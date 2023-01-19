@@ -1,0 +1,518 @@
+[
+  {
+    "isrc": "US39N2000303",
+    "xid": 1208187,
+    "title": "Mariachi Flow",
+    "displayArtist": "Ebenezer",
+    "createdAt": "2020-04-04T09:03:30.65371",
+    "updatedAt": "2020-06-09T17:20:15.577822",
+    "releaseYear": 2020,
+    "speed": "Ballad",
+    "energy": "Normal",
+    "languages": [
+      "English"
+    ],
+    "origin": "GB",
+    "parentalWarning": "Explicit",
+    "mood": "Happy",
+    "visions": [
+      "Normal"
+    ],
+    "versions": [
+      "Normal"
+    ],
+    "explicit": [
+      "Language"
+    ],
+    "category": "Music Video",
+    "urgency": "Recognizable",
+    "genres": [
+      "Regional Popular"
+    ],
+    "subGenres": [
+      "French Rap/Hip-Hop"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 41773187,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5543922,
+          "name": "Ebenezer"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 514,
+    "version": 8
+  },
+  {
+    "isrc": "AUWA82200257",
+    "xid": 1411356,
+    "title": "Vigil",
+    "albumTitle": "Vigil [Single]",
+    "displayArtist": "Golden Features",
+    "createdAt": "2022-09-03T22:29:25.122219",
+    "updatedAt": "2022-09-07T08:15:03.878718",
+    "releaseYear": 2022,
+    "speed": "Ballad",
+    "energy": "Chill",
+    "languages": [
+      "English"
+    ],
+    "origin": "AU",
+    "parentalWarning": "NotExplicit",
+    "mood": "Normal",
+    "visions": [
+      "Normal"
+    ],
+    "versions": [
+      "Normal"
+    ],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Recurrent Hit",
+    "genres": [
+      "Rock"
+    ],
+    "subGenres": [
+      "Classic Rock"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 28684460,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5672552,
+          "name": "Golden Features"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 1133,
+    "version": 11
+  },
+  {
+    "isrc": "QM2EJ1500281",
+    "xid": 877721,
+    "title": "Voy A Quererte Tanto",
+    "albumTitle": "Voy A Quererte Tanto",
+    "icpn": "",
+    "displayArtist": "Los De La Noria",
+    "createdAt": "2020-05-30T00:01:49.911506",
+    "updatedAt": "2020-06-03T03:18:09.065273",
+    "releaseYear": 2017,
+    "speed": "Uptempo",
+    "energy": "Powerful",
+    "languages": [],
+    "origin": "MX",
+    "parentalWarning": "NoAdviceAvailable",
+    "mood": "Happy",
+    "visions": [],
+    "versions": [],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Recognizable",
+    "genres": [
+      "Pop"
+    ],
+    "subGenres": [
+      "Adult Contemporary: Pop"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 38531492,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5497936,
+          "name": "Los De La Noria"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 1709,
+    "version": 21
+  },
+  {
+    "isrc": "GB0400200810",
+    "xid": 699839,
+    "title": "Days Go By",
+    "albumTitle": "Dirty Vegas",
+    "displayArtist": "Dirty Vegas",
+    "createdAt": "2020-05-30T07:24:41.134782",
+    "updatedAt": "2022-08-23T09:30:04.342287",
+    "releaseYear": 2001,
+    "speed": "Ballad",
+    "energy": "Chill",
+    "languages": [],
+    "origin": "CA",
+    "parentalWarning": "NotExplicit",
+    "mood": "Uplifting",
+    "visions": [
+      "Normal"
+    ],
+    "versions": [
+      "Normal"
+    ],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Non-relevant",
+    "genres": [
+      "Alternative/Indie"
+    ],
+    "subGenres": [
+      "Synth-Pop"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 67538729,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5447758,
+          "name": "Dirty Vegas"
+        }
+      }
+    ],
+    "musicTags": [
+      "dance",
+      "auto tune",
+      "drum pad",
+      "synthesizer",
+      "male vocals",
+      "electronic",
+      "dance pop"
+    ],
+    "videoTags": [
+      "choreography",
+      "las vegas",
+      "text in video",
+      "streets",
+      "conversation",
+      "master_record",
+      "dancer"
+    ],
+    "id": 1953,
+    "version": 23
+  },
+  {
+    "isrc": "QM2EJ1500338",
+    "xid": 1056762,
+    "title": "Mi Sorpresa Fuiste Tú",
+    "displayArtist": "Calibre 50",
+    "createdAt": "2020-04-08T20:06:07.380938",
+    "updatedAt": "2020-06-17T15:00:22.745561",
+    "releaseYear": 2018,
+    "speed": "Ballad",
+    "energy": "Chill",
+    "languages": [
+      "Spanish / Castilian"
+    ],
+    "origin": "MX",
+    "parentalWarning": "NotExplicit",
+    "mood": "Uplifting",
+    "visions": [],
+    "versions": [],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Hit",
+    "genres": [
+      "Rock"
+    ],
+    "subGenres": [
+      "Classic Rock"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 38602239,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5194664,
+          "name": "Calibre 50"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 1996,
+    "version": 29
+  },
+  {
+    "isrc": "QM2EJ1500373",
+    "xid": 1143252,
+    "title": "Simplemente Gracias",
+    "displayArtist": "Calibre 50",
+    "createdAt": "2020-03-29T08:22:21.218792",
+    "updatedAt": "2020-06-03T03:18:01.584372",
+    "releaseYear": 2019,
+    "speed": "Extra Fast",
+    "energy": "Easy",
+    "languages": [
+      "Spanish / Castilian"
+    ],
+    "origin": "MX",
+    "parentalWarning": "NotExplicit",
+    "mood": "Uplifting",
+    "visions": [
+      "Live",
+      "Normal"
+    ],
+    "versions": [
+      "Normal"
+    ],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Hit",
+    "genres": [
+      "Alternative/Indie"
+    ],
+    "subGenres": [
+      "Indie Pop"
+    ],
+    "assetType": "Live Video",
+    "artists": [
+      {
+        "id": 38533068,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5194664,
+          "name": "Calibre 50"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 2017,
+    "version": 21
+  },
+  {
+    "isrc": "USRO20652501",
+    "xid": 1077109,
+    "title": "If I Didn't Know Any Better",
+    "albumTitle": "Lonely Runs Both Ways",
+    "displayArtist": "Alison Krauss & Union Station",
+    "createdAt": "2020-04-09T21:42:18.51284",
+    "updatedAt": "2020-06-10T04:15:18.636111",
+    "releaseYear": 2004,
+    "speed": "Ballad",
+    "energy": "Extra Powerful",
+    "languages": [
+      "English"
+    ],
+    "origin": "US",
+    "parentalWarning": "NotExplicit",
+    "mood": "Normal",
+    "visions": [
+      "Normal"
+    ],
+    "versions": [
+      "Normal"
+    ],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Recurrent Hit",
+    "genres": [
+      "Rap/Hip-Hop"
+    ],
+    "subGenres": [
+      "East Coast Rap"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 44781020,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5406098,
+          "name": "Alison Krauss & Union Station"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 2030,
+    "version": 17
+  },
+  {
+    "isrc": "US2BX1009802",
+    "xid": 559168,
+    "title": "Bushwick Blues",
+    "albumTitle": "History from Below",
+    "displayArtist": "Delta Spirit",
+    "createdAt": "2020-05-30T03:38:17.55164",
+    "updatedAt": "2020-06-09T16:04:20.573874",
+    "releaseYear": 2010,
+    "speed": "Ballad",
+    "energy": "Chill",
+    "languages": [],
+    "origin": "US",
+    "mood": "Sad",
+    "visions": [
+      "Normal"
+    ],
+    "versions": [
+      "Studio Session"
+    ],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Hit",
+    "genres": [
+      "Latin"
+    ],
+    "subGenres": [
+      "Latin Pop"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 41437223,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5264535,
+          "name": "Delta Spirit"
+        }
+      }
+    ],
+    "musicTags": [
+      "guitar",
+      "drums"
+    ],
+    "videoTags": [
+      "master_record",
+      "lights",
+      "studio",
+      "recording",
+      "microphone",
+      "harmonica"
+    ],
+    "id": 2070,
+    "version": 18
+  },
+  {
+    "isrc": "US2BX1009701",
+    "xid": 853208,
+    "title": "Shroud",
+    "albumTitle": "In Memory of Loss",
+    "icpn": "",
+    "displayArtist": "Nathaniel Rateliff",
+    "createdAt": "2020-05-30T03:38:16.837965",
+    "updatedAt": "2020-06-09T16:04:21.456578",
+    "releaseYear": 2010,
+    "speed": "Normal",
+    "energy": "Chill",
+    "languages": [],
+    "origin": "US",
+    "parentalWarning": "NoAdviceAvailable",
+    "mood": "Normal",
+    "visions": [
+      "Normal",
+      "Black & White"
+    ],
+    "versions": [],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Non-relevant",
+    "genres": [
+      "Rap/Hip-Hop"
+    ],
+    "subGenres": [
+      "Brithop"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 47536129,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5832782,
+          "name": "Nathaniel Rateliff"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 2088,
+    "version": 19
+  },
+  {
+    "isrc": "USRO20532502",
+    "xid": 1117700,
+    "title": "When You Say Nothing At All",
+    "albumTitle": "Now That I've Found You - A Collection",
+    "displayArtist": "Alison Krauss",
+    "createdAt": "2020-04-10T01:28:23.26539",
+    "updatedAt": "2022-06-28T14:24:07.648136",
+    "releaseYear": 1995,
+    "speed": "Normal",
+    "energy": "Powerful",
+    "languages": [
+      "English"
+    ],
+    "origin": "US",
+    "parentalWarning": "NotExplicit",
+    "mood": "Melancholic",
+    "visions": [
+      "Normal"
+    ],
+    "versions": [
+      "Normal"
+    ],
+    "explicit": [],
+    "category": "Music Video",
+    "urgency": "Hit",
+    "genres": [
+      "Alternative/Indie"
+    ],
+    "subGenres": [
+      "Brit Pop"
+    ],
+    "assetType": "Official Music Video",
+    "artists": [
+      {
+        "id": 63797580,
+        "role": "Main",
+        "artistType": "Person",
+        "artist": {
+          "id": 5203174,
+          "name": "Alison Krauss"
+        }
+      }
+    ],
+    "musicTags": [],
+    "videoTags": [
+      "master_record"
+    ],
+    "id": 2100,
+    "version": 29
+  }
+]
