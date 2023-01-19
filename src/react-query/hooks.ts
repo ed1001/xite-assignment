@@ -1,9 +1,14 @@
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { QueryClient, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 import { Artist, Genre, Track } from "../types";
-import { getTracks } from "../api/xite";
 import { rq_artists_keys, rq_genres_keys, rq_tracks_keys } from "./keys";
-import { rqGetArtists, rqGetGenres, rqGetTracks } from "./helpers";
+import {
+  rqGetArtists,
+  rqGetGenres,
+  rqGetPaginatedArtists,
+  rqGetPaginatedTracks,
+  rqGetTracks,
+} from "./helpers";
 
 /*************************************************************
  *
@@ -24,10 +29,28 @@ export const queryClient = new QueryClient({
   },
 });
 
+export const useInfiniteTracks = (searchTerm: string) => {
+  return useInfiniteQuery<{
+    tracks: Track[];
+    paginationToken: number;
+    nextPageAvailable: boolean;
+  }>({
+    queryKey: rq_tracks_keys.infiniteList(),
+    queryFn: (page) => rqGetPaginatedTracks(page.pageParam),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.nextPageAvailable) {
+        return;
+      }
+
+      return lastPage.paginationToken;
+    },
+  });
+};
+
 export const useTracks = () => {
   return useQuery<Track[]>({
     queryKey: rq_tracks_keys.list(),
-    queryFn: getTracks,
+    queryFn: rqGetTracks,
   });
 };
 
@@ -38,6 +61,24 @@ export const useTrack = (id: number) => {
       const tracks = await rqGetTracks();
 
       return tracks.find((t) => t.xid === id);
+    },
+  });
+};
+
+export const useInfiniteArtists = (searchTerm: string) => {
+  return useInfiniteQuery<{
+    artists: Artist[];
+    paginationToken: number;
+    nextPageAvailable: boolean;
+  }>({
+    queryKey: rq_artists_keys.infiniteList(),
+    queryFn: (page) => rqGetPaginatedArtists(page.pageParam),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.nextPageAvailable) {
+        return;
+      }
+
+      return lastPage.paginationToken;
     },
   });
 };

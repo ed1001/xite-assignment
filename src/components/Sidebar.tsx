@@ -24,7 +24,7 @@ const Sidebar = () => {
         {sidebarItems.map(({ to, text, Icon }) => {
           const active = location.pathname === to;
 
-          return <Item {...{ to, text, Icon, active }} />;
+          return <Item key={text} {...{ to, text, Icon, active }} />;
         })}
       </div>
     </div>

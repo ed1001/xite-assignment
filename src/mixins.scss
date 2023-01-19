@@ -3,6 +3,7 @@
 @mixin content-shared {
   background-color: white;
   margin: variables.$content-padding;
+  overflow-y: scroll;
 
   .header {
     display: flex;
