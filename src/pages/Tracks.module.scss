@@ -7,6 +7,7 @@
   width: 100%;
   background-color: variables.$light-grey;
   padding: 0 16px;
+  box-sizing: border-box;
 
   &.dark {
     background-color: variables.$grey;

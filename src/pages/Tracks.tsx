@@ -4,16 +4,29 @@ import styles from "./Tracks.module.scss";
 import { Track } from "../types";
 import classnames from "classnames";
 import { BsMusicNote } from "react-icons/bs";
+import { useState } from "react";
+import { rq_tracks_keys } from "../react-query/keys";
+import { trimPreviousInfiniteQuery } from "../react-query/helpers";
 
 const Tracks = () => {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteTracks("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const { data, fetchNextPage, hasNextPage } = useInfiniteTracks(searchTerm);
+  const tracks = data?.pages.flatMap((page) => page.tracks);
+
+  const onSearch = (queryString: string) => {
+    trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
+    setSearchTerm(queryString);
+  };
 
   return (
-    <Content header={"Tracks"} searchable={true}>
-      {data?.pages.flatMap((page) => {
-        return page.tracks.map((track, i) => {
-          return <RenderTrack track={track} dark={i % 2 === 0} />;
-        });
+    <Content
+      header={"Tracks"}
+      searchable={true}
+      onSearch={onSearch}
+      placeholder={"Search by title"}
+    >
+      {tracks?.map((track, i) => {
+        return <RenderTrack key={track.xid} track={track} dark={i % 2 === 0} />;
       })}
       <button disabled={!hasNextPage} onClick={() => fetchNextPage()}>
         Load more

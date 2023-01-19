@@ -7,7 +7,7 @@ import {
   rqGetGenres,
   rqGetPaginatedArtists,
   rqGetPaginatedTracks,
-  rqGetTracks,
+  rqGetAllTracks,
 } from "./helpers";
 
 /*************************************************************
@@ -35,8 +35,8 @@ export const useInfiniteTracks = (searchTerm: string) => {
     paginationToken: number;
     nextPageAvailable: boolean;
   }>({
-    queryKey: rq_tracks_keys.infiniteList(),
-    queryFn: (page) => rqGetPaginatedTracks(page.pageParam),
+    queryKey: rq_tracks_keys.infiniteList(searchTerm),
+    queryFn: (page) => rqGetPaginatedTracks(page.pageParam, searchTerm),
     getNextPageParam: (lastPage) => {
       if (!lastPage.nextPageAvailable) {
         return;
@@ -50,7 +50,7 @@ export const useInfiniteTracks = (searchTerm: string) => {
 export const useTracks = () => {
   return useQuery<Track[]>({
     queryKey: rq_tracks_keys.list(),
-    queryFn: rqGetTracks,
+    queryFn: rqGetAllTracks,
   });
 };
 
@@ -58,7 +58,7 @@ export const useTrack = (id: number) => {
   return useQuery<Track | undefined>({
     queryKey: rq_tracks_keys.id(id),
     queryFn: async () => {
-      const tracks = await rqGetTracks();
+      const tracks = await rqGetAllTracks();
 
       return tracks.find((t) => t.xid === id);
     },
