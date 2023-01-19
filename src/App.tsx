@@ -3,9 +3,15 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { queryClient } from "./react-query/hooks";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
-import ContentContainer from "./components/ContentContainer";
+import { ContentContainer, Navbar, Sidebar } from "./components";
+import {
+  Artists,
+  Dashboard,
+  Genres,
+  Inspector,
+  Playlists,
+  Tracks,
+} from "./pages";
 
 function App() {
   return (
@@ -15,13 +21,14 @@ function App() {
         <Sidebar />
         <ContentContainer>
           <Routes>
-            <Route path="/" element={<div>dashboard</div>} />
-            <Route path="/tracks" element={<div>tracks</div>} />
-            <Route path="/artists" element={<div>artists</div>} />
-            <Route path="/genres" element={<div>genres</div>} />
-            <Route path="/playlists" element={<div>playlists</div>} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/tracks" element={<Tracks />} />
+            <Route path="/artists" element={<Artists />} />
+            <Route path="/genres" element={<Genres />} />
+            <Route path="/playlists" element={<Playlists />} />
             <Route path="*" element={<div>not found</div>} />
           </Routes>
+          <Inspector />
         </ContentContainer>
       </BrowserRouter>
     </QueryClientProvider>

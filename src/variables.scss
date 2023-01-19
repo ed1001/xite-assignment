@@ -7,7 +7,10 @@ $grey: #adadad;
 $light-grey: #dedede;
 
 // DIMENSIONS
-$content-padding: 30px;
+$content-padding: 20px;
+$content-min-width: 450px;
 $navbar-height: 60px;
 $sidebar-width-l: 200px;
 $sidebar-item-height: 70px;
+$inspector-width: $content-min-width;
+$inspector-width-closed: 64px;

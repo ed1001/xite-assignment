@@ -1,6 +1,8 @@
 @use "../variables";
 
 .content {
-  padding: variables.$content-padding;
+  display: flex;
+  height: calc(100vh - #{variables.$navbar-height});
+  margin-top: variables.$navbar-height;
   margin-left: variables.$sidebar-width-l;
 }

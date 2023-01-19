@@ -1,0 +1,45 @@
+@use "../variables";
+@use "../mixins";
+
+.content {
+  @include mixins.content-shared;
+  margin-left: variables.$content-padding / 2;
+  width: variables.$inspector-width;
+
+  .header {
+    .toggle-open {
+      all: unset;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      svg {
+        $icon-dimension: 30px;
+        height: $icon-dimension;
+        width: $icon-dimension;
+
+        &:hover {
+          color: variables.$secondary-color;
+        }
+      }
+    }
+  }
+
+  .vertical-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    writing-mode: vertical-rl;
+    margin: 20px 0;
+    font-weight: normal;
+    color: variables.$grey;
+  }
+
+  &.closed {
+    width: variables.$inspector-width-closed;
+
+    .header {
+      justify-content: end;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+@use "../variables";
+@use "../mixins";
+
+.content {
+  flex: 1;
+  min-width: variables.$content-min-width;
+  @include mixins.content-shared;
+  margin-right: variables.$content-padding / 2;
+}
