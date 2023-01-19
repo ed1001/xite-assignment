@@ -1,35 +1,37 @@
+@use "variables";
+
 @font-face {
-  font-family: 'Roboto';
-  src: local('Roboto'), url(./fonts/Roboto-Regular.ttf) format('truetype');
+  font-family: "Roboto";
+  src: local("Roboto"), url(./fonts/Roboto-Regular.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-weight: bold;
-  src: local('Roboto'), url(./fonts/Roboto-Bold.ttf) format('truetype');
+  src: local("Roboto"), url(./fonts/Roboto-Bold.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-weight: 200;
-  src: local('Roboto'), url(./fonts/Roboto-Thin.ttf) format('truetype');
+  src: local("Roboto"), url(./fonts/Roboto-Thin.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
-  src: local('Roboto'), url(./fonts/Roboto-Regular.ttf) format('truetype');
+  font-family: "Roboto";
+  src: local("Roboto"), url(./fonts/Roboto-Regular.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-weight: bold;
-  src: local('Roboto'), url(./fonts/Roboto-Bold.ttf) format('truetype');
+  src: local("Roboto"), url(./fonts/Roboto-Bold.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-weight: 200;
-  src: local('Roboto'), url(./fonts/Roboto-Thin.ttf) format('truetype');
+  src: local("Roboto"), url(./fonts/Roboto-Thin.ttf) format("truetype");
 }
 
 body {
@@ -37,9 +39,11 @@ body {
   font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: variables.$light-grey;
+  overscroll-behavior: none;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }

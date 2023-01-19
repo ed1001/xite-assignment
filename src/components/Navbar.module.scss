@@ -1,0 +1,22 @@
+@use "../variables";
+
+.navbar {
+  display: flex;
+  align-items: center;
+  height: variables.$navbar-height;
+  width: 100%;
+  background-color: variables.$secondary-color;
+  .items-container {
+    height: 100%;
+    .logo {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      color: white;
+      text-decoration: none;
+      width: variables.$sidebar-width-l;
+    }
+  }
+}

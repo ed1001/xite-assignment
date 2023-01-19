@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { PropsWithChildren } from "react";
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -22,7 +22,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const wrapper = ({ children }: { children: ReactNode }) => (
+const wrapper = ({ children }: PropsWithChildren<{}>) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 

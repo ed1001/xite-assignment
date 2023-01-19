@@ -1,0 +1,43 @@
+@use "../variables";
+
+.sidebar {
+  position: fixed;
+  top: variables.$navbar-height;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  width: variables.$sidebar-width-l;
+  height: 100%;
+  background-color: white;
+
+  .items-container {
+    margin-top: 60px;
+    .item {
+      display: flex;
+      align-items: center;
+      padding: 0 35px;
+      height: variables.$sidebar-item-height;
+      text-decoration: none;
+      color: variables.$secondary-color;
+      border-bottom: 1px solid variables.$grey;
+      transition: background-color 0.2s;
+
+      svg {
+        $icon-dimension: 22px;
+        height: $icon-dimension;
+        width: $icon-dimension;
+        margin-right: 16px;
+        color: variables.$grey;
+      }
+
+      &:hover {
+        background-color: lighten(variables.$secondary-color, 15%);
+        color: white;
+      }
+      &.active {
+        background-color: variables.$secondary-color;
+        color: white;
+      }
+    }
+  }
+}

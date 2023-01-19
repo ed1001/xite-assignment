@@ -1,0 +1,6 @@
+@use "../variables";
+
+.content {
+  padding: variables.$content-padding;
+  margin-left: variables.$sidebar-width-l;
+}
