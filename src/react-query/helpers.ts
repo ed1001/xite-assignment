@@ -5,8 +5,15 @@ import { queryClient } from "./hooks";
 
 const DEFAULT_PAGE_LIMIT = 15;
 
-export const rqGetTracks = (): Promise<Track[]> =>
-  queryClient.ensureQueryData({
+export const prefetchAllTracks = async () => {
+  await queryClient.prefetchQuery({
+    queryKey: rq_tracks_keys.list(),
+    queryFn: rqGetAllTracks,
+  });
+};
+
+export const rqGetAllTracks = (): Promise<Track[]> => {
+  return queryClient.ensureQueryData({
     queryKey: rq_tracks_keys.list(),
     queryFn: getTracks,
   });

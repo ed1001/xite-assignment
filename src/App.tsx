@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { queryClient } from "./react-query/hooks";
 import { ContentContainer, Navbar, Sidebar } from "./components";
+import { prefetchAllTracks } from "./react-query/helpers";
 import {
   Artists,
   Dashboard,
@@ -14,6 +15,12 @@ import {
 } from "./pages";
 
 function App() {
+  useEffect(() => {
+    prefetchAllTracks().catch((err) =>
+      console.warn("Could not prefetch track data", err)
+    );
+  });
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
