@@ -3,18 +3,20 @@ import classnames from "classnames";
 import { BsMusicNote, BsMusicNoteList } from "react-icons/bs";
 import { IoIosPeople } from "react-icons/io";
 import { FaGuitar } from "react-icons/fa";
+import { TbMoodEmpty } from "react-icons/tb";
 
 import styles from "./Inspector.module.scss";
 import {
+  rqSetCurrentInspectorItemIndex,
   rqToggleInspecterOpen,
-  useInspectedItems,
   useCurrentInspectorItemIndex,
+  useInspectedItems,
   useInspectorOpen,
   useRemoveFromInspector,
-  rqSetCurrentInspectorItemIndex,
 } from "../react-query/inspector";
 import { InspectableItem } from "../types";
 import { RxCross2 } from "react-icons/rx";
+import { useTrack } from "../react-query/tracks";
 
 const typeIconMap = {
   track: BsMusicNote,
@@ -62,7 +64,7 @@ const Inspector = () => {
           })}
         </div>
       )}
-      {open && currentInspectorItem && renderItem(currentInspectorItem)}
+      {open && renderItem(currentInspectorItem)}
     </section>
   );
 };
@@ -97,15 +99,67 @@ const RenderTab = ({
   );
 };
 
-const renderItem = (item: InspectableItem) => {
+const renderItem = (item?: InspectableItem) => {
+  if (!item) {
+    return (
+      <div className={styles.empty}>
+        <TbMoodEmpty />
+        <p>
+          Nothing to see here at the moment... <br />
+          <br />
+          Click 'inspect' on a track, artist or playlist to inspect its details
+        </p>
+      </div>
+    );
+  }
+
   switch (item.type) {
     case "track":
       return <RenderTrack item={item} />;
-    // case "artist":
-    //   return <Track item={item}/>
+    case "artist":
+      return <RenderArtist item={item} />;
   }
 };
 const RenderTrack = ({ item }: { item: InspectableItem }) => {
+  const { data: track } = useTrack(item.id);
+
+  if (!track) {
+    return <p>Something went wrong... Track not found!</p>;
+  }
+
+  const {
+    title,
+    displayArtist,
+    artists: artistDataList,
+    createdAt,
+    updatedAt,
+    ...rest
+  } = track;
+  const artists = artistDataList.map(({ artist }) => artist.name);
+  const additionalInfo = {
+    artists,
+    createdAt: new Date(createdAt).toDateString(),
+    updatedAt: new Date(updatedAt).toDateString(),
+  };
+
+  return (
+    <div className={styles["item-container"]}>
+      <h2 className={styles.description}>Track Info </h2>
+      <h2>{title}</h2>
+      <h3>{displayArtist}</h3>
+      <br />
+      {Object.entries({ ...additionalInfo, ...rest }).map(([key, value]) => {
+        const string = Array.isArray(value) ? value.join(", ") : value;
+        return (
+          <div>
+            <b>{key}</b>: {string || "none"}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+const RenderArtist = ({ item }: { item: InspectableItem }) => {
   return <div>{JSON.stringify(item)}</div>;
 };
 export default Inspector;

@@ -64,6 +64,7 @@ const RenderTrack = ({
       <div>{track.genres.join(", ")}</div>
       <div>{new Date(track.createdAt).toDateString()}</div>
       <div
+        style={{ cursor: "pointer" }}
         onClick={() =>
           addToInspector({
             type: "track",

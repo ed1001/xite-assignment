@@ -62,11 +62,48 @@
     color: variables.$grey;
   }
 
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px;
+    color: variables.$grey;
+    font-size: 20px;
+    height: 50%;
+
+    svg {
+      $icon-dimension: 50px;
+      height: $icon-dimension;
+      width: $icon-dimension;
+    }
+  }
+
   &.closed {
     width: variables.$inspector-width-closed;
 
     .header {
       justify-content: end;
+    }
+  }
+
+  .item-container {
+    padding: 30px;
+
+    .description {
+      color: variables.$grey;
+    }
+
+    h2,
+    h3 {
+      margin: 0;
+    }
+
+    ul {
+      margin: 30px 0 0;
+      list-style-type: none;
+      padding: 0;
     }
   }
 }

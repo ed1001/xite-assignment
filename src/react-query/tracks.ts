@@ -54,7 +54,7 @@ export const useTrack = (id: number) => {
     queryFn: async () => {
       const tracks = await rqGetAllTracks();
 
-      return tracks.find((t) => t.xid === id);
+      return tracks.find((t) => t.id === id);
     },
   });
 };
