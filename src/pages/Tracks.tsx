@@ -1,7 +1,5 @@
-import { Content } from "../components";
+import { Content, ListEntry, LoadMoreButton } from "../components";
 import styles from "./Tracks.module.scss";
-import { InspectableItem, Track } from "../types";
-import classnames from "classnames";
 import { useState } from "react";
 import { rq_tracks_keys, useInfiniteTracks } from "../react-query/tracks";
 import { trimPreviousInfiniteQuery } from "../react-query/helpers";
@@ -27,54 +25,38 @@ const Tracks = () => {
     >
       {tracks?.map((track, i) => {
         return (
-          <RenderTrack
+          <ListEntry
             key={track.xid}
-            track={track}
             dark={i % 2 === 0}
-            number={i + 1}
-            addToInspector={addToInspector}
-          />
+            style={{ gridTemplateColumns: "50px 1fr 1fr 1fr 50px" }}
+          >
+            <div>{i + 1}</div>
+            <div className={styles.title}>
+              <div>{track.title}</div>
+              <div className={styles.artist}>{track.displayArtist}</div>
+            </div>
+            <div>{track.genres.join(", ")}</div>
+            <div>{new Date(track.createdAt).toDateString()}</div>
+            <div
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                addToInspector({
+                  type: "track",
+                  id: track.id,
+                })
+              }
+            >
+              inspect
+            </div>
+          </ListEntry>
         );
       })}
-      <button disabled={!hasNextPage} onClick={() => fetchNextPage()}>
-        Load more
-      </button>
+      {hasNextPage && (
+        <LoadMoreButton disabled={!hasNextPage} onClick={() => fetchNextPage()}>
+          Load more tracks
+        </LoadMoreButton>
+      )}
     </Content>
-  );
-};
-
-const RenderTrack = ({
-  track,
-  dark,
-  number,
-  addToInspector,
-}: {
-  track: Track;
-  dark: boolean;
-  number: number;
-  addToInspector: (item: InspectableItem) => void;
-}) => {
-  return (
-    <div className={classnames(styles.track, { [styles.dark]: dark })}>
-      <div>{number}</div>
-      <div className={styles.title}>
-        <div>{track.title}</div>
-        <div className={styles.artist}>{track.displayArtist}</div>
-      </div>
-      <div>{track.genres.join(", ")}</div>
-      <div>{new Date(track.createdAt).toDateString()}</div>
-      <div
-        style={{ cursor: "pointer" }}
-        onClick={() =>
-          addToInspector({
-            type: "track",
-            id: track.id,
-          })
-        }
-      >
-        inspect
-      </div>
-    </div>
   );
 };
 

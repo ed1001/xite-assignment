@@ -1,0 +1,18 @@
+@use "../variables";
+
+.list-entry {
+  display: grid;
+  align-content: center;
+  height: 50px;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+
+  &.dark {
+    background-color: lighten(variables.$light-grey, 11%);
+  }
+
+  &:hover {
+    background-color: variables.$light-grey;
+  }
+}

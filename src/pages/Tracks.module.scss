@@ -1,26 +1,11 @@
 @use "../variables";
 
-.track {
-  display: grid;
-  grid-template-columns: 50px 1fr 1fr 1fr 50px;
-  align-content: center;
-  height: 50px;
-  width: 100%;
-  background-color: variables.$light-grey;
-  padding: 0 16px;
-  box-sizing: border-box;
-
-  &.dark {
-    background-color: variables.$grey;
-  }
-
-  .title {
-    margin-left: 16px;
-    display: flex;
-    flex-direction: column;
-    .artist {
-      font-size: 14px;
-      color: #6c6c6c;
-    }
+.title {
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+  .artist {
+    font-size: 14px;
+    color: #6c6c6c;
   }
 }
