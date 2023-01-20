@@ -7,11 +7,11 @@ import { queryClient } from "./client";
  ************/
 
 export const rq_inspector_keys = {
-  single: ["inspected"] as const,
+  single: ["inspectedItems"] as const,
   id: (id: number) => [...rq_inspector_keys.single, id] as const,
-  all: ["inspected"] as const,
+  all: ["inspectedItems"] as const,
   list: () => [...rq_inspector_keys.all, "list"] as const,
-  currentInspectorItemIndex: ["inspecting"] as const,
+  currentInspectorItemIndex: ["currentInspectorItemIndex"] as const,
   open: ["open"] as const,
 };
 
@@ -55,6 +55,7 @@ export const useAddToInspector = () => {
       }
 
       rqSetCurrentInspectorItemIndex(newCurrentInspectorItemIndex);
+      queryClient.setQueryData(rq_inspector_keys.open, true);
     },
   });
 };
@@ -71,20 +72,10 @@ export const useRemoveFromInspector = () => {
         queryClient.setQueryData(
           rq_inspector_keys.list(),
           (prev: InspectedItems | undefined) => {
-            if (!prev) {
-              return;
-            }
-
-            const newData = prev.filter(
+            return prev?.filter(
               (inspectedItem) =>
                 item.type !== inspectedItem.type || item.id !== inspectedItem.id
             );
-
-            if (!newData.length) {
-              rqSetCurrentInspectorItemIndex(-1);
-            }
-
-            return newData;
           }
         ) || [];
 
@@ -96,7 +87,7 @@ export const useRemoveFromInspector = () => {
         newInspectedItems.length > 0
       ) {
         newCurrentInspectorItemIndex =
-          removedItemIndex > 0 ? removedItemIndex - 1 : removedItemIndex + 1;
+          removedItemIndex > 0 ? removedItemIndex - 1 : removedItemIndex;
       }
 
       rqSetCurrentInspectorItemIndex(newCurrentInspectorItemIndex);
@@ -119,7 +110,7 @@ const rqGetInspectedItems = async (): Promise<InspectedItems> =>
   queryClient.getQueryData(rq_inspector_keys.list()) || [];
 
 export const rqGetCurrentInspectorItemIndex = async (): Promise<number> =>
-  queryClient.getQueryData(rq_inspector_keys.currentInspectorItemIndex) || -1;
+  queryClient.getQueryData(rq_inspector_keys.currentInspectorItemIndex) ?? -1;
 
 export const rqSetCurrentInspectorItemIndex = (inspecting: number) =>
   queryClient.setQueryData(

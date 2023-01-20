@@ -31,8 +31,6 @@ const Inspector = () => {
   const removeFromInspector = useRemoveFromInspector().mutate;
   const currentInspectorItem = inspectedItems?.[currentInspectorItemIndex];
 
-  console.log(currentInspectorItemIndex);
-
   return (
     <section
       className={classnames(styles.content, {
