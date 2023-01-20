@@ -39,6 +39,14 @@ export interface Artist {
   name: string;
 }
 
+export type Playlist = Track[];
+
+export type InspectableItem = {
+  type: "track" | "artist" | "playlist" | "genre";
+  id: number;
+};
+export type InspectedItems = Array<InspectableItem>;
+
 type Language =
   | "English"
   | "Spanish / Castilian"

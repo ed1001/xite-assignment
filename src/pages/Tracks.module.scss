@@ -1,8 +1,9 @@
 @use "../variables";
 
 .track {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 1fr 50px;
+  align-content: center;
   height: 50px;
   width: 100%;
   background-color: variables.$light-grey;

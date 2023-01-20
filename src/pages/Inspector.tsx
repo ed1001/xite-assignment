@@ -1,13 +1,37 @@
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
-import { useState } from "react";
 import classnames from "classnames";
+import { BsMusicNote, BsMusicNoteList } from "react-icons/bs";
+import { IoIosPeople } from "react-icons/io";
+import { FaGuitar } from "react-icons/fa";
+
 import styles from "./Inspector.module.scss";
+import {
+  rqToggleInspecterOpen,
+  useInspectedItems,
+  useCurrentInspectorItemIndex,
+  useInspectorOpen,
+  useRemoveFromInspector,
+  rqSetCurrentInspectorItemIndex,
+} from "../react-query/inspector";
+import { InspectableItem } from "../types";
+import { RxCross2 } from "react-icons/rx";
+
+const typeIconMap = {
+  track: BsMusicNote,
+  artist: IoIosPeople,
+  playlist: BsMusicNoteList,
+  genre: FaGuitar,
+};
 
 const Inspector = () => {
-  const [open, setOpen] = useState(false);
-  const toggleOpen = () => {
-    setOpen((prev) => !prev);
-  };
+  const { data: open } = useInspectorOpen();
+  const { data: inspectedItems } = useInspectedItems();
+  const { data: currentInspectorItemIndex = -1 } =
+    useCurrentInspectorItemIndex();
+  const removeFromInspector = useRemoveFromInspector().mutate;
+  const currentInspectorItem = inspectedItems?.[currentInspectorItemIndex];
+
+  console.log(currentInspectorItemIndex);
 
   return (
     <section
@@ -17,25 +41,73 @@ const Inspector = () => {
     >
       <div className={styles.header}>
         {open && <h1>Inspector</h1>}
-        <ToggleOpenButton open={open} toggleOpen={toggleOpen} />
+        <button
+          onClick={() => rqToggleInspecterOpen()}
+          className={styles["toggle-open"]}
+        >
+          {open ? <TfiArrowCircleRight /> : <TfiArrowCircleLeft />}
+        </button>
       </div>
       {!open && <h1 className={styles["vertical-header"]}>Inspector</h1>}
+      {open && (
+        <div className={styles.tabs}>
+          {inspectedItems?.map((item, i) => {
+            return (
+              <RenderTab
+                key={JSON.stringify(item)}
+                active={i === currentInspectorItemIndex}
+                setActive={() => rqSetCurrentInspectorItemIndex(i)}
+                item={item}
+                removeFromInspector={removeFromInspector}
+              />
+            );
+          })}
+        </div>
+      )}
+      {open && currentInspectorItem && renderItem(currentInspectorItem)}
     </section>
   );
 };
 
-const ToggleOpenButton = ({
-  open,
-  toggleOpen,
+const RenderTab = ({
+  active,
+  setActive,
+  item,
+  removeFromInspector,
 }: {
-  open: boolean;
-  toggleOpen: () => void;
+  active: boolean;
+  setActive: () => void;
+  item: InspectableItem;
+  removeFromInspector: (item: InspectableItem) => void;
 }) => {
+  const Icon = typeIconMap[item.type];
+
   return (
-    <button onClick={toggleOpen} className={styles["toggle-open"]}>
-      {open ? <TfiArrowCircleRight /> : <TfiArrowCircleLeft />}
-    </button>
+    <div
+      className={classnames(styles.tab, { [styles.active]: active })}
+      onClick={setActive}
+    >
+      <Icon />
+      {item.id}
+      <RxCross2
+        onClick={(e) => {
+          e.stopPropagation();
+          removeFromInspector(item);
+        }}
+      />
+    </div>
   );
 };
 
+const renderItem = (item: InspectableItem) => {
+  switch (item.type) {
+    case "track":
+      return <RenderTrack item={item} />;
+    // case "artist":
+    //   return <Track item={item}/>
+  }
+};
+const RenderTrack = ({ item }: { item: InspectableItem }) => {
+  return <div>{JSON.stringify(item)}</div>;
+};
 export default Inspector;

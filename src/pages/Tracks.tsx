@@ -1,15 +1,17 @@
 import { Content } from "../components";
 import styles from "./Tracks.module.scss";
-import { Track } from "../types";
+import { InspectableItem, Track } from "../types";
 import classnames from "classnames";
 import { useState } from "react";
 import { rq_tracks_keys, useInfiniteTracks } from "../react-query/tracks";
 import { trimPreviousInfiniteQuery } from "../react-query/helpers";
+import { useAddToInspector } from "../react-query/inspector";
 
 const Tracks = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { data, fetchNextPage, hasNextPage } = useInfiniteTracks(searchTerm);
   const tracks = data?.pages.flatMap((page) => page.tracks);
+  const addToInspector = useAddToInspector().mutate;
 
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
@@ -30,6 +32,7 @@ const Tracks = () => {
             track={track}
             dark={i % 2 === 0}
             number={i + 1}
+            addToInspector={addToInspector}
           />
         );
       })}
@@ -44,10 +47,12 @@ const RenderTrack = ({
   track,
   dark,
   number,
+  addToInspector,
 }: {
   track: Track;
   dark: boolean;
   number: number;
+  addToInspector: (item: InspectableItem) => void;
 }) => {
   return (
     <div className={classnames(styles.track, { [styles.dark]: dark })}>
@@ -58,7 +63,16 @@ const RenderTrack = ({
       </div>
       <div>{track.genres.join(", ")}</div>
       <div>{new Date(track.createdAt).toDateString()}</div>
-      {/*<div onClick={() => onInspect}>inspect</div>*/}
+      <div
+        onClick={() =>
+          addToInspector({
+            type: "track",
+            id: track.id,
+          })
+        }
+      >
+        inspect
+      </div>
     </div>
   );
 };

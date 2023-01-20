@@ -25,6 +25,33 @@
     }
   }
 
+  .tabs {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: start;
+    height: 35px;
+    color: variables.$grey;
+    padding: 0 16px;
+    overflow-x: scroll;
+
+    .tab {
+      background-color: variables.$light-grey;
+      width: 100px;
+      height: 100%;
+      cursor: pointer;
+
+      &.active {
+        background-color: variables.$secondary-color;
+        cursor: default;
+      }
+
+      + .tab {
+        border-left: variables.$grey 1px solid;
+      }
+    }
+  }
+
   .vertical-header {
     display: flex;
     align-items: center;
