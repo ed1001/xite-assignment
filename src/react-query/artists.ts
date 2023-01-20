@@ -16,9 +16,9 @@ export const rq_artists_keys = {
   infiniteList: () => [...rq_artists_keys.all, "infinite", "list"] as const,
 };
 
-/*********
+/*******
  * HOOKS
- *********/
+ *******/
 
 export const useInfiniteArtists = (searchTerm: string) => {
   return useInfiniteQuery<{

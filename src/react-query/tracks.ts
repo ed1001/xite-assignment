@@ -19,9 +19,9 @@ export const rq_tracks_keys = {
     [...rq_tracks_keys.all, "infinite", "list", searchTerm] as const,
 };
 
-/*********
+/*******
  * HOOKS
- *********/
+ *******/
 
 export const useInfiniteTracks = (searchTerm: string) => {
   return useInfiniteQuery<{

@@ -11,9 +11,9 @@ export const rq_genres_keys = {
   list: () => [...rq_genres_keys.all, "list"] as const,
 };
 
-/*********
+/*******
  * HOOKS
- *********/
+ *******/
 
 export const useGenres = () => {
   return useQuery<Genre[]>({

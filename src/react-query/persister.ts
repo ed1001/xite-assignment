@@ -18,3 +18,12 @@ export const createIDBPersister = (idbValidKey: IDBValidKey) =>
       await del(idbValidKey);
     },
   } as Persister);
+
+export const persister = createIDBPersister(idbPersistorKey);
+
+export const removePersisterClient = () => {
+  persister.removeClient();
+};
+
+// Uncomment below to clear persisted cache
+// removePersisterClient();

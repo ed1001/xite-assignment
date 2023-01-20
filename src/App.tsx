@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { queryClient } from "./react-query/client";
+import { persister } from "./react-query/persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createIDBPersister, idbPersistorKey } from "./react-query/persister";
 import { ContentContainer, Navbar, Sidebar } from "./components";
 import { prefetchAllTracks } from "./react-query/tracks";
 import {
@@ -14,8 +14,6 @@ import {
   Playlists,
   Tracks,
 } from "./pages";
-
-const persister = createIDBPersister(idbPersistorKey);
 
 function App() {
   useEffect(() => {
