@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { createIDBPersister, idbPersistorKey } from "./react-query/persister";
 import { queryClient } from "./react-query/hooks";
 import { ContentContainer, Navbar, Sidebar } from "./components";
 import { prefetchAllTracks } from "./react-query/helpers";
@@ -14,6 +15,8 @@ import {
   Tracks,
 } from "./pages";
 
+const persister = createIDBPersister(idbPersistorKey);
+
 function App() {
   useEffect(() => {
     prefetchAllTracks().catch((err) =>
@@ -22,7 +25,10 @@ function App() {
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister }}
+    >
       <BrowserRouter>
         <Navbar />
         <Sidebar />
@@ -38,7 +44,7 @@ function App() {
           <Inspector />
         </ContentContainer>
       </BrowserRouter>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }
 
