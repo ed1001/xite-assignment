@@ -2,13 +2,9 @@ import { PropsWithChildren } from "react";
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import {
-  useArtist,
-  useArtists,
-  useGenres,
-  useTrack,
-  useTracks,
-} from "../hooks";
+import { useTrack, useTracks } from "../tracks";
+import { useArtist, useArtists } from "../artists";
+import { useGenres } from "../genres";
 import mockTrackList from "./mock-tracks.json";
 import mockArtistList from "./mock-artists.json";
 import mockGenreList from "./mock-genres.json";

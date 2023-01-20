@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import { queryClient } from "./react-query/client";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { createIDBPersister, idbPersistorKey } from "./react-query/persister";
-import { queryClient } from "./react-query/hooks";
 import { ContentContainer, Navbar, Sidebar } from "./components";
-import { prefetchAllTracks } from "./react-query/helpers";
+import { prefetchAllTracks } from "./react-query/tracks";
 import {
   Artists,
   Dashboard,
