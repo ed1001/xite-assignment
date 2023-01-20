@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { queryClient } from "./react-query/client";
-import { persister } from "./react-query/persister";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+// import { persister } from "./react-query/persister";
+// import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ContentContainer, Navbar, Sidebar } from "./components";
 import { prefetchAllTracks } from "./react-query/tracks";
 import {
@@ -23,10 +24,11 @@ function App() {
   });
 
   return (
-    <PersistQueryClientProvider
-      client={queryClient}
-      persistOptions={{ persister }}
-    >
+    // <PersistQueryClientProvider
+    //   client={queryClient}
+    //   persistOptions={{ persister }}
+    // >
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Navbar />
         <Sidebar />
@@ -42,7 +44,7 @@ function App() {
           <Inspector />
         </ContentContainer>
       </BrowserRouter>
-    </PersistQueryClientProvider>
+    </QueryClientProvider>
   );
 }
 

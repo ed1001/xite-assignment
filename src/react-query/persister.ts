@@ -9,9 +9,11 @@ export const idbPersistorKey = "REACT_QUERY";
 export const createIDBPersister = (idbValidKey: IDBValidKey) =>
   ({
     persistClient: async (client: PersistedClient) => {
+      // console.log("persisting");
       await set(idbValidKey, client);
     },
     restoreClient: async () => {
+      // console.log("restoring");
       return await get<PersistedClient>(idbValidKey);
     },
     removeClient: async () => {
