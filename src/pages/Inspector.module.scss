@@ -3,7 +3,7 @@
 
 .content {
   @include mixins.content-shared;
-  margin-left: variables.$content-padding / 2;
+  margin-left: calc(#{variables.$content-padding} / 2);
   width: variables.$inspector-width;
 
   .header {
@@ -29,25 +29,62 @@
     position: sticky;
     top: 0;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     height: 35px;
     color: variables.$grey;
     padding: 0 16px;
     overflow-x: scroll;
 
     .tab {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: variables.$light-grey;
       width: 100px;
+      min-width: 100px;
       height: 100%;
       cursor: pointer;
+      font-size: 12px;
+
+      .cross {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        cursor: pointer;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: lighten(variables.$primary-color, 10%);
+
+          svg {
+            height: 9px;
+            width: 9px;
+            color: white;
+          }
+        }
+      }
+
+      .icon {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+      }
 
       &.active {
-        background-color: variables.$secondary-color;
+        background-color: white;
         cursor: default;
       }
 
       + .tab {
-        border-left: variables.$grey 1px solid;
+        border-left: white 1px solid;
       }
     }
   }
@@ -70,7 +107,7 @@
     text-align: center;
     padding: 50px;
     color: variables.$grey;
-    font-size: 20px;
+    font-size: 24px;
     height: 50%;
 
     svg {

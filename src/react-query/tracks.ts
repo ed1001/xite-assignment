@@ -15,6 +15,8 @@ export const rq_tracks_keys = {
   all: ["tracks"] as const,
   list: (searchTerm?: string) =>
     [...rq_tracks_keys.all, "list", searchTerm] as const,
+  listByArtist: (artistId: number) =>
+    [...rq_tracks_keys.all, "list", artistId] as const,
   infiniteList: (searchTerm?: string) =>
     [...rq_tracks_keys.all, "infinite", "list", searchTerm] as const,
 };
@@ -45,6 +47,13 @@ export const useTracks = () => {
   return useQuery<Track[]>({
     queryKey: rq_tracks_keys.list(),
     queryFn: rqGetAllTracks,
+  });
+};
+
+export const useTracksByArtist = (artistId: number) => {
+  return useQuery<Track[]>({
+    queryKey: rq_tracks_keys.listByArtist(artistId),
+    queryFn: () => rqGetTracksByArtist(artistId),
   });
 };
 
@@ -98,6 +107,23 @@ export const rqGetTracksBySearchTerm = async (
 
       const results = fuse.search(searchTerm);
       return results.map((result) => result.item);
+    },
+  });
+};
+
+export const rqGetTracksByArtist = async (
+  artistId: number
+): Promise<Track[]> => {
+  return queryClient.ensureQueryData({
+    queryKey: rq_tracks_keys.listByArtist(artistId),
+    queryFn: async () => {
+      const tracks = await rqGetAllTracks();
+
+      return tracks.filter((track) =>
+        track.artists
+          .map((artistData) => artistData.artist.id)
+          .includes(artistId)
+      );
     },
   });
 };

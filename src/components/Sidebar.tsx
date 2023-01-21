@@ -3,7 +3,7 @@ import classnames from "classnames";
 import { IconType } from "react-icons";
 import { GoDashboard } from "react-icons/go";
 import { BsMusicNoteList, BsMusicNote } from "react-icons/bs";
-import { IoIosPeople } from "react-icons/io";
+import { SlPeople } from "react-icons/sl";
 import { FaGuitar } from "react-icons/fa";
 
 import styles from "./Sidebar.module.scss";
@@ -11,7 +11,7 @@ import styles from "./Sidebar.module.scss";
 const sidebarItems = [
   { text: "Dashboard", to: "/", Icon: GoDashboard },
   { text: "Tracks", to: "/tracks", Icon: BsMusicNote },
-  { text: "Artists", to: "/artists", Icon: IoIosPeople },
+  { text: "Artists", to: "/artists", Icon: SlPeople },
   { text: "Genres", to: "/genres", Icon: FaGuitar },
   { text: "Playlists", to: "/playlists", Icon: BsMusicNoteList },
 ];

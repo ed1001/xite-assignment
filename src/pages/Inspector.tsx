@@ -1,26 +1,29 @@
-import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
 import classnames from "classnames";
+import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
 import { BsMusicNote, BsMusicNoteList } from "react-icons/bs";
-import { IoIosPeople } from "react-icons/io";
+import { SlPeople } from "react-icons/sl";
 import { FaGuitar } from "react-icons/fa";
-import { TbMoodEmpty } from "react-icons/tb";
+import { TbMoodEmpty, TbMoodSad } from "react-icons/tb";
+import { RxCross2 } from "react-icons/rx";
 
 import styles from "./Inspector.module.scss";
 import {
   rqSetCurrentInspectorItemIndex,
   rqToggleInspecterOpen,
+  useAddToInspector,
   useCurrentInspectorItemIndex,
   useInspectedItems,
   useInspectorOpen,
   useRemoveFromInspector,
 } from "../react-query/inspector";
 import { InspectableItem } from "../types";
-import { RxCross2 } from "react-icons/rx";
-import { useTrack } from "../react-query/tracks";
+import { useTrack, useTracksByArtist } from "../react-query/tracks";
+import { useArtist } from "../react-query/artists";
+import { InspectButton, ListEntry } from "../components";
 
 const typeIconMap = {
   track: BsMusicNote,
-  artist: IoIosPeople,
+  artist: SlPeople,
   playlist: BsMusicNoteList,
   genre: FaGuitar,
 };
@@ -87,14 +90,16 @@ const RenderTab = ({
       className={classnames(styles.tab, { [styles.active]: active })}
       onClick={setActive}
     >
-      <Icon />
+      <Icon className={styles.icon} />
       {item.id}
-      <RxCross2
-        onClick={(e) => {
-          e.stopPropagation();
-          removeFromInspector(item);
-        }}
-      />
+      <div className={styles.cross}>
+        <RxCross2
+          onClick={(e) => {
+            e.stopPropagation();
+            removeFromInspector(item);
+          }}
+        />
+      </div>
     </div>
   );
 };
@@ -107,7 +112,7 @@ const renderItem = (item?: InspectableItem) => {
         <p>
           Nothing to see here at the moment... <br />
           <br />
-          Click 'inspect' on a track, artist or playlist to inspect its details
+          Click 'inspect' on a track, artist or playlist to view its details
         </p>
       </div>
     );
@@ -124,7 +129,15 @@ const RenderTrack = ({ item }: { item: InspectableItem }) => {
   const { data: track } = useTrack(item.id);
 
   if (!track) {
-    return <p>Something went wrong... Track not found!</p>;
+    return (
+      <div className={styles.empty}>
+        <TbMoodSad />
+        <p>
+          Something went wrong... Track not found! <br />
+          <br /> Try closing this tab and reopening
+        </p>
+      </div>
+    );
   }
 
   const {
@@ -138,8 +151,8 @@ const RenderTrack = ({ item }: { item: InspectableItem }) => {
   const artists = artistDataList.map(({ artist }) => artist.name);
   const additionalInfo = {
     artists,
-    createdAt: new Date(createdAt).toDateString(),
-    updatedAt: new Date(updatedAt).toDateString(),
+    createdAt: new Date(createdAt).toLocaleDateString(),
+    updatedAt: new Date(updatedAt).toLocaleDateString(),
   };
 
   return (
@@ -151,7 +164,7 @@ const RenderTrack = ({ item }: { item: InspectableItem }) => {
       {Object.entries({ ...additionalInfo, ...rest }).map(([key, value]) => {
         const string = Array.isArray(value) ? value.join(", ") : value;
         return (
-          <div>
+          <div key={key}>
             <b>{key}</b>: {string || "none"}
           </div>
         );
@@ -160,6 +173,56 @@ const RenderTrack = ({ item }: { item: InspectableItem }) => {
   );
 };
 const RenderArtist = ({ item }: { item: InspectableItem }) => {
-  return <div>{JSON.stringify(item)}</div>;
+  const { data: artist } = useArtist(item.id);
+  const { data: tracks } = useTracksByArtist(item.id);
+  const latestTracks = tracks?.slice(0, 10);
+  const addToInspector = useAddToInspector().mutate;
+
+  if (!artist) {
+    return (
+      <div className={styles.empty}>
+        <TbMoodSad />
+        <p>
+          Something went wrong... Artist not found! <br />
+          <br /> Try closing this tab and reopening
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles["item-container"]}>
+      <h2 className={styles.description}>Artist Info </h2>
+      <h2>{artist.name}</h2>
+      <br />
+      {latestTracks && (
+        <>
+          <h3 style={{ marginBottom: "10px" }}>Latest tracks: </h3>
+          {latestTracks.map((track, i) => {
+            return (
+              <ListEntry
+                key={track.id}
+                dark={i % 2 === 0}
+                style={{
+                  gridTemplateColumns: "50px 1fr 100px",
+                }}
+              >
+                <div>{i + 1}</div>
+                <div className={styles.title}>
+                  <div>{track.title}</div>
+                  <div className={styles.artist}>{track.displayArtist}</div>
+                </div>
+                <InspectButton
+                  onClick={() =>
+                    addToInspector({ type: "track", id: track.id })
+                  }
+                />
+              </ListEntry>
+            );
+          })}
+        </>
+      )}
+    </div>
+  );
 };
 export default Inspector;
