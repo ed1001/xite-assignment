@@ -45,9 +45,9 @@ describe("react query", () => {
     });
 
     describe("useTrack", () => {
-      const expectedTrackId = 1208187;
+      const expectedTrackId = 514;
       const expectedTrack = mockTrackList.find(
-        (track) => track.xid === expectedTrackId
+        (track) => track.id === expectedTrackId
       );
 
       test("succeeds and retrieves correct data", async () => {
