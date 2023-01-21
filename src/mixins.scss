@@ -3,15 +3,13 @@
 @mixin content-shared {
   background-color: white;
   margin: variables.$content-padding;
-  overflow-y: scroll;
+  overflow: hidden;
 
   .header {
-    position: sticky;
-    top: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
+    height: variables.$content-header-height;
     color: variables.$grey;
     background-color: white;
     padding: 0 16px;

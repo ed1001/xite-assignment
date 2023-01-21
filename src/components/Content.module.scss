@@ -6,4 +6,11 @@
   min-width: variables.$content-min-width;
   @include mixins.content-shared;
   margin-right: variables.$content-padding / 2;
+
+  .main {
+    height: calc(
+      100% - #{variables.$content-header-height} - #{variables.$list-header-height}
+    );
+    overflow-y: scroll;
+  }
 }

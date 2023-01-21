@@ -1,34 +1,37 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactElement } from "react";
 
 import styles from "./Content.module.scss";
 import { SearchBar } from "./index";
 
 interface Props {
   header: string;
-  searchable?: boolean;
-  onSearch?: (searchTerm: string) => void;
-  placeholder?: string;
+  preMainRender?: () => ReactElement;
+  searchProps?: {
+    searchable: boolean;
+    onSearch: (searchTerm: string) => void;
+    placeholder?: string;
+  };
 }
 
 const Content = ({
   children,
   header,
-  searchable,
-  onSearch,
-  placeholder,
+  searchProps,
+  preMainRender,
 }: PropsWithChildren<Props>) => {
   return (
     <section className={styles.content}>
       <div className={styles.header}>
         <h1>{header}</h1>
-        {searchable && onSearch && (
+        {searchProps && (
           <SearchBar
-            onSearch={onSearch}
-            placeholder={placeholder || "Search"}
+            onSearch={searchProps.onSearch}
+            placeholder={searchProps.placeholder}
           />
         )}
       </div>
-      {children}
+      {preMainRender?.()}
+      <div className={styles.main}>{children}</div>
     </section>
   );
 };

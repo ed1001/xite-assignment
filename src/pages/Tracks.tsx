@@ -1,9 +1,15 @@
-import { Content, ListEntry, LoadMoreButton } from "../components";
+import {
+  Content,
+  InspectButton,
+  ListEntry,
+  LoadMoreButton,
+} from "../components";
 import styles from "./Tracks.module.scss";
 import { useState } from "react";
 import { rq_tracks_keys, useInfiniteTracks } from "../react-query/tracks";
 import { trimPreviousInfiniteQuery } from "../react-query/helpers";
 import { useAddToInspector } from "../react-query/inspector";
+import ListHeader from "../components/ListHeader";
 
 const Tracks = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,38 +22,38 @@ const Tracks = () => {
     setSearchTerm(queryString);
   };
 
+  const style = { gridTemplateColumns: "50px 1fr 1fr 0.5fr 0.5fr 100px" };
+  const preMainRender = () => (
+    <ListHeader style={style}>
+      <div>#</div>
+      <div>TITLE</div>
+      <div>ARTIST</div>
+      <div>GENRE</div>
+      <div>CREATED AT</div>
+    </ListHeader>
+  );
+
   return (
     <Content
       header={"Tracks"}
-      searchable={true}
-      onSearch={onSearch}
-      placeholder={"Search by title or artist name"}
+      preMainRender={preMainRender}
+      searchProps={{
+        searchable: true,
+        placeholder: "Search by title or artist name",
+        onSearch,
+      }}
     >
       {tracks?.map((track, i) => {
         return (
-          <ListEntry
-            key={track.xid}
-            dark={i % 2 === 0}
-            style={{ gridTemplateColumns: "50px 1fr 1fr 1fr 50px" }}
-          >
+          <ListEntry key={track.id} dark={i % 2 === 0} style={style}>
             <div>{i + 1}</div>
-            <div className={styles.title}>
-              <div>{track.title}</div>
-              <div className={styles.artist}>{track.displayArtist}</div>
-            </div>
+            <div>{track.title}</div>
+            <div className={styles.artist}>{track.displayArtist}</div>
             <div>{track.genres.join(", ")}</div>
-            <div>{new Date(track.createdAt).toDateString()}</div>
-            <div
-              style={{ cursor: "pointer" }}
-              onClick={() =>
-                addToInspector({
-                  type: "track",
-                  id: track.id,
-                })
-              }
-            >
-              inspect
-            </div>
+            <div>{new Date(track.createdAt).toLocaleDateString()}</div>
+            <InspectButton
+              onClick={() => addToInspector({ type: "track", id: track.id })}
+            />
           </ListEntry>
         );
       })}
