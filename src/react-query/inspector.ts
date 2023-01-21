@@ -7,13 +7,14 @@ import { queryClient } from "./client";
  ************/
 
 export const rq_inspector_keys = {
-  single: ["inspectedItems"] as const,
-  id: (id: number) => [...rq_inspector_keys.single, id] as const,
   all: ["inspectedItems"] as const,
   list: () => [...rq_inspector_keys.all, "list"] as const,
   currentInspectorItemIndex: ["currentInspectorItemIndex"] as const,
-  open: ["open"] as const,
+  open: ["inspectorOpen"] as const,
 };
+
+const { currentInspectorItemIndex, open, list } = rq_inspector_keys;
+export const persistedKeys = [currentInspectorItemIndex, open, list()];
 
 /*******
  * HOOKS

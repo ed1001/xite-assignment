@@ -1,31 +1,33 @@
-import { get, set, del } from "idb-keyval";
+import { del, get, set } from "idb-keyval";
 import {
   PersistedClient,
   Persister,
 } from "@tanstack/react-query-persist-client";
+import { DehydrateOptions, QueryKey } from "@tanstack/react-query";
+import isEqual from "lodash.isequal";
+import { persistedKeys as persistedInspectorKeys } from "./inspector";
 
 export const idbPersistorKey = "REACT_QUERY";
 
 export const createIDBPersister = (idbValidKey: IDBValidKey) =>
   ({
-    persistClient: async (client: PersistedClient) => {
-      // console.log("persisting");
-      await set(idbValidKey, client);
-    },
-    restoreClient: async () => {
-      // console.log("restoring");
-      return await get<PersistedClient>(idbValidKey);
-    },
-    removeClient: async () => {
-      await del(idbValidKey);
-    },
+    persistClient: async (client: PersistedClient) =>
+      await set(idbValidKey, client),
+    restoreClient: async () => await get<PersistedClient>(idbValidKey),
+    removeClient: async () => await del(idbValidKey),
   } as Persister);
 
-export const persister = createIDBPersister(idbPersistorKey);
-
-export const removePersisterClient = () => {
-  persister.removeClient();
+const persister = createIDBPersister(idbPersistorKey);
+const persistQueries: QueryKey[] = [...persistedInspectorKeys];
+const dehydrateOptions: DehydrateOptions = {
+  shouldDehydrateQuery: ({ queryKey }) => {
+    return persistQueries.some((persistQuery) =>
+      isEqual(persistQuery, queryKey)
+    );
+  },
 };
 
-// Uncomment below to clear persisted cache
-// removePersisterClient();
+export const persistOptions = { persister, dehydrateOptions };
+
+// Uncomment below and refresh to clear persisted cache
+// persister.removeClient();
