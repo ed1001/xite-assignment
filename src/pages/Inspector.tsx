@@ -16,9 +16,8 @@ import {
   useInspectorOpen,
   useRemoveFromInspector,
 } from "../react-query/inspector";
-import { InspectableItem } from "../types";
-import { useTrack, useTracksByArtist } from "../react-query/tracks";
-import { useArtist } from "../react-query/artists";
+import { Artist, InspectableItem, Track } from "../types";
+import { useTracksByArtist } from "../react-query/tracks";
 import { InspectButton, ListEntry } from "../components";
 
 const typeIconMap = {
@@ -72,6 +71,15 @@ const Inspector = () => {
   );
 };
 
+const getIdentifierForItem = (item: InspectableItem) => {
+  switch (item.type) {
+    case "track":
+      return item.entity.title;
+    case "artist":
+      return item.entity.name;
+  }
+};
+
 const RenderTab = ({
   active,
   setActive,
@@ -91,7 +99,7 @@ const RenderTab = ({
       onClick={setActive}
     >
       <Icon className={styles.icon} />
-      {item.id}
+      <div className={styles.identifier}>{getIdentifierForItem(item)}</div>
       <div className={styles.cross}>
         <RxCross2
           onClick={(e) => {
@@ -120,14 +128,12 @@ const renderItem = (item?: InspectableItem) => {
 
   switch (item.type) {
     case "track":
-      return <RenderTrack item={item} />;
+      return <RenderTrack track={item.entity as Track} />;
     case "artist":
-      return <RenderArtist item={item} />;
+      return <RenderArtist artist={item.entity as Artist} />;
   }
 };
-const RenderTrack = ({ item }: { item: InspectableItem }) => {
-  const { data: track } = useTrack(item.id);
-
+const RenderTrack = ({ track }: { track: Track }) => {
   if (!track) {
     return (
       <div className={styles.empty}>
@@ -172,9 +178,8 @@ const RenderTrack = ({ item }: { item: InspectableItem }) => {
     </div>
   );
 };
-const RenderArtist = ({ item }: { item: InspectableItem }) => {
-  const { data: artist } = useArtist(item.id);
-  const { data: tracks } = useTracksByArtist(item.id);
+const RenderArtist = ({ artist }: { artist: Artist }) => {
+  const { data: tracks } = useTracksByArtist(artist.id);
   const latestTracks = tracks?.slice(0, 10);
   const addToInspector = useAddToInspector().mutate;
 
@@ -214,7 +219,7 @@ const RenderArtist = ({ item }: { item: InspectableItem }) => {
                 </div>
                 <InspectButton
                   onClick={() =>
-                    addToInspector({ type: "track", id: track.id })
+                    addToInspector({ type: "track", entity: track })
                   }
                 />
               </ListEntry>

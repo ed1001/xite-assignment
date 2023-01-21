@@ -39,12 +39,22 @@ export interface Artist {
   name: string;
 }
 
-export type Playlist = Track[];
+export type Playlist = { id: number; tracks: Track[] };
 
-export type InspectableItem = {
-  type: "track" | "artist" | "playlist" | "genre";
-  id: number;
-};
+export type InspectableItem =
+  | {
+      type: "track";
+      entity: Track;
+    }
+  | {
+      type: "artist";
+      entity: Artist;
+    }
+  | {
+      type: "playlist";
+      entity: Playlist;
+    };
+
 export type InspectedItems = Array<InspectableItem>;
 
 type Language =

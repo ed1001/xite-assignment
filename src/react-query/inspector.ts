@@ -38,9 +38,7 @@ export const useAddToInspector = () => {
   return useMutation({
     mutationFn: async (item: InspectableItem) => {
       const inspected = await rqGetInspectedItems();
-      const existingItemIndex = inspected.findIndex(
-        (inspectedItem) => inspectedItem.id === item.id
-      );
+      const existingItemIndex = getIndexOfInspectedItem(inspected, item);
 
       let newCurrentInspectorItemIndex = existingItemIndex;
 
@@ -65,9 +63,7 @@ export const useRemoveFromInspector = () => {
   return useMutation({
     mutationFn: async (item: InspectableItem) => {
       const inspected = await rqGetInspectedItems();
-      const removedItemIndex = inspected.findIndex(
-        (inspectedItem) => inspectedItem.id === item.id
-      );
+      const removedItemIndex = getIndexOfInspectedItem(inspected, item);
 
       const newInspectedItems =
         queryClient.setQueryData(
@@ -75,7 +71,8 @@ export const useRemoveFromInspector = () => {
           (prev: InspectedItems | undefined) => {
             return prev?.filter(
               (inspectedItem) =>
-                item.type !== inspectedItem.type || item.id !== inspectedItem.id
+                inspectedItem.type !== item.type ||
+                inspectedItem.entity.id !== item.entity.id
             );
           }
         ) || [];
@@ -121,3 +118,13 @@ export const rqSetCurrentInspectorItemIndex = (inspecting: number) =>
 
 export const rqToggleInspecterOpen = () =>
   queryClient.setQueryData(rq_inspector_keys.open, (prev) => !prev);
+
+const getIndexOfInspectedItem = (
+  inspected: InspectedItems,
+  item: InspectableItem
+) =>
+  inspected.findIndex(
+    (inspectedItem) =>
+      inspectedItem.type === item.type &&
+      inspectedItem.entity.id === item.entity.id
+  );

@@ -52,7 +52,7 @@ const Tracks = () => {
             <div>{track.genres.join(", ")}</div>
             <div>{new Date(track.createdAt).toLocaleDateString()}</div>
             <InspectButton
-              onClick={() => addToInspector({ type: "track", id: track.id })}
+              onClick={() => addToInspector({ type: "track", entity: track })}
             />
           </ListEntry>
         );

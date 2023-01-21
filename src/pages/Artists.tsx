@@ -43,7 +43,12 @@ const Artists = () => {
             <div>{artist.name}</div>
             <div>{artist.id}</div>
             <InspectButton
-              onClick={() => addToInspector({ type: "artist", id: artist.id })}
+              onClick={() =>
+                addToInspector({
+                  type: "artist",
+                  entity: artist,
+                })
+              }
             />
           </ListEntry>
         );
