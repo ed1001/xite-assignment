@@ -1,19 +1,34 @@
 import classnames from "classnames";
-import { PropsWithChildren } from "react";
-import CSS from "csstype";
 import styles from "./ListEntry.module.scss";
+import { InspectableItem, Listable } from "../types";
+import { InspectButton } from "./index";
+import { useAddToInspector } from "../react-query/inspector";
 
 const ListEntry = ({
+  listEntryData,
   dark,
-  children,
-  style,
-}: PropsWithChildren<{ dark: boolean; style?: CSS.Properties }>) => {
+  type,
+  inspectableItem,
+}: {
+  listEntryData: Array<string | number>;
+  dark: boolean;
+  type: Listable;
+  inspectableItem?: InspectableItem;
+}) => {
+  const addToInspector = useAddToInspector().mutate;
+
   return (
     <div
-      style={style}
-      className={classnames(styles["list-entry"], { [styles.dark]: dark })}
+      className={classnames(styles["list-entry"], styles[type], {
+        [styles.dark]: dark,
+      })}
     >
-      {children}
+      {listEntryData.map((attribute) => (
+        <div>{attribute}</div>
+      ))}
+      {inspectableItem && (
+        <InspectButton onClick={() => addToInspector(inspectableItem)} />
+      )}
     </div>
   );
 };

@@ -1,56 +1,40 @@
-import { Content, InspectButton, LoadMoreButton } from "../components";
+import { ListContent, LoadMoreButton } from "../components";
 import { useState } from "react";
 import { rq_artists_keys, useInfiniteArtists } from "../react-query/artists";
 import { trimPreviousInfiniteQuery } from "../react-query/helpers";
-import { useAddToInspector } from "../react-query/inspector";
 import ListEntry from "../components/ListEntry";
-import ListHeader from "../components/ListHeader";
+import { isEven } from "../util";
 
 const Artists = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { data, fetchNextPage, hasNextPage } = useInfiniteArtists(searchTerm);
-  const artists = data?.pages.flatMap((page) => page.artists);
-  const addToInspector = useAddToInspector().mutate;
-
+  const artists = data?.pages.flatMap((page) => page.artists) || [];
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_artists_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
 
-  const style = { gridTemplateColumns: "50px 1fr 1fr 100px" };
-  const preMainRender = () => (
-    <ListHeader style={style}>
-      <div>#</div>
-      <div>NAME</div>
-      <div>ID</div>
-    </ListHeader>
-  );
+  const type = "artist";
+  const listHeaderAttributes = ["#", "NAME", "ID"];
+  const searchPlaceholder = "Search by name";
 
   return (
-    <Content
-      header={"Artists"}
-      preMainRender={preMainRender}
-      searchProps={{
-        searchable: true,
-        placeholder: "Search by name",
-        onSearch,
-      }}
+    <ListContent
+      {...{ type, onSearch, listHeaderAttributes, searchPlaceholder }}
     >
       {artists?.map((artist, i) => {
+        const { id, name } = artist;
+        const listNumber = i + 1;
+        const listEntryData = [listNumber, name, id];
+
         return (
-          <ListEntry key={artist.id} dark={i % 2 === 0} style={style}>
-            <div>{i + 1}</div>
-            <div>{artist.name}</div>
-            <div>{artist.id}</div>
-            <InspectButton
-              onClick={() =>
-                addToInspector({
-                  type: "artist",
-                  entity: artist,
-                })
-              }
-            />
-          </ListEntry>
+          <ListEntry
+            key={id}
+            listEntryData={listEntryData}
+            dark={isEven(i)}
+            type={type}
+            inspectableItem={{ type, entity: artist }}
+          />
         );
       })}
       {hasNextPage && (
@@ -58,7 +42,7 @@ const Artists = () => {
           Load more artists
         </LoadMoreButton>
       )}
-    </Content>
+    </ListContent>
   );
 };
 

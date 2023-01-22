@@ -57,6 +57,9 @@ export type InspectableItem =
 
 export type InspectedItems = Array<InspectableItem>;
 
+export type EntityList = "track" | "artist" | "playlist";
+export type Listable = EntityList | "track-abbreviated";
+
 type Language =
   | "English"
   | "Spanish / Castilian"

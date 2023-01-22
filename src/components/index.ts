@@ -1,4 +1,4 @@
-export { default as Content } from "./Content";
+export { default as ListContent } from "./ListContent";
 export { default as ContentContainer } from "./ContentContainer";
 export { default as Navbar } from "./Navbar";
 export { default as Sidebar } from "./Sidebar";

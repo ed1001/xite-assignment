@@ -7,10 +7,23 @@
   @include mixins.content-shared;
   margin-right: variables.$content-padding / 2;
 
-  .main {
+  .list {
     height: calc(
       100% - #{variables.$content-header-height} - #{variables.$list-header-height}
     );
     overflow-y: scroll;
+  }
+
+  .list-header {
+    display: grid;
+    align-content: center;
+    height: 50px;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+    color: variables.$grey;
+    font-size: 12px;
+
+    @include mixins.grid-template-columns-for-entities;
   }
 }

@@ -5,12 +5,10 @@ import { SlPeople } from "react-icons/sl";
 import { FaGuitar } from "react-icons/fa";
 import { TbMoodEmpty, TbMoodSad } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
-
 import styles from "./Inspector.module.scss";
 import {
   rqSetCurrentInspectorItemIndex,
   rqToggleInspecterOpen,
-  useAddToInspector,
   useCurrentInspectorItemIndex,
   useInspectedItems,
   useInspectorOpen,
@@ -18,7 +16,8 @@ import {
 } from "../react-query/inspector";
 import { Artist, InspectableItem, Track } from "../types";
 import { useTracksByArtist } from "../react-query/tracks";
-import { InspectButton, ListEntry } from "../components";
+import { ListEntry } from "../components";
+import { isEven } from "../util";
 
 const typeIconMap = {
   track: BsMusicNote,
@@ -76,6 +75,8 @@ const getIdentifierForItem = (item: InspectableItem) => {
     case "track":
       return item.entity.title;
     case "artist":
+      return item.entity.name;
+    case "playlist":
       return item.entity.name;
   }
 };
@@ -181,7 +182,6 @@ const RenderTrack = ({ track }: { track: Track }) => {
 const RenderArtist = ({ artist }: { artist: Artist }) => {
   const { data: tracks } = useTracksByArtist(artist.id);
   const latestTracks = tracks?.slice(0, 10);
-  const addToInspector = useAddToInspector().mutate;
 
   if (!artist) {
     return (
@@ -207,22 +207,11 @@ const RenderArtist = ({ artist }: { artist: Artist }) => {
             return (
               <ListEntry
                 key={track.id}
-                dark={i % 2 === 0}
-                style={{
-                  gridTemplateColumns: "50px 1fr 100px",
-                }}
-              >
-                <div>{i + 1}</div>
-                <div className={styles.title}>
-                  <div>{track.title}</div>
-                  <div className={styles.artist}>{track.displayArtist}</div>
-                </div>
-                <InspectButton
-                  onClick={() =>
-                    addToInspector({ type: "track", entity: track })
-                  }
-                />
-              </ListEntry>
+                listEntryData={[track.title]}
+                dark={isEven(i)}
+                type={"track-abbreviated"}
+                inspectableItem={{ type: "track", entity: track }}
+              />
             );
           })}
         </>
