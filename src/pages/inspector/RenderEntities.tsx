@@ -10,6 +10,7 @@ import { useArtist } from "../../react-query/artists";
 import { useGenre } from "../../react-query/genres";
 import { ListEntry } from "../../components";
 import { isEven } from "../../util";
+import capitalize from "lodash.capitalize";
 
 interface Props {
   entity?: Entity;
@@ -22,7 +23,7 @@ const RenderEntity = ({ item, tracks, info }: Props) => {
   return (
     <div className={styles["item-container"]}>
       <div className={styles["item-header-container"]}>
-        <h2 className={styles.description}>Artist Info </h2>
+        <h2 className={styles.description}>{capitalize(item.type)}</h2>
         <h2>{item.displayName}</h2>
       </div>
       {info &&

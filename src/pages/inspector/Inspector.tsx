@@ -17,7 +17,7 @@ import {
 import { InspectableItem } from "../../types";
 import { RenderArtist, RenderGenre, RenderTrack } from "./RenderEntities";
 import React from "react";
-import { RenderPlaylist } from "./RenderPlayllist";
+import { RenderPlaylist } from "./RenderPlaylist";
 
 const typeIconMap = {
   track: BsMusicNote,

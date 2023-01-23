@@ -1,4 +1,4 @@
-import { ListContent, ListEntry } from "../components";
+import { ListContent, ListEntry, LoadMoreButton } from "../components";
 import {
   useCreatePlaylist,
   useInfinitePlaylists,
@@ -10,7 +10,7 @@ import { isEven } from "../util";
 
 const Playlists = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data } = useInfinitePlaylists(searchTerm);
+  const { data, fetchNextPage, hasNextPage } = useInfinitePlaylists(searchTerm);
   const playlists = data?.pages.flatMap((page) => page.playlists);
   const createPlaylist = useCreatePlaylist().mutate;
   const onSearch = (queryString: string) => {
@@ -55,6 +55,11 @@ const Playlists = () => {
           />
         );
       })}
+      {hasNextPage && (
+        <LoadMoreButton disabled={!hasNextPage} onClick={() => fetchNextPage()}>
+          Load more playlists
+        </LoadMoreButton>
+      )}
     </ListContent>
   );
 };

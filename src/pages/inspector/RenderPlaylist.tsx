@@ -49,8 +49,9 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
           <p>
             No tracks in this playlist yet
             <br />
-            <br /> Add tracks by clicking the menu on a track or by dragging a
-            track here
+            <br /> Add tracks either by dragging a track into a playlist in the
+            inspector (the outlined area here) or by clicking the add to
+            playlist button on a track
           </p>
         </div>
       )}

@@ -1,5 +1,5 @@
 import { Playlist, Track } from "../types";
-import React from "react";
+import React, { useState } from "react";
 import {
   useAddToPlaylist,
   useCreatePlaylist,
@@ -10,8 +10,12 @@ import {
   useDropdownOpenId,
   useSetDropdownOpenId,
 } from "../react-query/dropdown";
+import { BsMusicNoteList } from "react-icons/bs";
+import { GoPlus } from "react-icons/go";
+import classnames from "classnames";
 
 const AddToPlaylist = ({ track }: { track: Track }) => {
+  const [displayUpwards, setDisplayUpwards] = useState(false);
   const { data: dropdownOpenId } = useDropdownOpenId();
   const setDropdownOpenId = useSetDropdownOpenId().mutate;
   const dropdownId = `addToPlaylist:${track.id}`;
@@ -34,6 +38,9 @@ const AddToPlaylist = ({ track }: { track: Track }) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.stopPropagation();
+
+    setDisplayUpwards(event.clientY > window.innerHeight / 2);
+
     if (!dropdownOpen) {
       window.addEventListener("click", handleWindowClick, { once: true });
       return setDropdownOpenId(dropdownId);
@@ -43,32 +50,47 @@ const AddToPlaylist = ({ track }: { track: Track }) => {
     setDropdownOpenId("");
   };
 
-  const handleClickCreatePlaylist = () => {
+  const handleClickCreatePlaylist = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     createPlaylist({ track, openInInspector: true });
     setDropdownOpenId("");
+    event.stopPropagation();
   };
 
-  const handleClickAddToPlaylist = (playlist: Playlist) => {
+  const handleClickAddToPlaylist = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    playlist: Playlist
+  ) => {
     addToPlaylist({ track, playlist });
     setDropdownOpenId("");
+    event.stopPropagation();
   };
 
   return (
     <div className={styles.container}>
-      <button onClick={handleClickOpenDropdown}>add to playlist</button>
+      <button className={styles.button} onClick={handleClickOpenDropdown}>
+        <BsMusicNoteList />
+        <GoPlus className={styles.plus} />
+      </button>
       {dropdownOpen && (
-        <div className={styles.dropdown}>
+        <div
+          className={classnames(styles.dropdown, {
+            [styles.upwards]: displayUpwards,
+          })}
+        >
           <div
             className={styles["dropdown-item"]}
             onClick={handleClickCreatePlaylist}
           >
-            Create playlist
+            Create playlist &nbsp; <GoPlus />
           </div>
           {playlists?.map((playlist) => {
             return (
               <div
+                key={playlist.id}
                 className={styles["dropdown-item"]}
-                onClick={() => handleClickAddToPlaylist(playlist)}
+                onClick={(event) => handleClickAddToPlaylist(event, playlist)}
               >
                 {playlist.name}
               </div>

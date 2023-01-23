@@ -75,7 +75,7 @@ export const useCreatePlaylist = () => {
       queryClient.setQueryData(
         rq_playlists_keys.list(),
         (prev: Playlist[] | undefined) => {
-          return [...(prev || []), playlist];
+          return [playlist, ...(prev || [])];
         }
       );
 
