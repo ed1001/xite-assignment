@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { queryClient } from "./react-query/client";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { persistOptions } from "./react-query/persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { ContentContainer, Navbar, Sidebar } from "./components";
@@ -42,6 +43,7 @@ function App() {
           <Inspector />
         </ContentContainer>
       </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
     </PersistQueryClientProvider>
   );
 }
