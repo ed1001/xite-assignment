@@ -7,14 +7,17 @@ import { queryClient } from "./client";
  ************/
 
 export const rq_inspector_keys = {
-  all: ["inspectedItems"] as const,
-  list: () => [...rq_inspector_keys.all, "list"] as const,
-  currentInspectorItemIndex: ["currentInspectorItemIndex"] as const,
-  open: ["inspectorOpen"] as const,
+  all: ["inspector"] as const,
+  inspectedItems: () => [...rq_inspector_keys.all, "inspectedItems"] as const,
+  inspectedEntities: () =>
+    [...rq_inspector_keys.all, "inspectedEntities"] as const,
+  currentItemIndex: () =>
+    [...rq_inspector_keys.all, "currentInspectorItemIndex"] as const,
+  open: () => [...rq_inspector_keys.all, "open"] as const,
 };
 
-const { currentInspectorItemIndex, open, list } = rq_inspector_keys;
-export const persistedKeys = [currentInspectorItemIndex, open, list()];
+const { currentItemIndex, open, inspectedItems } = rq_inspector_keys;
+export const persistedKeys = [currentItemIndex(), open(), inspectedItems()];
 
 /*******
  * HOOKS
@@ -22,40 +25,21 @@ export const persistedKeys = [currentInspectorItemIndex, open, list()];
 
 export const useInspectorOpen = () => {
   return useQuery<boolean>({
-    queryKey: rq_inspector_keys.open,
-    queryFn: async () => !!queryClient.getQueryData(rq_inspector_keys.open),
+    queryKey: rq_inspector_keys.open(),
+    queryFn: async () => !!queryClient.getQueryData(rq_inspector_keys.open()),
   });
 };
 
 export const useInspectedItems = () => {
   return useQuery<InspectedItems>({
-    queryKey: rq_inspector_keys.list(),
+    queryKey: rq_inspector_keys.inspectedItems(),
     queryFn: rqGetInspectedItems,
   });
 };
 
 export const useAddToInspector = () => {
   return useMutation({
-    mutationFn: async (item: InspectableItem) => {
-      const inspected = await rqGetInspectedItems();
-      const existingItemIndex = getIndexOfInspectedItem(inspected, item);
-
-      let newCurrentInspectorItemIndex = existingItemIndex;
-
-      if (existingItemIndex === -1) {
-        queryClient.setQueryData(
-          rq_inspector_keys.list(),
-          (prev: InspectedItems | undefined) => {
-            return [...(prev || []), item];
-          }
-        );
-
-        newCurrentInspectorItemIndex = inspected.length;
-      }
-
-      rqSetCurrentInspectorItemIndex(newCurrentInspectorItemIndex);
-      queryClient.setQueryData(rq_inspector_keys.open, true);
-    },
+    mutationFn: rqAddToInspectedItems,
   });
 };
 
@@ -67,12 +51,11 @@ export const useRemoveFromInspector = () => {
 
       const newInspectedItems =
         queryClient.setQueryData(
-          rq_inspector_keys.list(),
+          rq_inspector_keys.inspectedItems(),
           (prev: InspectedItems | undefined) => {
             return prev?.filter(
               (inspectedItem) =>
-                inspectedItem.type !== item.type ||
-                inspectedItem.entity.id !== item.entity.id
+                inspectedItem.type !== item.type || inspectedItem.id !== item.id
             );
           }
         ) || [];
@@ -95,7 +78,7 @@ export const useRemoveFromInspector = () => {
 
 export const useCurrentInspectorItemIndex = () => {
   return useQuery<number>({
-    queryKey: rq_inspector_keys.currentInspectorItemIndex,
+    queryKey: rq_inspector_keys.currentItemIndex(),
     queryFn: rqGetCurrentInspectorItemIndex,
   });
 };
@@ -105,19 +88,37 @@ export const useCurrentInspectorItemIndex = () => {
  ******************/
 
 const rqGetInspectedItems = async (): Promise<InspectedItems> =>
-  queryClient.getQueryData(rq_inspector_keys.list()) || [];
+  queryClient.getQueryData(rq_inspector_keys.inspectedItems()) || [];
 
 export const rqGetCurrentInspectorItemIndex = async (): Promise<number> =>
-  queryClient.getQueryData(rq_inspector_keys.currentInspectorItemIndex) ?? -1;
+  queryClient.getQueryData(rq_inspector_keys.currentItemIndex()) ?? -1;
 
 export const rqSetCurrentInspectorItemIndex = (inspecting: number) =>
-  queryClient.setQueryData(
-    rq_inspector_keys.currentInspectorItemIndex,
-    inspecting
-  );
+  queryClient.setQueryData(rq_inspector_keys.currentItemIndex(), inspecting);
+
+export const rqAddToInspectedItems = async (item: InspectableItem) => {
+  const inspected = await rqGetInspectedItems();
+  const existingItemIndex = getIndexOfInspectedItem(inspected, item);
+
+  let newCurrentInspectorItemIndex = existingItemIndex;
+
+  if (existingItemIndex === -1) {
+    queryClient.setQueryData(
+      rq_inspector_keys.inspectedItems(),
+      (prev: InspectedItems | undefined) => {
+        return [...(prev || []), item];
+      }
+    );
+
+    newCurrentInspectorItemIndex = inspected.length;
+  }
+
+  rqSetCurrentInspectorItemIndex(newCurrentInspectorItemIndex);
+  queryClient.setQueryData(rq_inspector_keys.open(), true);
+};
 
 export const rqToggleInspecterOpen = () =>
-  queryClient.setQueryData(rq_inspector_keys.open, (prev) => !prev);
+  queryClient.setQueryData(rq_inspector_keys.open(), (prev) => !prev);
 
 const getIndexOfInspectedItem = (
   inspected: InspectedItems,
@@ -125,6 +126,5 @@ const getIndexOfInspectedItem = (
 ) =>
   inspected.findIndex(
     (inspectedItem) =>
-      inspectedItem.type === item.type &&
-      inspectedItem.entity.id === item.entity.id
+      inspectedItem.type === item.type && inspectedItem.id === item.id
   );

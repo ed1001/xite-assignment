@@ -17,7 +17,7 @@ export interface Track {
   explicit: Array<"Language" | "Violence" | "Sex" | "Drugs" | "Discrimination">;
   category: "Music Video";
   urgency: Urgency;
-  genres: Genre[];
+  genres: GenreType[];
   subGenres: SubGenre[];
   assetType: AssetType;
   artists: ArtistData[];
@@ -39,26 +39,30 @@ export interface Artist {
   name: string;
 }
 
-export type Playlist = { id: number; tracks: Track[] };
+export type Playlist = {
+  id: number;
+  name: string;
+  tracks: Track[];
+  createdAt: string;
+};
 
-export type InspectableItem =
-  | {
-      type: "track";
-      entity: Track;
-    }
-  | {
-      type: "artist";
-      entity: Artist;
-    }
-  | {
-      type: "playlist";
-      entity: Playlist;
-    };
+export type Genre = {
+  id: number;
+  name: GenreType | SubGenre;
+};
+
+export type Entity = Track | Artist | Playlist | Genre;
+export type EntityType = "track" | "artist" | "playlist" | "genre";
+
+export type InspectableItem = {
+  type: EntityType;
+  id: number;
+  displayName: string;
+};
 
 export type InspectedItems = Array<InspectableItem>;
 
-export type EntityList = "track" | "artist" | "playlist";
-export type Listable = EntityList | "track-abbreviated";
+export type Listable = EntityType | "track-abbreviated";
 
 type Language =
   | "English"
@@ -161,7 +165,7 @@ type Origin =
   | "EE"
   | "UK";
 
-export type Genre =
+export type GenreType =
   | "Regional Popular"
   | "Rock"
   | "Pop"

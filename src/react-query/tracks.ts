@@ -2,17 +2,25 @@ import { queryClient } from "./client";
 import { Track } from "../types";
 import { getTracks } from "../api/xite";
 import Fuse from "fuse.js";
-import { DEFAULT_PAGE_LIMIT } from "./helpers";
+import { DEFAULT_PAGE_LIMIT, rqGetEntity, rqGetSearchInterface } from "./util";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+
+const searchKeys: Array<string | Fuse.FuseOptionKey<Track>> = [
+  "title",
+  {
+    name: "artistName",
+    getFn: (track) => track.artists.map((artist) => artist.artist.name),
+  },
+];
 
 /************
  * QUERY KEYS
  ************/
 
 export const rq_tracks_keys = {
-  single: ["track"] as const,
-  id: (id: number) => [...rq_tracks_keys.single, id] as const,
   all: ["tracks"] as const,
+  id: (id: number) => [...rq_tracks_keys.all, id] as const,
+  searchInterface: () => [...rq_tracks_keys.all, "searchInterface"] as const,
   list: (searchTerm?: string) =>
     [...rq_tracks_keys.all, "list", searchTerm] as const,
   listByArtist: (artistId: number) =>
@@ -43,28 +51,25 @@ export const useInfiniteTracks = (searchTerm: string) => {
   });
 };
 
-export const useTracks = () => {
-  return useQuery<Track[]>({
-    queryKey: rq_tracks_keys.list(),
-    queryFn: rqGetAllTracks,
-  });
-};
-
-export const useTracksByArtist = (artistId: number) => {
+export const useTracksByArtist = ({
+  enabled,
+  artistId,
+}: {
+  enabled: boolean;
+  artistId: number;
+}) => {
   return useQuery<Track[]>({
     queryKey: rq_tracks_keys.listByArtist(artistId),
     queryFn: () => rqGetTracksByArtist(artistId),
+    enabled,
   });
 };
 
 export const useTrack = (id: number) => {
-  return useQuery<Track | undefined>({
+  return useQuery<Track>({
     queryKey: rq_tracks_keys.id(id),
-    queryFn: async () => {
-      const tracks = await rqGetAllTracks();
-
-      return tracks.find((t) => t.id === id);
-    },
+    queryFn: () =>
+      rqGetEntity<Track>(id, rq_tracks_keys.id(id), rqGetAllTracks),
   });
 };
 
@@ -79,7 +84,7 @@ export const prefetchAllTracks = async () => {
   });
 };
 
-export const rqGetAllTracks = (): Promise<Track[]> => {
+export const rqGetAllTracks = async () => {
   return queryClient.ensureQueryData({
     queryKey: rq_tracks_keys.list(),
     queryFn: getTracks,
@@ -93,19 +98,13 @@ export const rqGetTracksBySearchTerm = async (
     queryKey: rq_tracks_keys.list(searchTerm),
     queryFn: async () => {
       const tracks = await rqGetAllTracks();
-      const fuse = new Fuse(tracks, {
-        keys: [
-          "title",
-          {
-            name: "artistName",
-            getFn: (track) => track.artists.map((artist) => artist.artist.name),
-          },
-        ],
-        threshold: 0,
-        ignoreLocation: true,
-      });
+      const searchInterface = await rqGetSearchInterface<Track>(
+        rq_tracks_keys.searchInterface(),
+        tracks,
+        searchKeys
+      );
 
-      const results = fuse.search(searchTerm);
+      const results = searchInterface.search(searchTerm);
       return results.map((result) => result.item);
     },
   });
