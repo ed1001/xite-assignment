@@ -1,7 +1,6 @@
 import classnames from "classnames";
 import styles from "./ListEntry.module.scss";
 import { InspectableItem, Listable } from "../types";
-import { InspectButton } from "./index";
 import { useAddToInspector } from "../react-query/inspector";
 import { ReactElement } from "react";
 
@@ -17,19 +16,24 @@ const ListEntry = ({
   inspectableItem?: InspectableItem;
 }) => {
   const addToInspector = useAddToInspector().mutate;
+  const handleClick = () => {
+    if (!inspectableItem) {
+      return;
+    }
+
+    addToInspector(inspectableItem);
+  };
 
   return (
     <div
+      onClick={handleClick}
       className={classnames(styles["list-entry"], styles[type], {
         [styles.dark]: dark,
       })}
     >
-      {listEntryData.map((attribute) => (
-        <div key={`${attribute}`}>{attribute}</div>
+      {listEntryData.map((attribute, i) => (
+        <div key={`${attribute}:${i}`}>{attribute}</div>
       ))}
-      {inspectableItem && (
-        <InspectButton onClick={() => addToInspector(inspectableItem)} />
-      )}
     </div>
   );
 };
