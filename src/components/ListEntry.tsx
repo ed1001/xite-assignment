@@ -10,14 +10,17 @@ const ListEntry = ({
   type,
   inspectableItem,
   addToPlaylist,
+  draggableProps,
 }: {
   listEntryData: Array<string | number | ReactElement>;
   dark: boolean;
   type: Listable;
   inspectableItem?: InspectableItem;
   addToPlaylist?: ReactElement;
+  draggableProps?: any;
 }) => {
   const addToInspector = useAddToInspector().mutate;
+
   const handleClick = () => {
     if (!inspectableItem) {
       return;
@@ -28,6 +31,7 @@ const ListEntry = ({
 
   return (
     <div
+      {...draggableProps}
       onClick={handleClick}
       className={classnames(styles["list-entry"], styles[type], {
         [styles.dark]: dark,

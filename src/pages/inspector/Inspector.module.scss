@@ -125,6 +125,14 @@
     font-size: 24px;
     height: 50%;
 
+    &.dropzone {
+      border: 1px dashed variables.$light-grey;
+    }
+
+    &.dropzone-active {
+      background-color: lighten(variables.$light-grey, 5%);
+    }
+
     svg {
       $icon-dimension: 50px;
       height: $icon-dimension;
@@ -168,6 +176,17 @@
     .tracks-container {
       height: 400px;
       overflow-y: scroll;
+      box-sizing: border-box;
+
+      &.dropzone-active {
+        border: 1px dashed variables.$light-grey;
+      }
     }
+  }
+}
+
+.dropzone-active {
+  > * {
+    pointer-events: none;
   }
 }

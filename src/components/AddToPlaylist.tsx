@@ -70,7 +70,7 @@ const AddToPlaylist = ({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     playlist: Playlist
   ) => {
-    addToPlaylist({ track, playlist, openInInspector: true });
+    addToPlaylist({ trackId: track.id, playlist, openInInspector: true });
     setDropdownOpenId("");
     event.stopPropagation();
   };

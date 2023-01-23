@@ -4,10 +4,11 @@ import {
   ListEntry,
   LoadMoreButton,
 } from "../components";
-import { useState } from "react";
+import React, { useState } from "react";
 import { rq_tracks_keys, useInfiniteTracks } from "../react-query/tracks";
 import { trimPreviousInfiniteQuery } from "../react-query/util";
 import { isEven } from "../util";
+import { Track } from "../types";
 
 const Tracks = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -21,6 +22,14 @@ const Tracks = () => {
   const type = "track";
   const listHeaderAttributes = ["#", "TITLE", "ARTIST", "GENRE"];
   const searchPlaceholder = "Search by title or artist name";
+
+  const onDragStart = async (event: React.DragEvent, track: Track) => {
+    event.dataTransfer.effectAllowed = "copy";
+    event.dataTransfer.setData(
+      "text/plain",
+      JSON.stringify({ trackId: track.id })
+    );
+  };
 
   return (
     <ListContent
@@ -44,6 +53,10 @@ const Tracks = () => {
             dark={isEven(i)}
             type={type}
             inspectableItem={{ type, id, displayName: title }}
+            draggableProps={{
+              draggable: true,
+              onDragStart: (e: React.DragEvent) => onDragStart(e, track),
+            }}
           />
         );
       })}

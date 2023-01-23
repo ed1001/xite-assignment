@@ -22,6 +22,8 @@
     justify-content: flex-start;
   }
 
+  background-color: white;
+
   &.dark {
     background-color: lighten(variables.$light-grey, 11%);
   }

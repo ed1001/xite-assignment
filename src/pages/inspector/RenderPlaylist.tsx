@@ -1,10 +1,12 @@
-import { InspectableItem } from "../../types";
-import { usePlaylist } from "../../react-query/playlists";
+import { InspectableItem, Playlist } from "../../types";
+import { useAddToPlaylist, usePlaylist } from "../../react-query/playlists";
 import styles from "./Inspector.module.scss";
 import { AddToPlaylist, ListEntry } from "../../components";
 import { isEven } from "../../util";
 import { TbMoodEmpty } from "react-icons/tb";
 import { EmptyItem } from "./RenderEntities";
+import React, { PropsWithChildren, useState } from "react";
+import classnames from "classnames";
 
 export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
   const { data: playlist } = usePlaylist(item.id);
@@ -25,7 +27,10 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
       {!!tracks.length ? (
         <>
           <h3 style={{ marginBottom: "10px" }}>Tracks:</h3>
-          <div className={styles["tracks-container"]}>
+          <PlaylistDropZone
+            playlist={playlist}
+            className={styles["tracks-container"]}
+          >
             {tracks.map(({ track, addedAt }, i) => {
               return (
                 <ListEntry
@@ -48,10 +53,10 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
                 />
               );
             })}
-          </div>
+          </PlaylistDropZone>
         </>
       ) : (
-        <div className={styles.empty}>
+        <PlaylistDropZone playlist={playlist} className={styles.empty}>
           <TbMoodEmpty />
           <p>
             No tracks in this playlist yet
@@ -60,8 +65,54 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
             inspector (the outlined area here) or by clicking the add to
             playlist button on a track
           </p>
-        </div>
+        </PlaylistDropZone>
       )}
+    </div>
+  );
+};
+
+const PlaylistDropZone = ({
+  playlist,
+  className,
+  children,
+}: PropsWithChildren<{ playlist: Playlist; className: string }>) => {
+  const addToPlaylist = useAddToPlaylist().mutate;
+  const [dropZoneEntered, setDropZoneEntered] = useState(false);
+  const checkDroppable = (event: React.DragEvent) => {
+    const isDroppable = event.dataTransfer.types.includes("text/plain");
+    if (isDroppable) {
+      event.preventDefault();
+    }
+
+    return isDroppable;
+  };
+
+  const onDrop = (e: React.DragEvent) => {
+    setDropZoneEntered(false);
+    const json = e.dataTransfer.getData("text/plain");
+    const { trackId } = JSON.parse(json);
+    addToPlaylist({ trackId: +trackId, playlist, openInInspector: true });
+  };
+
+  return (
+    <div
+      onDragOver={(event) => {
+        if (checkDroppable(event)) {
+          setDropZoneEntered(true);
+        }
+      }}
+      onDragEnter={checkDroppable}
+      onDragLeave={() => setDropZoneEntered(false)}
+      onDrop={onDrop}
+      className={classnames(
+        styles.dropzone,
+        {
+          [styles["dropzone-active"]]: dropZoneEntered,
+        },
+        className
+      )}
+    >
+      {children}
     </div>
   );
 };

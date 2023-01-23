@@ -84,8 +84,7 @@ export const useTracksByGenre = ({
 export const useTrack = (id: number) => {
   return useQuery<Track>({
     queryKey: rq_tracks_keys.id(id),
-    queryFn: () =>
-      rqGetEntity<Track>(id, rq_tracks_keys.id(id), rqGetAllTracks),
+    queryFn: () => rqGetTrack(id),
   });
 };
 
@@ -106,6 +105,9 @@ export const rqGetAllTracks = async () => {
     queryFn: getTracks,
   });
 };
+
+export const rqGetTrack = (id: number) =>
+  rqGetEntity<Track>(id, rq_tracks_keys.id(id), rqGetAllTracks);
 
 export const rqGetTracksBySearchTerm = async (
   searchTerm: string

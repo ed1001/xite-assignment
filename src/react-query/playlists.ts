@@ -3,6 +3,7 @@ import { Playlist, Track } from "../types";
 import { DEFAULT_PAGE_LIMIT, rqGetEntity, rqGetSearchInterface } from "./util";
 import { queryClient } from "./client";
 import { rqAddToInspectedItems } from "./inspector";
+import { rqGetTrack } from "./tracks";
 
 /************
  * QUERY KEYS
@@ -99,15 +100,16 @@ export const useCreatePlaylist = () => {
 export const useAddToPlaylist = () => {
   return useMutation({
     mutationFn: async ({
-      track,
+      trackId,
       playlist,
       openInInspector = false,
     }: {
-      track: Track;
+      trackId: number;
       playlist: Playlist;
       openInInspector?: boolean;
     }) => {
       const addedAt = new Date().toISOString();
+      const track = await rqGetTrack(trackId);
       const updatedPlaylist = {
         ...playlist,
         tracks: [...playlist.tracks, { track, addedAt }],
