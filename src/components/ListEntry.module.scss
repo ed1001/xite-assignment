@@ -13,7 +13,7 @@
   @include mixins.grid-template-columns-for-entities;
 
   &.track-abbreviated {
-    grid-template-columns: 1fr 100px;
+    grid-template-columns: 1fr 60px;
   }
 
   div {

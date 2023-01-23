@@ -34,7 +34,7 @@ const Tracks = () => {
           title,
           displayArtist,
           genres.join(", "),
-          <AddToPlaylist track={track} />,
+          <AddToPlaylist track={track} origin={"list"} />,
         ];
 
         return (

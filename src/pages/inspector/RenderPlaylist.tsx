@@ -1,7 +1,7 @@
 import { InspectableItem } from "../../types";
 import { usePlaylist } from "../../react-query/playlists";
 import styles from "./Inspector.module.scss";
-import { ListEntry } from "../../components";
+import { AddToPlaylist, ListEntry } from "../../components";
 import { isEven } from "../../util";
 import { TbMoodEmpty } from "react-icons/tb";
 import { EmptyItem } from "./RenderEntities";
@@ -38,6 +38,13 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
                     id: track.id,
                     displayName: track.title,
                   }}
+                  addToPlaylist={
+                    <AddToPlaylist
+                      track={track}
+                      addedAt={addedAt}
+                      origin={"inspector"}
+                    />
+                  }
                 />
               );
             })}

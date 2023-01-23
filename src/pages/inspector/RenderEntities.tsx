@@ -8,9 +8,10 @@ import {
 } from "../../react-query/tracks";
 import { useArtist } from "../../react-query/artists";
 import { useGenre } from "../../react-query/genres";
-import { ListEntry } from "../../components";
+import { AddToPlaylist, ListEntry } from "../../components";
 import { isEven } from "../../util";
 import capitalize from "lodash.capitalize";
+import React from "react";
 
 interface Props {
   entity?: Entity;
@@ -54,6 +55,9 @@ const RenderEntity = ({ item, tracks, info }: Props) => {
                     id: track.id,
                     displayName: track.title,
                   }}
+                  addToPlaylist={
+                    <AddToPlaylist track={track} origin={"inspector"} />
+                  }
                 />
               );
             })}

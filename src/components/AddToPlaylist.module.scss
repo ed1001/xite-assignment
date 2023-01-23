@@ -5,8 +5,8 @@
   position: relative;
 
   .button {
-    position: relative;
     all: unset;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,6 +14,7 @@
     width: 55px;
     border-radius: 30px;
     border: 1px solid variables.$grey;
+    box-sizing: border-box;
 
     &:hover {
       background-color: variables.$grey;

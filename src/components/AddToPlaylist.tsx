@@ -14,11 +14,19 @@ import { BsMusicNoteList } from "react-icons/bs";
 import { GoPlus } from "react-icons/go";
 import classnames from "classnames";
 
-const AddToPlaylist = ({ track }: { track: Track }) => {
+const AddToPlaylist = ({
+  track,
+  origin,
+  addedAt,
+}: {
+  track: Track;
+  origin: "inspector" | "list";
+  addedAt?: string;
+}) => {
   const [displayUpwards, setDisplayUpwards] = useState(false);
   const { data: dropdownOpenId } = useDropdownOpenId();
   const setDropdownOpenId = useSetDropdownOpenId().mutate;
-  const dropdownId = `addToPlaylist:${track.id}`;
+  const dropdownId = `addToPlaylist:${track.id}:${origin}:${addedAt}`;
   const dropdownOpen = dropdownOpenId === dropdownId;
 
   const { data: playlists } = usePlaylists();

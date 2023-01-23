@@ -9,11 +9,13 @@ const ListEntry = ({
   dark,
   type,
   inspectableItem,
+  addToPlaylist,
 }: {
   listEntryData: Array<string | number | ReactElement>;
   dark: boolean;
   type: Listable;
   inspectableItem?: InspectableItem;
+  addToPlaylist?: ReactElement;
 }) => {
   const addToInspector = useAddToInspector().mutate;
   const handleClick = () => {
@@ -34,6 +36,7 @@ const ListEntry = ({
       {listEntryData.map((attribute, i) => (
         <div key={`${attribute}:${i}`}>{attribute}</div>
       ))}
+      {addToPlaylist}
     </div>
   );
 };
