@@ -5,8 +5,10 @@ import {
 } from "../react-query/playlists";
 import { trimPreviousInfiniteQuery } from "../react-query/util";
 import { rq_tracks_keys } from "../react-query/tracks";
-import { useState } from "react";
+import React, { useState } from "react";
 import { isEven } from "../util";
+import styles from "./Playlists.module.scss";
+import { GoPlus } from "react-icons/go";
 
 const Playlists = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,8 +19,14 @@ const Playlists = () => {
     trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
+
   const renderHeaderItems = () => (
-    <button onClick={() => createPlaylist({})}>create playlist</button>
+    <button
+      className={styles["create-playlist-button"]}
+      onClick={() => createPlaylist({})}
+    >
+      create playlist <GoPlus className={styles.plus} />
+    </button>
   );
 
   const type = "playlist";
