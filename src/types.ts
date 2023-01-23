@@ -42,9 +42,11 @@ export interface Artist {
 export type Playlist = {
   id: number;
   name: string;
-  tracks: Track[];
+  tracks: PlaylistTrack[];
   createdAt: string;
 };
+
+export type PlaylistTrack = { track: Track; addedAt: string };
 
 export type Genre = {
   id: number;

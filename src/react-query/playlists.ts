@@ -66,7 +66,8 @@ export const useCreatePlaylist = () => {
       track?: Track;
       openInInspector?: boolean;
     }) => {
-      const tracks = track ? [track] : [];
+      const addedAt = new Date().toISOString();
+      const tracks = track ? [{ track, addedAt }] : [];
       const id = await getIncrementedId();
       const name = `Untitled Playlist ${id}`;
       const createdAt = new Date().toISOString();
@@ -100,13 +101,16 @@ export const useAddToPlaylist = () => {
     mutationFn: async ({
       track,
       playlist,
+      openInInspector = false,
     }: {
       track: Track;
       playlist: Playlist;
+      openInInspector?: boolean;
     }) => {
+      const addedAt = new Date().toISOString();
       const updatedPlaylist = {
         ...playlist,
-        tracks: [...playlist.tracks, track],
+        tracks: [...playlist.tracks, { track, addedAt }],
       };
 
       queryClient.setQueryData(
@@ -126,11 +130,19 @@ export const useAddToPlaylist = () => {
         }
       );
 
-      return playlist.id;
+      return { playlist: updatedPlaylist, openInInspector };
     },
-    onSuccess: async (playlistId) => {
+    onSuccess: async ({ openInInspector, playlist }) => {
       await queryClient.invalidateQueries(rq_playlists_keys.all);
-      await queryClient.invalidateQueries(rq_playlists_keys.id(playlistId));
+
+      if (openInInspector) {
+        const { id, name } = playlist;
+        await rqAddToInspectedItems({
+          type: "playlist",
+          id,
+          displayName: name,
+        });
+      }
     },
   });
 };

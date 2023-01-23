@@ -24,12 +24,12 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
       <br />
       {!!tracks.length ? (
         <>
-          <h3 style={{ marginBottom: "10px" }}>Latest tracks:</h3>
+          <h3 style={{ marginBottom: "10px" }}>Tracks:</h3>
           <div className={styles["tracks-container"]}>
-            {tracks.map((track, i) => {
+            {tracks.map(({ track, addedAt }, i) => {
               return (
                 <ListEntry
-                  key={track.id}
+                  key={`${track.id}:${addedAt}`}
                   listEntryData={[track.title]}
                   dark={isEven(i)}
                   type={"track-abbreviated"}
