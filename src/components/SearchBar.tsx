@@ -5,10 +5,10 @@ import { RxCross2 } from "react-icons/rx";
 
 const SearchBar = ({
   onSearch,
-  placeholder = "Search",
+  searchPlaceholder = "Search",
 }: {
   onSearch: (searchTerm: string) => void;
-  placeholder?: string;
+  searchPlaceholder?: string;
 }) => {
   const [queryString, setQueryString] = useState<string>("");
 
@@ -27,7 +27,7 @@ const SearchBar = ({
         className={styles.input}
         value={queryString}
         onChange={handleOnChange}
-        placeholder={placeholder}
+        placeholder={searchPlaceholder}
       />
       <RxCross2
         className={styles["cross-icon"]}

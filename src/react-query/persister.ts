@@ -6,6 +6,7 @@ import {
 import { DehydrateOptions, QueryKey } from "@tanstack/react-query";
 import isEqual from "lodash.isequal";
 import { persistedKeys as persistedInspectorKeys } from "./inspector";
+import { persistedKeys as persistedPlaylistKeys } from "./playlists";
 
 export const idbPersistorKey = "REACT_QUERY";
 
@@ -18,7 +19,10 @@ export const createIDBPersister = (idbValidKey: IDBValidKey) =>
   } as Persister);
 
 const persister = createIDBPersister(idbPersistorKey);
-const persistQueries: QueryKey[] = [...persistedInspectorKeys];
+const persistQueries: QueryKey[] = [
+  ...persistedInspectorKeys,
+  ...persistedPlaylistKeys,
+];
 const dehydrateOptions: DehydrateOptions = {
   shouldDehydrateQuery: ({ queryKey }) => {
     return persistQueries.some((persistQuery) =>
