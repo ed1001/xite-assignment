@@ -25,7 +25,7 @@ const ListEntry = ({
       })}
     >
       {listEntryData.map((attribute) => (
-        <div>{attribute}</div>
+        <div key={`${attribute}`}>{attribute}</div>
       ))}
       {inspectableItem && (
         <InspectButton onClick={() => addToInspector(inspectableItem)} />

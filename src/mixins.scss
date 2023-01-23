@@ -42,4 +42,8 @@
   &.playlist {
     grid-template-columns: 50px 1fr 1fr 0.5fr 100px;
   }
+
+  &.genre {
+    grid-template-columns: 50px 1fr 1fr 100px;
+  }
 }

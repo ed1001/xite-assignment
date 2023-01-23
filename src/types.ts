@@ -49,6 +49,7 @@ export type Playlist = {
 export type Genre = {
   id: number;
   name: GenreType | SubGenre;
+  type: "Genre" | "Sub genre";
 };
 
 export type Entity = Track | Artist | Playlist | Genre;
@@ -189,7 +190,7 @@ export type GenreType =
   | "Children's"
   | "Gospel/Christian";
 
-type SubGenre =
+export type SubGenre =
   | "French Rap/Hip-Hop"
   | "Classic Rock"
   | "Adult Contemporary: Pop"

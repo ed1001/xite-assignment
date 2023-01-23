@@ -57,16 +57,24 @@ export const rqGetAllGenres = async (): Promise<Genre[]> => {
     queryKey: rq_genres_keys.list(),
     queryFn: async () => {
       const tracks = await rqGetAllTracks();
-      const genresNotUnique = tracks.flatMap((track) => [
-        ...track.genres,
-        ...track.subGenres,
-      ]);
+      const genresNotUnique = tracks.flatMap((track) => track.genres);
       const genresUnique = [...new Set(genresNotUnique)];
+      const subGenresNotUnique = tracks.flatMap((track) => track.genres);
+      const subGenresUnique = [...new Set(subGenresNotUnique)];
 
-      return genresUnique.map((genre, i) => ({
+      const genres = genresUnique.map((genre, i) => ({
         name: genre,
         id: i + 1,
+        type: "Genre",
       }));
+
+      const subGenres = subGenresUnique.map((genre, i) => ({
+        name: genre,
+        id: i + 1,
+        type: "Sub genre",
+      }));
+
+      return [...genres, ...subGenres];
     },
   });
 };

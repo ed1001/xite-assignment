@@ -35,7 +35,7 @@ const ListContent = ({
       </div>
       <div className={classnames(styles["list-header"], styles[type])}>
         {listHeaderAttributes.map((listHeaderValue) => (
-          <div>{listHeaderValue}</div>
+          <div key={listHeaderValue}>{listHeaderValue}</div>
         ))}
       </div>
       <div className={classnames(styles.list, styles[type])}>{children}</div>

@@ -1,5 +1,5 @@
-@use "../variables";
-@use "../mixins";
+@use "../../variables";
+@use "../../mixins";
 
 .content {
   @include mixins.content-shared;
@@ -30,7 +30,7 @@
     top: 0;
     display: flex;
     justify-content: flex-start;
-    height: 35px;
+    height: variables.$tabs-height;
     color: variables.$grey;
     padding: 0 10px;
     overflow-x: scroll;
@@ -156,6 +156,17 @@
       margin: 30px 0 0;
       list-style-type: none;
       padding: 0;
+    }
+
+    $item-header-container-height: 100px;
+
+    .item-header-container {
+      height: 100px;
+    }
+
+    .tracks-container {
+      height: 400px;
+      overflow-y: scroll;
     }
   }
 }

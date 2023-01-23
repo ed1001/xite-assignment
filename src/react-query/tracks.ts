@@ -1,5 +1,5 @@
 import { queryClient } from "./client";
-import { Track } from "../types";
+import { GenreType, SubGenre, Track } from "../types";
 import { getTracks } from "../api/xite";
 import Fuse from "fuse.js";
 import { DEFAULT_PAGE_LIMIT, rqGetEntity, rqGetSearchInterface } from "./util";
@@ -25,6 +25,8 @@ export const rq_tracks_keys = {
     [...rq_tracks_keys.all, "list", searchTerm] as const,
   listByArtist: (artistId: number) =>
     [...rq_tracks_keys.all, "list", artistId] as const,
+  listByGenre: (genre?: GenreType | SubGenre) =>
+    [...rq_tracks_keys.all, "list", genre] as const,
   infiniteList: (searchTerm?: string) =>
     [...rq_tracks_keys.all, "infinite", "list", searchTerm] as const,
 };
@@ -61,6 +63,20 @@ export const useTracksByArtist = ({
   return useQuery<Track[]>({
     queryKey: rq_tracks_keys.listByArtist(artistId),
     queryFn: () => rqGetTracksByArtist(artistId),
+    enabled,
+  });
+};
+
+export const useTracksByGenre = ({
+  enabled,
+  genre,
+}: {
+  enabled: boolean;
+  genre?: GenreType | SubGenre;
+}) => {
+  return useQuery<Track[]>({
+    queryKey: rq_tracks_keys.listByGenre(genre),
+    queryFn: () => rqGetTracksByGenre(genre),
     enabled,
   });
 };
@@ -122,6 +138,25 @@ export const rqGetTracksByArtist = async (
         track.artists
           .map((artistData) => artistData.artist.id)
           .includes(artistId)
+      );
+    },
+  });
+};
+
+export const rqGetTracksByGenre = async (
+  genre?: GenreType | SubGenre
+): Promise<Track[]> => {
+  return queryClient.ensureQueryData({
+    queryKey: rq_tracks_keys.listByGenre(genre),
+    queryFn: async () => {
+      if (!genre) {
+        return [];
+      }
+
+      const tracks = await rqGetAllTracks();
+
+      return tracks.filter((track) =>
+        [...track.genres, ...track.subGenres].includes(genre)
       );
     },
   });
