@@ -6,3 +6,4 @@ export { default as SearchBar } from "./SearchBar";
 export { default as LoadMoreButton } from "./LoadMoreButton";
 export { default as ListEntry } from "./ListEntry";
 export { default as InspectButton } from "./InspectButton";
+export { default as AddToPlaylist } from "./AddToPlaylist";

@@ -1,7 +1,7 @@
 import { ListContent, LoadMoreButton } from "../components";
 import { useState } from "react";
 import { rq_artists_keys, useInfiniteArtists } from "../react-query/artists";
-import { trimPreviousInfiniteQuery } from "../react-query/helpers";
+import { trimPreviousInfiniteQuery } from "../react-query/util";
 import ListEntry from "../components/ListEntry";
 import { isEven } from "../util";
 
@@ -15,7 +15,7 @@ const Artists = () => {
   };
 
   const type = "artist";
-  const listHeaderAttributes = ["#", "NAME", "ID"];
+  const listHeaderAttributes = ["#", "NAME"];
   const searchPlaceholder = "Search by name";
 
   return (
@@ -25,7 +25,7 @@ const Artists = () => {
       {artists?.map((artist, i) => {
         const { id, name } = artist;
         const listNumber = i + 1;
-        const listEntryData = [listNumber, name, id];
+        const listEntryData = [listNumber, name];
 
         return (
           <ListEntry
@@ -33,7 +33,7 @@ const Artists = () => {
             listEntryData={listEntryData}
             dark={isEven(i)}
             type={type}
-            inspectableItem={{ type, entity: artist }}
+            inspectableItem={{ type, id, displayName: artist.name }}
           />
         );
       })}

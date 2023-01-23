@@ -3,6 +3,7 @@ import styles from "./ListEntry.module.scss";
 import { InspectableItem, Listable } from "../types";
 import { InspectButton } from "./index";
 import { useAddToInspector } from "../react-query/inspector";
+import { ReactElement } from "react";
 
 const ListEntry = ({
   listEntryData,
@@ -10,7 +11,7 @@ const ListEntry = ({
   type,
   inspectableItem,
 }: {
-  listEntryData: Array<string | number>;
+  listEntryData: Array<string | number | ReactElement>;
   dark: boolean;
   type: Listable;
   inspectableItem?: InspectableItem;

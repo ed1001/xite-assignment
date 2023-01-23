@@ -19,19 +19,27 @@
       font-weight: normal;
       margin: 0 16px 0 0;
     }
+
+    .header-items {
+      display: flex;
+
+      & > * {
+        margin-left: 16px;
+      }
+    }
   }
 }
 
 @mixin grid-template-columns-for-entities {
   &.track {
-    grid-template-columns: 50px 1fr 1fr 0.5fr 0.5fr 100px;
+    grid-template-columns: 50px 1fr 1fr 0.5fr 100px 100px;
   }
 
   &.artist {
-    grid-template-columns: 50px 1fr 1fr 100px;
+    grid-template-columns: 50px 1fr 100px;
   }
 
   &.playlist {
-    grid-template-columns: 50px 1fr 1fr 1fr 100px;
+    grid-template-columns: 50px 1fr 1fr 0.5fr 100px;
   }
 }

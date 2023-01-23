@@ -1,0 +1,37 @@
+@use "../variables";
+
+.container {
+  position: relative;
+  .dropdown {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    z-index: 100;
+    background-color: white;
+    width: 120px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: scroll;
+    font-size: 12px;
+
+    .dropdown-item {
+      width: 100%;
+      padding: 10px;
+      cursor: pointer;
+      box-sizing: border-box;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:first-child {
+        border-bottom: 1px solid variables.$light-grey;
+      }
+
+      &:hover {
+        background-color: variables.$light-grey;
+      }
+    }
+  }
+}

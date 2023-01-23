@@ -1,11 +1,16 @@
-import { ListContent, ListEntry, LoadMoreButton } from "../components";
+import {
+  AddToPlaylist,
+  ListContent,
+  ListEntry,
+  LoadMoreButton,
+} from "../components";
 import { useState } from "react";
 import { rq_tracks_keys, useInfiniteTracks } from "../react-query/tracks";
-import { trimPreviousInfiniteQuery } from "../react-query/helpers";
+import { trimPreviousInfiniteQuery } from "../react-query/util";
 import { isEven } from "../util";
 
 const Tracks = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const { data, fetchNextPage, hasNextPage } = useInfiniteTracks(searchTerm);
   const tracks = data?.pages.flatMap((page) => page.tracks);
   const onSearch = (queryString: string) => {
@@ -14,7 +19,7 @@ const Tracks = () => {
   };
 
   const type = "track";
-  const listHeaderAttributes = ["#", "TITLE", "ARTIST", "GENRE", "CREATED AT"];
+  const listHeaderAttributes = ["#", "TITLE", "ARTIST", "GENRE"];
   const searchPlaceholder = "Search by title or artist name";
 
   return (
@@ -22,14 +27,14 @@ const Tracks = () => {
       {...{ type, onSearch, listHeaderAttributes, searchPlaceholder }}
     >
       {tracks?.map((track, i) => {
-        const { id, title, displayArtist, genres, createdAt } = track;
+        const { id, title, displayArtist, genres } = track;
         const listNumber = i + 1;
         const listEntryData = [
           listNumber,
           title,
           displayArtist,
           genres.join(", "),
-          new Date(createdAt).toLocaleDateString(),
+          <AddToPlaylist track={track} />,
         ];
 
         return (
@@ -38,7 +43,7 @@ const Tracks = () => {
             listEntryData={listEntryData}
             dark={isEven(i)}
             type={type}
-            inspectableItem={{ type, entity: track }}
+            inspectableItem={{ type, id, displayName: title }}
           />
         );
       })}

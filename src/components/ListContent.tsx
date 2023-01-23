@@ -1,15 +1,16 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactElement } from "react";
 import capitalize from "lodash.capitalize";
 import styles from "./ListContent.module.scss";
 import { SearchBar } from "./index";
 import classnames from "classnames";
-import { EntityList } from "../types";
+import { EntityType } from "../types";
 
 interface Props {
-  type: EntityList;
+  type: EntityType;
   onSearch: (searchTerm: string) => void;
   listHeaderAttributes: string[];
   searchPlaceholder: string;
+  renderHeaderItems?: () => ReactElement;
 }
 
 const ListContent = ({
@@ -17,13 +18,20 @@ const ListContent = ({
   onSearch,
   listHeaderAttributes,
   searchPlaceholder,
+  renderHeaderItems,
   children,
 }: PropsWithChildren<Props>) => {
   return (
     <section className={styles.content}>
       <div className={styles.header}>
         <h1>{`${capitalize(type)}s`}</h1>
-        <SearchBar onSearch={onSearch} searchPlaceholder={searchPlaceholder} />
+        <div className={styles["header-items"]}>
+          {renderHeaderItems?.()}
+          <SearchBar
+            onSearch={onSearch}
+            searchPlaceholder={searchPlaceholder}
+          />
+        </div>
       </div>
       <div className={classnames(styles["list-header"], styles[type])}>
         {listHeaderAttributes.map((listHeaderValue) => (
