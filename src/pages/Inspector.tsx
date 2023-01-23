@@ -14,10 +14,12 @@ import {
   useInspectorOpen,
   useRemoveFromInspector,
 } from "../react-query/inspector";
-import { Artist, InspectableItem, Track } from "../types";
-import { useTracksByArtist } from "../react-query/tracks";
+import { InspectableItem } from "../types";
+import { useTrack, useTracksByArtist } from "../react-query/tracks";
 import { ListEntry } from "../components";
 import { isEven } from "../util";
+import { useArtist } from "../react-query/artists";
+import { usePlaylist } from "../react-query/playlists";
 
 const typeIconMap = {
   track: BsMusicNote,
@@ -70,17 +72,6 @@ const Inspector = () => {
   );
 };
 
-const getIdentifierForItem = (item: InspectableItem) => {
-  switch (item.type) {
-    case "track":
-      return item.entity.title;
-    case "artist":
-      return item.entity.name;
-    case "playlist":
-      return item.entity.name;
-  }
-};
-
 const RenderTab = ({
   active,
   setActive,
@@ -100,7 +91,7 @@ const RenderTab = ({
       onClick={setActive}
     >
       <Icon className={styles.icon} />
-      <div className={styles.identifier}>{getIdentifierForItem(item)}</div>
+      <div className={styles.identifier}>{item.displayName}</div>
       <div className={styles.cross}>
         <RxCross2
           onClick={(e) => {
@@ -129,12 +120,16 @@ const renderItem = (item?: InspectableItem) => {
 
   switch (item.type) {
     case "track":
-      return <RenderTrack track={item.entity as Track} />;
+      return <RenderTrack item={item} />;
     case "artist":
-      return <RenderArtist artist={item.entity as Artist} />;
+      return <RenderArtist item={item} />;
+    case "playlist":
+      return <RenderPlaylist item={item} />;
   }
 };
-const RenderTrack = ({ track }: { track: Track }) => {
+const RenderTrack = ({ item }: { item: InspectableItem }) => {
+  const { data: track } = useTrack(item.id);
+
   if (!track) {
     return (
       <div className={styles.empty}>
@@ -179,8 +174,14 @@ const RenderTrack = ({ track }: { track: Track }) => {
     </div>
   );
 };
-const RenderArtist = ({ artist }: { artist: Artist }) => {
-  const { data: tracks } = useTracksByArtist(artist.id);
+
+const RenderArtist = ({ item }: { item: InspectableItem }) => {
+  const { data: artist } = useArtist(item.id);
+  const { data: tracks } = useTracksByArtist({
+    enabled: !!artist,
+    artistId: item.id,
+  });
+
   const latestTracks = tracks?.slice(0, 10);
 
   if (!artist) {
@@ -210,7 +211,11 @@ const RenderArtist = ({ artist }: { artist: Artist }) => {
                 listEntryData={[track.title]}
                 dark={isEven(i)}
                 type={"track-abbreviated"}
-                inspectableItem={{ type: "track", entity: track }}
+                inspectableItem={{
+                  type: "track",
+                  id: track.id,
+                  displayName: track.title,
+                }}
               />
             );
           })}
@@ -219,4 +224,53 @@ const RenderArtist = ({ artist }: { artist: Artist }) => {
     </div>
   );
 };
+
+const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
+  const { data: playlist } = usePlaylist(item.id);
+
+  if (!playlist) {
+    return (
+      <div className={styles.empty}>
+        <TbMoodSad />
+        <p>
+          Something went wrong... Playlist not found! <br />
+          <br /> Try closing this tab and reopening
+        </p>
+      </div>
+    );
+  }
+
+  const { tracks } = playlist;
+
+  return (
+    <div className={styles["item-container"]}>
+      <h2 className={styles.description}>Playlist Info </h2>
+      <h2>{playlist.name}</h2>
+      <br />
+      {tracks.length ? (
+        <>
+          <h3 style={{ marginBottom: "10px" }}>Tracks: </h3>
+          {tracks.map((track, i) => {
+            return (
+              <ListEntry
+                key={track.id}
+                listEntryData={[track.title]}
+                dark={isEven(i)}
+                type={"track-abbreviated"}
+                inspectableItem={{
+                  type: "track",
+                  id: track.id,
+                  displayName: track.title,
+                }}
+              />
+            );
+          })}
+        </>
+      ) : (
+        <div>no tracks</div>
+      )}
+    </div>
+  );
+};
+
 export default Inspector;
