@@ -5,20 +5,9 @@
   position: relative;
 
   .button {
-    all: unset;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 30px;
+    @include mixins.rounded-button;
     width: 55px;
-    border-radius: 30px;
-    border: 1px solid variables.$grey;
-    box-sizing: border-box;
-
-    &:hover {
-      background-color: variables.$grey;
-    }
+    background-color: white;
 
     .plus {
       font-size: 10px;

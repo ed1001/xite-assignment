@@ -1,0 +1,16 @@
+@use "../variables";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  font-size: 30px;
+  color: variables.$grey;
+
+  @media screen and (max-width: variables.$screen-width-break-point) {
+    font-size: 20px;
+  }
+}

@@ -1,6 +1,11 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Playlist, Track } from "../types";
-import { DEFAULT_PAGE_LIMIT, rqGetEntity, rqGetSearchInterface } from "./util";
+import {
+  DEFAULT_PAGE_LIMIT,
+  rqGetEntity,
+  rqGetSearchInterface,
+  rqSetAndInvalidateQuery,
+} from "./util";
 import { queryClient } from "./client";
 import { rqAddToInspectedItems } from "./inspector";
 import { rqGetTrack } from "./tracks";
@@ -13,6 +18,8 @@ export const rq_playlists_keys = {
   all: ["playlists"] as const,
   id: (id: number) => [...rq_playlists_keys.all, id] as const,
   searchInterface: () => [...rq_playlists_keys.all, "searchInterface"] as const,
+  total: (searchTerm?: string) =>
+    [...rq_playlists_keys.all, "total", searchTerm] as const,
   list: (searchTerm?: string) =>
     [...rq_playlists_keys.all, "list", searchTerm] as const,
   infiniteList: (searchTerm?: string) =>
@@ -162,6 +169,13 @@ export const useRemovePlaylist = () => {
   });
 };
 
+export const usePlaylistTotal = (searchTerm: string) => {
+  return useQuery<number>({
+    queryKey: rq_playlists_keys.total(searchTerm),
+    queryFn: () => getTotalPlaylistCount(searchTerm),
+  });
+};
+
 /******************
  * HELPER FUNCTIONS
  ******************/
@@ -198,6 +212,12 @@ export const rqGetPaginatedPlaylists = async (
   const playlists = searchTerm.length
     ? await rqGetPlaylistsBySearchTerm(searchTerm)
     : await rqGetAllPlaylists();
+
+  await rqSetAndInvalidateQuery<number>(
+    rq_playlists_keys.total(searchTerm),
+    playlists.length
+  );
+
   const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
   const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
 
@@ -214,3 +234,6 @@ const getIncrementedId = async () => {
 
   return ids.length ? Math.max(...ids) + 1 : 1;
 };
+
+const getTotalPlaylistCount = async (searchTerm: string): Promise<number> =>
+  queryClient.getQueryData(rq_playlists_keys.total(searchTerm)) || 0;

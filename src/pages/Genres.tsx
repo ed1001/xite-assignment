@@ -1,7 +1,10 @@
-import { ListContent, ListEntry, LoadMoreButton } from "../components";
-import { useInfiniteGenres } from "../react-query/genres";
+import { EmptyList, ListContent, ListEntry } from "../components";
+import {
+  rq_genres_keys,
+  useGenreTotal,
+  useInfiniteGenres,
+} from "../react-query/genres";
 import { trimPreviousInfiniteQuery } from "../react-query/util";
-import { rq_tracks_keys } from "../react-query/tracks";
 import { useState } from "react";
 import { isEven } from "../util";
 
@@ -11,9 +14,11 @@ const Genres = () => {
     useInfiniteGenres(searchTerm);
   const genres = data?.pages.flatMap((page) => page.genres);
   const onSearch = (queryString: string) => {
-    trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
+    trimPreviousInfiniteQuery(rq_genres_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
+  const { data: totalCount } = useGenreTotal(searchTerm);
+  const shownCount = genres?.length || 0;
 
   const type = "genre";
   const listHeaderAttributes = ["#", "NAME", "TYPE"];
@@ -27,27 +32,30 @@ const Genres = () => {
         listHeaderAttributes,
         searchPlaceholder,
         isLoading,
+        fetchNextPage,
+        hasNextPage,
+        totalCount,
+        shownCount,
       }}
     >
-      {genres?.map((genre, i) => {
-        const { id, name, type: specificType } = genre;
-        const listNumber = i + 1;
-        const listEntryData = [listNumber, name, specificType];
+      {!!genres?.length ? (
+        genres.map((genre, i) => {
+          const { id, name, type: specificType } = genre;
+          const listNumber = i + 1;
+          const listEntryData = [listNumber, name, specificType];
 
-        return (
-          <ListEntry
-            key={`${name}`}
-            listEntryData={listEntryData}
-            dark={isEven(i)}
-            type={type}
-            inspectableItem={{ type, id, displayName: genre.name }}
-          />
-        );
-      })}
-      {hasNextPage && (
-        <LoadMoreButton disabled={!hasNextPage} onClick={() => fetchNextPage()}>
-          Load more genres
-        </LoadMoreButton>
+          return (
+            <ListEntry
+              key={id}
+              listEntryData={listEntryData}
+              dark={isEven(i)}
+              type={type}
+              inspectableItem={{ type, id, displayName: genre.name }}
+            />
+          );
+        })
+      ) : (
+        <EmptyList searchTerm={searchTerm} type={type} />
       )}
     </ListContent>
   );

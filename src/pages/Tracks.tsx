@@ -1,11 +1,15 @@
 import {
   AddToPlaylist,
+  EmptyList,
   ListContent,
   ListEntry,
-  LoadMoreButton,
 } from "../components";
 import React, { useState } from "react";
-import { rq_tracks_keys, useInfiniteTracks } from "../react-query/tracks";
+import {
+  rq_tracks_keys,
+  useInfiniteTracks,
+  useTrackTotal,
+} from "../react-query/tracks";
 import { trimPreviousInfiniteQuery } from "../react-query/util";
 import { isEven } from "../util";
 import { Track } from "../types";
@@ -19,6 +23,8 @@ const Tracks = () => {
     trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
+  const { data: totalCount } = useTrackTotal(searchTerm);
+  const shownCount = tracks?.length || 0;
 
   const type = "track";
   const listHeaderAttributes = ["#", "TITLE", "ARTIST", "GENRE"];
@@ -40,37 +46,40 @@ const Tracks = () => {
         listHeaderAttributes,
         searchPlaceholder,
         isLoading,
+        fetchNextPage,
+        hasNextPage,
+        totalCount,
+        shownCount,
       }}
     >
-      {tracks?.map((track, i) => {
-        const { id, title, displayArtist, genres } = track;
-        const listNumber = i + 1;
-        const listEntryData = [
-          listNumber,
-          title,
-          displayArtist,
-          genres.join(", "),
-          <AddToPlaylist track={track} origin={"list"} />,
-        ];
+      {!!tracks?.length ? (
+        tracks.map((track, i) => {
+          const { id, title, displayArtist, genres } = track;
+          const listNumber = i + 1;
+          const listEntryData = [
+            listNumber,
+            title,
+            displayArtist,
+            genres.join(", "),
+            <AddToPlaylist track={track} origin={"list"} />,
+          ];
 
-        return (
-          <ListEntry
-            key={id}
-            listEntryData={listEntryData}
-            dark={isEven(i)}
-            type={type}
-            inspectableItem={{ type, id, displayName: title }}
-            draggableProps={{
-              draggable: true,
-              onDragStart: (e: React.DragEvent) => onDragStart(e, track),
-            }}
-          />
-        );
-      })}
-      {hasNextPage && (
-        <LoadMoreButton disabled={!hasNextPage} onClick={() => fetchNextPage()}>
-          Load more tracks
-        </LoadMoreButton>
+          return (
+            <ListEntry
+              key={id}
+              listEntryData={listEntryData}
+              dark={isEven(i)}
+              type={type}
+              inspectableItem={{ type, id, displayName: title }}
+              draggableProps={{
+                draggable: true,
+                onDragStart: (e: React.DragEvent) => onDragStart(e, track),
+              }}
+            />
+          );
+        })
+      ) : (
+        <EmptyList searchTerm={searchTerm} type={type} />
       )}
     </ListContent>
   );

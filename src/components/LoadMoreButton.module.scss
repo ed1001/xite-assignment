@@ -1,20 +1,16 @@
 @use "../variables";
+@use "../mixins";
 
 .container {
   display: flex;
   justify-content: center;
+
   .button {
-    all: unset;
-    width: 300px;
-    height: 50px;
-    margin: 10px;
-    border: 1px solid variables.$light-grey;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 17px;
+    @include mixins.rounded-button;
 
     &:not(:disabled) {
       &:hover {
+        color: white;
         background-color: variables.$light-grey;
       }
     }
@@ -24,6 +20,10 @@
       justify-content: center;
       text-align: center;
       width: 100%;
+
+      svg {
+        @include mixins.rotate-animation;
+      }
     }
   }
 }

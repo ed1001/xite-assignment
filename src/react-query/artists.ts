@@ -1,6 +1,11 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Artist } from "../types";
-import { DEFAULT_PAGE_LIMIT, rqGetEntity, rqGetSearchInterface } from "./util";
+import {
+  DEFAULT_PAGE_LIMIT,
+  rqGetEntity,
+  rqGetSearchInterface,
+  rqSetAndInvalidateQuery,
+} from "./util";
 import { queryClient } from "./client";
 import { rqGetAllTracks } from "./tracks";
 
@@ -12,6 +17,8 @@ export const rq_artists_keys = {
   all: ["artists"] as const,
   id: (id: number) => [...rq_artists_keys.all, id] as const,
   searchInterface: () => [...rq_artists_keys.all, "searchInterface"] as const,
+  total: (searchTerm?: string) =>
+    [...rq_artists_keys.all, "total", searchTerm] as const,
   list: (searchTerm?: string) =>
     [...rq_artists_keys.all, "list", searchTerm] as const,
   infiniteList: (searchTerm?: string) =>
@@ -45,6 +52,13 @@ export const useArtist = (id: number) => {
     queryKey: rq_artists_keys.id(id),
     queryFn: () =>
       rqGetEntity<Artist>(id, rq_artists_keys.id(id), rqGetAllArtists),
+  });
+};
+
+export const useArtistTotal = (searchTerm: string) => {
+  return useQuery<number>({
+    queryKey: rq_artists_keys.total(searchTerm),
+    queryFn: () => getTotalArtistCount(searchTerm),
   });
 };
 
@@ -99,6 +113,12 @@ export const rqGetPaginatedArtists = async (
   const artists = searchTerm.length
     ? await rqGetArtistsBySearchTerm(searchTerm)
     : await rqGetAllArtists();
+
+  await rqSetAndInvalidateQuery<number>(
+    rq_artists_keys.total(searchTerm),
+    artists.length
+  );
+
   const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
   const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
 
@@ -108,3 +128,6 @@ export const rqGetPaginatedArtists = async (
     nextPageAvailable: paginationToken < artists.length,
   };
 };
+
+const getTotalArtistCount = async (searchTerm: string): Promise<number> =>
+  queryClient.getQueryData(rq_artists_keys.total(searchTerm)) || 0;

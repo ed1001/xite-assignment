@@ -1,16 +1,8 @@
 @use "../variables";
+@use "../mixins";
 
 .create-playlist-button {
-  all: unset;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  border: 1px solid variables.$light-grey;
-  padding: 0 12px;
-  height: 30px;
-  border-radius: 30px;
+  @include mixins.rounded-button;
 
   .plus {
     margin-left: 10px;
@@ -24,10 +16,5 @@
     .plus {
       margin-left: 0;
     }
-  }
-
-  &:hover {
-    background-color: variables.$light-grey;
-    color: white;
   }
 }

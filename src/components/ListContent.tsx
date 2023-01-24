@@ -1,7 +1,7 @@
 import { PropsWithChildren, ReactElement } from "react";
 import capitalize from "lodash.capitalize";
 import styles from "./ListContent.module.scss";
-import { Loading, SearchBar } from "./index";
+import { Loading, LoadMoreButton, SearchBar } from "./index";
 import classnames from "classnames";
 import { EntityType } from "../types";
 
@@ -12,6 +12,10 @@ interface Props {
   searchPlaceholder: string;
   renderHeaderItems?: () => ReactElement;
   isLoading?: boolean;
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  totalCount?: number;
+  shownCount?: number;
 }
 
 const ListContent = ({
@@ -21,6 +25,10 @@ const ListContent = ({
   searchPlaceholder,
   renderHeaderItems,
   isLoading,
+  fetchNextPage,
+  hasNextPage,
+  totalCount,
+  shownCount,
   children,
 }: PropsWithChildren<Props>) => {
   return (
@@ -42,6 +50,17 @@ const ListContent = ({
       </div>
       <div className={classnames(styles.list, styles[type])}>
         {isLoading ? <Loading /> : children}
+      </div>
+      <div className={styles.footer}>
+        <div className={styles.info}>
+          Showing {shownCount} out of {totalCount} results
+        </div>
+        <LoadMoreButton
+          disabled={!hasNextPage}
+          onClick={() => fetchNextPage?.()}
+        >
+          load more {type}s
+        </LoadMoreButton>
       </div>
     </section>
   );

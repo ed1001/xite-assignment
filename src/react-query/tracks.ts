@@ -2,7 +2,12 @@ import { queryClient } from "./client";
 import { GenreType, SubGenre, Track } from "../types";
 import { getTracks } from "../api/xite";
 import Fuse from "fuse.js";
-import { DEFAULT_PAGE_LIMIT, rqGetEntity, rqGetSearchInterface } from "./util";
+import {
+  DEFAULT_PAGE_LIMIT,
+  rqGetEntity,
+  rqGetSearchInterface,
+  rqSetAndInvalidateQuery,
+} from "./util";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 const searchKeys: Array<string | Fuse.FuseOptionKey<Track>> = [
@@ -21,6 +26,8 @@ export const rq_tracks_keys = {
   all: ["tracks"] as const,
   id: (id: number) => [...rq_tracks_keys.all, id] as const,
   searchInterface: () => [...rq_tracks_keys.all, "searchInterface"] as const,
+  total: (searchTerm?: string) =>
+    [...rq_tracks_keys.all, "total", searchTerm] as const,
   list: (searchTerm?: string) =>
     [...rq_tracks_keys.all, "list", searchTerm] as const,
   listByArtist: (artistId: number) =>
@@ -85,6 +92,13 @@ export const useTrack = (id: number) => {
   return useQuery<Track>({
     queryKey: rq_tracks_keys.id(id),
     queryFn: () => rqGetTrack(id),
+  });
+};
+
+export const useTrackTotal = (searchTerm: string) => {
+  return useQuery<number>({
+    queryKey: rq_tracks_keys.total(searchTerm),
+    queryFn: () => getTotalTrackCount(searchTerm),
   });
 };
 
@@ -176,6 +190,11 @@ export const rqGetPaginatedTracks = async (
     ? await rqGetTracksBySearchTerm(searchTerm)
     : await rqGetAllTracks();
 
+  await rqSetAndInvalidateQuery<number>(
+    rq_tracks_keys.total(searchTerm),
+    tracks.length
+  );
+
   const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
   const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
 
@@ -185,3 +204,6 @@ export const rqGetPaginatedTracks = async (
     nextPageAvailable: paginationToken < tracks.length,
   };
 };
+
+const getTotalTrackCount = async (searchTerm: string): Promise<number> =>
+  queryClient.getQueryData(rq_tracks_keys.total(searchTerm)) || 0;

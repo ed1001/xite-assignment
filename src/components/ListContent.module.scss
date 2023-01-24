@@ -9,9 +9,26 @@
 
   .list {
     height: calc(
-      100% - #{variables.$content-header-height} - #{variables.$list-header-height}
+      100% - #{variables.$content-header-height} - #{variables.$list-header-height} -
+        #{variables.$content-footer-height}
     );
     overflow-y: scroll;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: variables.$content-footer-height;
+    border-top: 1px solid variables.$light-grey;
+    padding: 0 16px;
+
+    .info {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      color: variables.$grey;
+    }
   }
 
   .list-header {

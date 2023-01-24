@@ -2,7 +2,12 @@ import { Genre } from "../types";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { rq_tracks_keys, rqGetAllTracks } from "./tracks";
 import { queryClient } from "./client";
-import { DEFAULT_PAGE_LIMIT, rqGetEntity, rqGetSearchInterface } from "./util";
+import {
+  DEFAULT_PAGE_LIMIT,
+  rqGetEntity,
+  rqGetSearchInterface,
+  rqSetAndInvalidateQuery,
+} from "./util";
 
 /************
  * QUERY KEYS
@@ -12,6 +17,8 @@ export const rq_genres_keys = {
   all: ["genres"] as const,
   id: (id: number) => [...rq_genres_keys.all, id] as const,
   searchInterface: () => [...rq_genres_keys.all, "searchInterface"] as const,
+  total: (searchTerm?: string) =>
+    [...rq_genres_keys.all, "total", searchTerm] as const,
   list: (searchTerm?: string) =>
     [...rq_genres_keys.all, "list", searchTerm] as const,
   infiniteList: (searchTerm?: string) =>
@@ -48,6 +55,13 @@ export const useGenre = (id: number) => {
   });
 };
 
+export const useGenreTotal = (searchTerm: string) => {
+  return useQuery<number>({
+    queryKey: rq_genres_keys.total(searchTerm),
+    queryFn: () => getTotalGenreCount(searchTerm),
+  });
+};
+
 /******************
  * HELPER FUNCTIONS
  ******************/
@@ -61,16 +75,16 @@ export const rqGetAllGenres = async (): Promise<Genre[]> => {
       const genresUnique = [...new Set(genresNotUnique)];
       const subGenresNotUnique = tracks.flatMap((track) => track.genres);
       const subGenresUnique = [...new Set(subGenresNotUnique)];
-
       const genres = genresUnique.map((genre, i) => ({
         name: genre,
         id: i + 1,
         type: "Genre",
       }));
 
+      const subGenresStartIndex = genres.length + 1;
       const subGenres = subGenresUnique.map((genre, i) => ({
         name: genre,
-        id: i + 1,
+        id: subGenresStartIndex + i,
         type: "Sub genre",
       }));
 
@@ -108,6 +122,11 @@ export const rqGetPaginatedGenres = async (
   const genres = searchTerm.length
     ? await rqGetGenresBySearchTerm(searchTerm)
     : await rqGetAllGenres();
+
+  await rqSetAndInvalidateQuery<number>(
+    rq_genres_keys.total(searchTerm),
+    genres.length
+  );
   const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
   const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
 
@@ -117,3 +136,6 @@ export const rqGetPaginatedGenres = async (
     nextPageAvailable: paginationToken < genres.length,
   };
 };
+
+const getTotalGenreCount = async (searchTerm: string): Promise<number> =>
+  queryClient.getQueryData(rq_genres_keys.total(searchTerm)) || 0;

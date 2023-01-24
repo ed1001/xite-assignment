@@ -2,7 +2,7 @@ import { queryClient } from "./client";
 import { QueryKey } from "@tanstack/query-core/src/types";
 import Fuse from "fuse.js";
 
-export const DEFAULT_PAGE_LIMIT = 15;
+export const DEFAULT_PAGE_LIMIT = 50;
 
 // Reset the previously searched query to the first page when a new search is made
 export const trimPreviousInfiniteQuery = (queryKey: QueryKey) => {
@@ -54,4 +54,12 @@ export const rqGetSearchInterface = <T>(
       });
     },
   });
+};
+
+export const rqSetAndInvalidateQuery = async <T>(
+  queryKey: QueryKey,
+  newValue: T
+) => {
+  queryClient.setQueryData(queryKey, newValue);
+  await queryClient.invalidateQueries(queryKey);
 };

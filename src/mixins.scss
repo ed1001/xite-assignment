@@ -1,5 +1,31 @@
 @use "variables";
 
+@mixin rounded-button {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid variables.$light-grey;
+  padding: 0 12px;
+  height: 30px;
+  border-radius: 30px;
+  color: variables.$grey;
+
+  &:not(:disabled) {
+    &:hover {
+      background-color: variables.$light-grey;
+      color: white;
+    }
+  }
+
+  &:disabled {
+    color: variables.$light-grey;
+    cursor: not-allowed;
+  }
+}
+
 @mixin content-shared {
   background-color: white;
   margin: variables.$content-padding;
@@ -45,5 +71,18 @@
 
   &.genre {
     grid-template-columns: 50px 1fr 0.5fr;
+  }
+}
+
+@mixin rotate-animation {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
