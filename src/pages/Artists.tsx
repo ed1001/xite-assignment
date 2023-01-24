@@ -7,7 +7,8 @@ import { isEven } from "../util";
 
 const Artists = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, fetchNextPage, hasNextPage } = useInfiniteArtists(searchTerm);
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useInfiniteArtists(searchTerm);
   const artists = data?.pages.flatMap((page) => page.artists) || [];
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_artists_keys.infiniteList(searchTerm));
@@ -20,7 +21,13 @@ const Artists = () => {
 
   return (
     <ListContent
-      {...{ type, onSearch, listHeaderAttributes, searchPlaceholder }}
+      {...{
+        type,
+        onSearch,
+        listHeaderAttributes,
+        searchPlaceholder,
+        isLoading,
+      }}
     >
       {artists?.map((artist, i) => {
         const { id, name } = artist;

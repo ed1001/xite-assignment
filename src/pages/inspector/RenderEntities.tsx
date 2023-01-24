@@ -1,4 +1,4 @@
-import { Entity, InspectableItem, Track } from "../../types";
+import { InspectableItem, Track } from "../../types";
 import styles from "./Inspector.module.scss";
 import { TbMoodSad } from "react-icons/tb";
 import {
@@ -11,10 +11,8 @@ import { useGenre } from "../../react-query/genres";
 import { AddToPlaylist, ListEntry } from "../../components";
 import { isEven } from "../../util";
 import capitalize from "lodash.capitalize";
-import React from "react";
 
 interface Props {
-  entity?: Entity;
   item: InspectableItem;
   tracks?: Track[];
   info?: { [key: string]: string | number | string[] };
@@ -81,7 +79,11 @@ export const EmptyItem = ({ item }: { item: InspectableItem }) => {
 };
 
 export const RenderTrack = ({ item }: { item: InspectableItem }) => {
-  const { data: track } = useTrack(item.id);
+  const { data: track, isLoading } = useTrack(item.id);
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!track) {
     return <EmptyItem item={item} />;
@@ -102,21 +104,21 @@ export const RenderTrack = ({ item }: { item: InspectableItem }) => {
     updatedAt: new Date(updatedAt).toLocaleDateString(),
   };
 
-  return (
-    <RenderEntity
-      entity={track}
-      item={item}
-      info={{ ...additionalInfo, ...rest }}
-    />
-  );
+  return <RenderEntity item={item} info={{ ...additionalInfo, ...rest }} />;
 };
 
 export const RenderArtist = ({ item }: { item: InspectableItem }) => {
-  const { data: artist } = useArtist(item.id);
-  const { data: tracks } = useTracksByArtist({
+  const { data: artist, isLoading: artistsLoading } = useArtist(item.id);
+  const { data: tracks, isLoading: tracksLoading } = useTracksByArtist({
     enabled: !!artist,
     artistId: item.id,
   });
+
+  const isLoading = artistsLoading || tracksLoading;
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!artist) {
     return <EmptyItem item={item} />;
@@ -130,22 +132,21 @@ export const RenderArtist = ({ item }: { item: InspectableItem }) => {
 
   const latestTracks = tracks?.slice(0, 20);
 
-  return (
-    <RenderEntity
-      entity={artist}
-      item={item}
-      tracks={latestTracks}
-      info={info}
-    />
-  );
+  return <RenderEntity item={item} tracks={latestTracks} info={info} />;
 };
 
 export const RenderGenre = ({ item }: { item: InspectableItem }) => {
-  const { data: genre } = useGenre(item.id);
-  const { data: tracks } = useTracksByGenre({
+  const { data: genre, isLoading: genreLoading } = useGenre(item.id);
+  const { data: tracks, isLoading: tracksLoading } = useTracksByGenre({
     enabled: !!genre,
     genre: genre?.name,
   });
+
+  const isLoading = genreLoading || tracksLoading;
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!genre) {
     return <EmptyItem item={item} />;
@@ -153,5 +154,5 @@ export const RenderGenre = ({ item }: { item: InspectableItem }) => {
 
   const latestTracks = tracks?.slice(0, 20) || [];
 
-  return <RenderEntity entity={genre} item={item} tracks={latestTracks} />;
+  return <RenderEntity item={item} tracks={latestTracks} />;
 };

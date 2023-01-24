@@ -7,7 +7,8 @@ import { isEven } from "../util";
 
 const Genres = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, fetchNextPage, hasNextPage } = useInfiniteGenres(searchTerm);
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useInfiniteGenres(searchTerm);
   const genres = data?.pages.flatMap((page) => page.genres);
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
@@ -25,6 +26,7 @@ const Genres = () => {
         onSearch,
         listHeaderAttributes,
         searchPlaceholder,
+        isLoading,
       }}
     >
       {genres?.map((genre, i) => {

@@ -12,7 +12,8 @@ import { GoPlus } from "react-icons/go";
 
 const Playlists = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, fetchNextPage, hasNextPage } = useInfinitePlaylists(searchTerm);
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useInfinitePlaylists(searchTerm);
   const playlists = data?.pages.flatMap((page) => page.playlists);
   const createPlaylist = useCreatePlaylist().mutate;
   const onSearch = (queryString: string) => {
@@ -42,6 +43,7 @@ const Playlists = () => {
         listHeaderAttributes,
         searchPlaceholder,
         renderHeaderItems,
+        isLoading,
       }}
     >
       {playlists?.map((playlist, i) => {

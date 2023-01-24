@@ -12,7 +12,8 @@ import { Track } from "../types";
 
 const Tracks = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const { data, fetchNextPage, hasNextPage } = useInfiniteTracks(searchTerm);
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useInfiniteTracks(searchTerm);
   const tracks = data?.pages.flatMap((page) => page.tracks);
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
@@ -33,7 +34,13 @@ const Tracks = () => {
 
   return (
     <ListContent
-      {...{ type, onSearch, listHeaderAttributes, searchPlaceholder }}
+      {...{
+        type,
+        onSearch,
+        listHeaderAttributes,
+        searchPlaceholder,
+        isLoading,
+      }}
     >
       {tracks?.map((track, i) => {
         const { id, title, displayArtist, genres } = track;

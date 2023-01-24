@@ -1,7 +1,7 @@
 import { PropsWithChildren, ReactElement } from "react";
 import capitalize from "lodash.capitalize";
 import styles from "./ListContent.module.scss";
-import { SearchBar } from "./index";
+import { Loading, SearchBar } from "./index";
 import classnames from "classnames";
 import { EntityType } from "../types";
 
@@ -11,6 +11,7 @@ interface Props {
   listHeaderAttributes: string[];
   searchPlaceholder: string;
   renderHeaderItems?: () => ReactElement;
+  isLoading?: boolean;
 }
 
 const ListContent = ({
@@ -19,6 +20,7 @@ const ListContent = ({
   listHeaderAttributes,
   searchPlaceholder,
   renderHeaderItems,
+  isLoading,
   children,
 }: PropsWithChildren<Props>) => {
   return (
@@ -38,7 +40,9 @@ const ListContent = ({
           <div key={listHeaderValue}>{listHeaderValue}</div>
         ))}
       </div>
-      <div className={classnames(styles.list, styles[type])}>{children}</div>
+      <div className={classnames(styles.list, styles[type])}>
+        {isLoading ? <Loading /> : children}
+      </div>
     </section>
   );
 };

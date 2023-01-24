@@ -19,6 +19,7 @@ import { RenderArtist, RenderGenre, RenderTrack } from "./RenderEntities";
 import React from "react";
 import { RenderPlaylist } from "./RenderPlaylist";
 import { useScrollToAddedElement } from "../../hooks";
+import { Loading } from "../../components";
 
 const typeIconMap = {
   track: BsMusicNote,
@@ -29,10 +30,14 @@ const typeIconMap = {
 
 const Inspector = () => {
   const { data: open } = useInspectorOpen();
-  const { data: inspectedItems } = useInspectedItems();
+  const { data: inspectedItems, isLoading } = useInspectedItems();
   const { data: currentInspectorItemIndex = -1 } =
     useCurrentInspectorItemIndex();
   const currentInspectorItem = inspectedItems?.[currentInspectorItemIndex];
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <section
