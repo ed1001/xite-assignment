@@ -58,8 +58,9 @@ export const rqGetSearchInterface = <T>(
 
 export const rqSetAndInvalidateQuery = async <T>(
   queryKey: QueryKey,
-  newValue: T
+  newValue: T,
+  invalidateKey?: QueryKey
 ) => {
   queryClient.setQueryData(queryKey, newValue);
-  await queryClient.invalidateQueries(queryKey);
+  await queryClient.invalidateQueries(invalidateKey || queryKey);
 };

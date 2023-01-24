@@ -7,7 +7,7 @@ import {
   rqSetAndInvalidateQuery,
 } from "./util";
 import { queryClient } from "./client";
-import { rqAddToInspectedItems } from "./inspector";
+import { rqAddToInspectedItems, rqUpdateInspectedItem } from "./inspector";
 import { rqGetTrack } from "./tracks";
 
 /************
@@ -125,11 +125,7 @@ export const useAddToPlaylist = () => {
       queryClient.setQueryData(
         rq_playlists_keys.list(),
         (prev: Playlist[] | undefined) => {
-          if (!prev) {
-            return;
-          }
-
-          return prev.map((pl) => {
+          return prev?.map((pl) => {
             if (pl.id === playlist.id) {
               return updatedPlaylist;
             }
@@ -165,6 +161,35 @@ export const useRemovePlaylist = () => {
           return prev?.filter((p) => p.id !== playlist.id);
         }
       );
+    },
+  });
+};
+
+export const useEditPlaylistName = () => {
+  return useMutation({
+    mutationFn: async ({ id, name }: { id: number; name: string }) => {
+      const playlist = await rqGetPlaylist(id);
+      const updatedPlaylist = { ...playlist, name };
+
+      queryClient.setQueryData(
+        rq_playlists_keys.list(),
+        (prev: Playlist[] | undefined) => {
+          return prev?.map((pl) => {
+            if (pl.id === playlist.id) {
+              return updatedPlaylist;
+            }
+
+            return pl;
+          });
+        }
+      );
+
+      await rqUpdateInspectedItem(id, {
+        type: "playlist",
+        id,
+        displayName: name,
+      });
+      await queryClient.invalidateQueries(rq_playlists_keys.all);
     },
   });
 };
@@ -237,3 +262,6 @@ const getIncrementedId = async () => {
 
 const getTotalPlaylistCount = async (searchTerm: string): Promise<number> =>
   queryClient.getQueryData(rq_playlists_keys.total(searchTerm)) || 0;
+
+export const rqGetPlaylist = (id: number) =>
+  rqGetEntity<Playlist>(id, rq_playlists_keys.id(id), rqGetAllPlaylists);

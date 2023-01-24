@@ -1,16 +1,31 @@
 import { InspectableItem, Playlist } from "../../types";
-import { useAddToPlaylist, usePlaylist } from "../../react-query/playlists";
+import {
+  useAddToPlaylist,
+  useEditPlaylistName,
+  usePlaylist,
+} from "../../react-query/playlists";
 import styles from "./Inspector.module.scss";
 import { AddToPlaylist, ListEntry } from "../../components";
 import { isEven } from "../../util";
 import { TbMoodEmpty } from "react-icons/tb";
 import { EmptyItem } from "./RenderEntities";
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import classnames from "classnames";
 import { useScrollToAddedElement } from "../../hooks";
+import { FaEdit } from "react-icons/fa";
 
 export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
+  const [editingName, setEditingName] = useState(false);
+  const [name, setName] = useState(item.displayName);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const { data: playlist } = usePlaylist(item.id);
+  const editName = useEditPlaylistName().mutate;
+
+  useEffect(() => {
+    if (editingName) {
+      nameInputRef?.current?.focus();
+    }
+  }, [editingName]);
 
   if (!playlist) {
     return <EmptyItem item={item} />;
@@ -18,11 +33,39 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
 
   const { tracks } = playlist;
 
+  const handleSubmitEditTitle = (event: any) => {
+    event.preventDefault();
+
+    editName({ id: playlist.id, name });
+    setEditingName(false);
+  };
+
   return (
     <div className={styles["item-container"]}>
       <div className={styles["item-header-container"]}>
         <h2 className={styles.description}>Playlist Info </h2>
-        <h2>{item.displayName}</h2>
+        <div className={styles.name}>
+          {editingName ? (
+            <form onSubmit={handleSubmitEditTitle}>
+              <input
+                className={styles["name-input"]}
+                ref={nameInputRef}
+                type="text"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                onBlur={handleSubmitEditTitle}
+              />
+            </form>
+          ) : (
+            <h2>{item.displayName}</h2>
+          )}
+          <div
+            className={styles["header-button"]}
+            onClick={() => setEditingName(true)}
+          >
+            <FaEdit />
+          </div>
+        </div>
       </div>
       {!!tracks.length ? (
         <>

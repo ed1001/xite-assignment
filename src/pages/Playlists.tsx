@@ -27,7 +27,7 @@ const Playlists = () => {
   const renderHeaderItems = () => (
     <button
       className={styles["create-playlist-button"]}
-      onClick={() => createPlaylist({})}
+      onClick={() => createPlaylist({ openInInspector: true })}
     >
       <p className={styles["button-text"]}>create playlist</p>{" "}
       <GoPlus className={styles.plus} />

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { InspectableItem, InspectedItems } from "../types";
 import { queryClient } from "./client";
+import { rqSetAndInvalidateQuery } from "./util";
 
 /************
  * QUERY KEYS
@@ -108,6 +109,26 @@ export const rqAddToInspectedItems = async (item: InspectableItem) => {
 
   rqSetCurrentInspectorItemIndex(newCurrentInspectorItemIndex);
   queryClient.setQueryData(rq_inspector_keys.open(), true);
+};
+
+export const rqUpdateInspectedItem = async (
+  id: number,
+  updatedItem: InspectableItem
+) => {
+  const inspectedItems = await rqGetInspectedItems();
+  const updatedItems = inspectedItems.map((item) => {
+    if (item.id === updatedItem.id) {
+      return updatedItem;
+    }
+
+    return item;
+  });
+
+  await rqSetAndInvalidateQuery<InspectableItem[]>(
+    rq_inspector_keys.inspectedItems(),
+    updatedItems,
+    rq_inspector_keys.all
+  );
 };
 
 export const rqToggleInspecterOpen = () =>

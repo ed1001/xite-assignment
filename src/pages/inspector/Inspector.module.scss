@@ -177,14 +177,45 @@
       padding: 0;
     }
 
-    $item-header-container-height: 100px;
-
     .item-header-container {
-      height: 100px;
+      height: variables.$item-header-container-height;
+
+      .name {
+        display: flex;
+
+        .header-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          cursor: pointer;
+          color: variables.$grey;
+          box-sizing: border-box;
+
+          &:hover {
+            color: variables.$light-grey;
+          }
+        }
+      }
+
+      .name-input {
+        height: 30px;
+        border-radius: 30px;
+        background-color: lighten(variables.$light-grey, 7%);
+        padding: 0 10px;
+        font-size: 15px;
+        border: none;
+
+        &:focus {
+          outline: none;
+        }
+      }
     }
 
     .tracks-container {
-      height: calc(100% - $item-header-container-height - 22px);
+      height: calc(100% - #{variables.$item-header-container-height} - 22px);
       padding-top: 10px;
       overflow-y: scroll;
       box-sizing: border-box;
