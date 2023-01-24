@@ -39,7 +39,12 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
   const handleSubmitEditTitle = (event: any) => {
     event.preventDefault();
 
-    editName({ id: playlist.id, name });
+    if (name.length) {
+      editName({ id: playlist.id, name });
+    } else {
+      setName(item.displayName);
+    }
+
     setEditingName(false);
   };
 
