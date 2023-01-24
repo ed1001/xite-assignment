@@ -41,7 +41,7 @@ const RenderEntity = ({ item, tracks, info }: Props) => {
       <br />
       {!!tracks?.length && (
         <>
-          <h3 style={{ marginBottom: "10px" }}>Latest tracks:</h3>
+          <h3>Latest tracks:</h3>
           <div className={styles["tracks-container"]}>
             {tracks.map((track, i) => {
               return (

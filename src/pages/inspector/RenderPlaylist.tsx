@@ -7,6 +7,7 @@ import { TbMoodEmpty } from "react-icons/tb";
 import { EmptyItem } from "./RenderEntities";
 import React, { PropsWithChildren, useState } from "react";
 import classnames from "classnames";
+import { useScrollToAddedElement } from "../../hooks";
 
 export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
   const { data: playlist } = usePlaylist(item.id);
@@ -23,10 +24,9 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
         <h2 className={styles.description}>Playlist Info </h2>
         <h2>{item.displayName}</h2>
       </div>
-      <br />
       {!!tracks.length ? (
         <>
-          <h3 style={{ marginBottom: "10px" }}>Tracks:</h3>
+          <h3>Tracks:</h3>
           <PlaylistDropZone
             playlist={playlist}
             className={styles["tracks-container"]}
@@ -76,6 +76,7 @@ const PlaylistDropZone = ({
   className,
   children,
 }: PropsWithChildren<{ playlist: Playlist; className: string }>) => {
+  const scrollRef = useScrollToAddedElement();
   const addToPlaylist = useAddToPlaylist().mutate;
   const [dropZoneEntered, setDropZoneEntered] = useState(false);
   const checkDroppable = (event: React.DragEvent) => {
@@ -96,6 +97,7 @@ const PlaylistDropZone = ({
 
   return (
     <div
+      ref={scrollRef}
       onDragOver={(event) => {
         if (checkDroppable(event)) {
           setDropZoneEntered(true);

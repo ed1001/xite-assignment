@@ -18,6 +18,7 @@ import { InspectableItem } from "../../types";
 import { RenderArtist, RenderGenre, RenderTrack } from "./RenderEntities";
 import React from "react";
 import { RenderPlaylist } from "./RenderPlaylist";
+import { useScrollToAddedElement } from "../../hooks";
 
 const typeIconMap = {
   track: BsMusicNote,
@@ -31,7 +32,6 @@ const Inspector = () => {
   const { data: inspectedItems } = useInspectedItems();
   const { data: currentInspectorItemIndex = -1 } =
     useCurrentInspectorItemIndex();
-  const removeFromInspector = useRemoveFromInspector().mutate;
   const currentInspectorItem = inspectedItems?.[currentInspectorItemIndex];
 
   return (
@@ -51,53 +51,53 @@ const Inspector = () => {
       </div>
       {!open && <h1 className={styles["vertical-header"]}>Inspector</h1>}
       {open && (
-        <div className={styles.tabs}>
-          {inspectedItems?.map((item, i) => {
-            return (
-              <RenderTab
-                key={JSON.stringify(item)}
-                active={i === currentInspectorItemIndex}
-                setActive={() => rqSetCurrentInspectorItemIndex(i)}
-                item={item}
-                removeFromInspector={removeFromInspector}
-              />
-            );
-          })}
-        </div>
+        <>
+          <RenderTabs
+            items={inspectedItems}
+            activeIndex={currentInspectorItemIndex}
+          />
+          {renderItem(currentInspectorItem)}
+        </>
       )}
-      {open && renderItem(currentInspectorItem)}
     </section>
   );
 };
 
-const RenderTab = ({
-  active,
-  setActive,
-  item,
-  removeFromInspector,
+const RenderTabs = ({
+  items,
+  activeIndex,
 }: {
-  active: boolean;
-  setActive: () => void;
-  item: InspectableItem;
-  removeFromInspector: (item: InspectableItem) => void;
+  items?: InspectableItem[];
+  activeIndex: number;
 }) => {
-  const Icon = typeIconMap[item.type];
+  const removeFromInspector = useRemoveFromInspector().mutate;
+  const scrollRef = useScrollToAddedElement();
 
   return (
-    <div
-      className={classnames(styles.tab, { [styles.active]: active })}
-      onClick={setActive}
-    >
-      <Icon className={styles.icon} />
-      <div className={styles.identifier}>{item.displayName}</div>
-      <div className={styles.cross}>
-        <RxCross2
-          onClick={(e) => {
-            e.stopPropagation();
-            removeFromInspector(item);
-          }}
-        />
-      </div>
+    <div ref={scrollRef} className={styles.tabs}>
+      {items?.map((item, i) => {
+        const Icon = typeIconMap[item.type];
+
+        return (
+          <div
+            className={classnames(styles.tab, {
+              [styles.active]: i === activeIndex,
+            })}
+            onClick={() => rqSetCurrentInspectorItemIndex(i)}
+          >
+            <Icon className={styles.icon} />
+            <div className={styles.identifier}>{item.displayName}</div>
+            <div className={styles.cross}>
+              <RxCross2
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeFromInspector(item);
+                }}
+              />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -110,7 +110,7 @@ const renderItem = (item?: InspectableItem) => {
         <p>
           Nothing to see here at the moment... <br />
           <br />
-          Click 'inspect' on a track, artist or playlist to view its details
+          Click on a track, artist, genre or playlist to view its details
         </p>
       </div>
     );

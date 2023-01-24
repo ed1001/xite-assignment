@@ -26,22 +26,20 @@
   }
 
   .tabs {
-    position: sticky;
-    top: 0;
     display: flex;
     justify-content: flex-start;
     height: variables.$tabs-height;
     color: variables.$grey;
-    padding: 0 10px;
+    padding: 10px 10px;
     overflow-x: scroll;
-    margin-top: 10px;
+    box-sizing: border-box;
 
     .tab {
       position: relative;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
-      width: 120px;
+      width: 130px;
       min-width: 120px;
       height: 100%;
       cursor: pointer;
@@ -52,7 +50,7 @@
       border-right: 1px solid;
       border-color: transparent;
       box-sizing: border-box;
-      padding: 0 20px;
+      padding: 0 10px;
 
       &:hover {
         &:not(.active) {
@@ -62,7 +60,8 @@
 
       &.active {
         cursor: default;
-        border-color: variables.$light-grey;
+        border-color: variables.$grey;
+        color: darken(variables.$grey, 30%);
       }
 
       .cross {
@@ -92,14 +91,15 @@
         width: 12px;
         height: 12px;
         position: absolute;
-        top: 3px;
-        left: 3px;
+        top: 4px;
+        left: 4px;
       }
 
       .identifier {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        margin-bottom: 5px;
       }
     }
   }
@@ -115,6 +115,9 @@
   }
 
   .empty {
+    height: calc(
+      100% - #{variables.$tabs-height} - #{variables.$content-header-height}
+    );
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -123,7 +126,7 @@
     padding: 50px;
     color: variables.$grey;
     font-size: 24px;
-    height: 50%;
+    box-sizing: border-box;
 
     &.dropzone {
       border: 1px dashed variables.$light-grey;
@@ -149,7 +152,12 @@
   }
 
   .item-container {
+    height: calc(
+      100% - #{variables.$tabs-height} - #{variables.$content-header-height}
+    );
     padding: 30px;
+    box-sizing: border-box;
+    overflow: hidden;
 
     .description {
       color: variables.$grey;
@@ -174,7 +182,8 @@
     }
 
     .tracks-container {
-      height: 400px;
+      height: calc(100% - $item-header-container-height - 22px);
+      padding-top: 10px;
       overflow-y: scroll;
       box-sizing: border-box;
 
