@@ -46,9 +46,6 @@ export const useAddToInspector = () => {
 export const useRemoveFromInspector = () => {
   return useMutation({
     mutationFn: async (item: InspectableItem) => {
-      const inspected = await rqGetInspectedItems();
-      const removedItemIndex = getIndexOfInspectedItem(inspected, item);
-
       const newInspectedItems =
         queryClient.setQueryData(
           rq_inspector_keys.inspectedItems(),
@@ -60,18 +57,16 @@ export const useRemoveFromInspector = () => {
           }
         ) || [];
 
-      const currentInspectorItemIndex = await rqGetCurrentInspectorItemIndex();
-      let newCurrentInspectorItemIndex = currentInspectorItemIndex - 1;
-
-      if (
-        removedItemIndex === currentInspectorItemIndex &&
-        newInspectedItems.length > 0
-      ) {
-        newCurrentInspectorItemIndex =
-          removedItemIndex > 0 ? removedItemIndex - 1 : removedItemIndex;
+      if (!newInspectedItems.length) {
+        return rqSetCurrentInspectorItemIndex(-1);
       }
 
-      rqSetCurrentInspectorItemIndex(newCurrentInspectorItemIndex);
+      const currentIndex = await rqGetCurrentInspectorItemIndex();
+      const newIndex = newInspectedItems[currentIndex]
+        ? currentIndex
+        : currentIndex - 1;
+
+      rqSetCurrentInspectorItemIndex(newIndex);
     },
   });
 };
