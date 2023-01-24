@@ -48,7 +48,7 @@ const Item = ({
       className={classnames(styles.item, { [styles.active]: active })}
     >
       <Icon />
-      {text}
+      <p>{text}</p>
     </Link>
   );
 };

@@ -25,7 +25,8 @@ const Playlists = () => {
       className={styles["create-playlist-button"]}
       onClick={() => createPlaylist({})}
     >
-      create playlist <GoPlus className={styles.plus} />
+      <p className={styles["button-text"]}>create playlist</p>{" "}
+      <GoPlus className={styles.plus} />
     </button>
   );
 

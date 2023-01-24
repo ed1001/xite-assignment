@@ -3,12 +3,14 @@
 
 .list-entry {
   display: grid;
+  grid-column-gap: 5px;
   align-content: center;
   height: 50px;
   width: 100%;
   padding: 0 16px;
   box-sizing: border-box;
   cursor: pointer;
+  overflow: hidden;
 
   @include mixins.grid-template-columns-for-entities;
 
@@ -20,6 +22,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    overflow: hidden;
+
+    & > p {
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   background-color: white;

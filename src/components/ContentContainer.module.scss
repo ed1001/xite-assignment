@@ -4,5 +4,9 @@
   display: flex;
   height: calc(100vh - #{variables.$navbar-height});
   margin-top: variables.$navbar-height;
-  margin-left: variables.$sidebar-width-l;
+  margin-left: variables.$sidebar-width;
+
+  @media screen and (max-width: variables.$screen-width-break-point) {
+    margin-left: variables.$sidebar-width-minimized;
+  }
 }

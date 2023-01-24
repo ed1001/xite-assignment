@@ -36,14 +36,14 @@
   }
 
   &.artist {
-    grid-template-columns: 50px 1fr 100px;
+    grid-template-columns: 50px 1fr;
   }
 
   &.playlist {
-    grid-template-columns: 50px 1fr 1fr 0.5fr 100px;
+    grid-template-columns: 50px 1fr 0.3fr 0.5fr;
   }
 
   &.genre {
-    grid-template-columns: 50px 1fr 1fr 100px;
+    grid-template-columns: 50px 1fr 0.5fr;
   }
 }

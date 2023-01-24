@@ -5,6 +5,7 @@
   @include mixins.content-shared;
   margin-left: calc(#{variables.$content-padding} / 2);
   width: variables.$inspector-width;
+  min-width: variables.$content-min-width;
 
   .header {
     .toggle-open {
@@ -145,6 +146,7 @@
 
   &.closed {
     width: variables.$inspector-width-closed;
+    min-width: 64px;
 
     .header {
       justify-content: end;

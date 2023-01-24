@@ -16,6 +16,16 @@
     margin-left: 10px;
   }
 
+  @media screen and (max-width: 1295px) {
+    .button-text {
+      display: none;
+    }
+
+    .plus {
+      margin-left: 0;
+    }
+  }
+
   &:hover {
     background-color: variables.$light-grey;
     color: white;

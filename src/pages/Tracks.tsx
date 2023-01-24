@@ -21,7 +21,7 @@ const Tracks = () => {
 
   const type = "track";
   const listHeaderAttributes = ["#", "TITLE", "ARTIST", "GENRE"];
-  const searchPlaceholder = "Search by title or artist name";
+  const searchPlaceholder = "Search by title or artist";
 
   const onDragStart = async (event: React.DragEvent, track: Track) => {
     event.dataTransfer.effectAllowed = "copy";

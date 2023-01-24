@@ -38,7 +38,13 @@ const ListEntry = ({
       })}
     >
       {listEntryData.map((attribute, i) => (
-        <div key={`${attribute}:${i}`}>{attribute}</div>
+        <div key={`${attribute}:${i}`}>
+          {["string", "number"].includes(typeof attribute) ? (
+            <p>{attribute}</p>
+          ) : (
+            attribute
+          )}
+        </div>
       ))}
       {addToPlaylist}
     </div>
