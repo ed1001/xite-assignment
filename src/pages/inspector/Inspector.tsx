@@ -85,6 +85,7 @@ const RenderTabs = ({
 
         return (
           <div
+            key={JSON.stringify(item)}
             className={classnames(styles.tab, {
               [styles.active]: i === activeIndex,
             })}
