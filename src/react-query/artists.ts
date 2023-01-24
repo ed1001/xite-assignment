@@ -29,14 +29,17 @@ export const rq_artists_keys = {
  * HOOKS
  *******/
 
-export const useInfiniteArtists = (searchTerm: string) => {
+export const useInfiniteArtists = (
+  searchTerm: string,
+  limit: number = DEFAULT_PAGE_LIMIT
+) => {
   return useInfiniteQuery<{
     artists: Artist[];
     paginationToken: number;
     nextPageAvailable: boolean;
   }>({
     queryKey: rq_artists_keys.infiniteList(searchTerm),
-    queryFn: (page) => rqGetPaginatedArtists(page.pageParam, searchTerm),
+    queryFn: (page) => rqGetPaginatedArtists(page.pageParam, searchTerm, limit),
     getNextPageParam: (lastPage) => {
       if (!lastPage.nextPageAvailable) {
         return;
@@ -104,7 +107,8 @@ export const rqGetArtistsBySearchTerm = async (
 
 export const rqGetPaginatedArtists = async (
   pageParam: number = 0,
-  searchTerm: string
+  searchTerm: string,
+  limit: number
 ): Promise<{
   artists: Artist[];
   paginationToken: number;
@@ -119,8 +123,8 @@ export const rqGetPaginatedArtists = async (
     artists.length
   );
 
-  const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
-  const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
+  const endIndex = pageParam + limit;
+  const paginationToken = pageParam + limit;
 
   return {
     artists: artists.slice(pageParam, endIndex),

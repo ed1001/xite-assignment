@@ -42,14 +42,17 @@ export const rq_tracks_keys = {
  * HOOKS
  *******/
 
-export const useInfiniteTracks = (searchTerm: string) => {
+export const useInfiniteTracks = (
+  searchTerm: string,
+  limit: number = DEFAULT_PAGE_LIMIT
+) => {
   return useInfiniteQuery<{
     tracks: Track[];
     paginationToken: number;
     nextPageAvailable: boolean;
   }>({
     queryKey: rq_tracks_keys.infiniteList(searchTerm),
-    queryFn: (page) => rqGetPaginatedTracks(page.pageParam, searchTerm),
+    queryFn: (page) => rqGetPaginatedTracks(page.pageParam, searchTerm, limit),
     getNextPageParam: (lastPage) => {
       if (!lastPage.nextPageAvailable) {
         return;
@@ -180,7 +183,8 @@ export const rqGetTracksByGenre = async (
 
 export const rqGetPaginatedTracks = async (
   pageParam: number = 0,
-  searchTerm: string
+  searchTerm: string,
+  limit: number
 ): Promise<{
   tracks: Track[];
   paginationToken: number;
@@ -195,8 +199,8 @@ export const rqGetPaginatedTracks = async (
     tracks.length
   );
 
-  const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
-  const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
+  const endIndex = pageParam + limit;
+  const paginationToken = pageParam + limit;
 
   return {
     tracks: tracks.slice(pageParam, endIndex),

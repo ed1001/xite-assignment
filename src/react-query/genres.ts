@@ -1,6 +1,6 @@
 import { Genre } from "../types";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { rq_tracks_keys, rqGetAllTracks } from "./tracks";
+import { rqGetAllTracks } from "./tracks";
 import { queryClient } from "./client";
 import {
   DEFAULT_PAGE_LIMIT,
@@ -29,14 +29,17 @@ export const rq_genres_keys = {
  * HOOKS
  *******/
 
-export const useInfiniteGenres = (searchTerm: string) => {
+export const useInfiniteGenres = (
+  searchTerm: string,
+  limit: number = DEFAULT_PAGE_LIMIT
+) => {
   return useInfiniteQuery<{
     genres: Genre[];
     paginationToken: number;
     nextPageAvailable: boolean;
   }>({
     queryKey: rq_genres_keys.infiniteList(searchTerm),
-    queryFn: (page) => rqGetPaginatedGenres(page.pageParam, searchTerm),
+    queryFn: (page) => rqGetPaginatedGenres(page.pageParam, searchTerm, limit),
     getNextPageParam: (lastPage) => {
       if (!lastPage.nextPageAvailable) {
         return;
@@ -101,7 +104,7 @@ export const rqGetGenresBySearchTerm = async (
     queryFn: async () => {
       const genres = await rqGetAllGenres();
       const searchInterface = await rqGetSearchInterface<Genre>(
-        rq_tracks_keys.searchInterface(),
+        rq_genres_keys.searchInterface(),
         genres
       );
 
@@ -113,7 +116,8 @@ export const rqGetGenresBySearchTerm = async (
 
 export const rqGetPaginatedGenres = async (
   pageParam: number = 0,
-  searchTerm: string
+  searchTerm: string,
+  limit: number
 ): Promise<{
   genres: Genre[];
   paginationToken: number;
@@ -127,8 +131,8 @@ export const rqGetPaginatedGenres = async (
     rq_genres_keys.total(searchTerm),
     genres.length
   );
-  const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
-  const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
+  const endIndex = pageParam + limit;
+  const paginationToken = pageParam + limit;
 
   return {
     genres: genres.slice(pageParam, endIndex),

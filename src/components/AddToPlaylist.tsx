@@ -67,7 +67,7 @@ const AddToPlaylist = ({
   const onClickCreatePlaylist = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
-    createPlaylist({ track, openInInspector: true });
+    createPlaylist({ trackId: track.id, openInInspector: true });
     setDropdownOpenId("");
     event.stopPropagation();
   };

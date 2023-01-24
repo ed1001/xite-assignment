@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { Playlist, Track } from "../types";
+import { Playlist } from "../types";
 import {
   DEFAULT_PAGE_LIMIT,
   rqGetEntity,
@@ -36,14 +36,18 @@ export const persistedKeys = [rq_playlists_keys.list()];
  * HOOKS
  *******/
 
-export const useInfinitePlaylists = (searchTerm: string) => {
+export const useInfinitePlaylists = (
+  searchTerm: string,
+  limit: number = DEFAULT_PAGE_LIMIT
+) => {
   return useInfiniteQuery<{
     playlists: Playlist[];
     paginationToken: number;
     nextPageAvailable: boolean;
   }>({
     queryKey: rq_playlists_keys.infiniteList(searchTerm),
-    queryFn: (page) => rqGetPaginatedPlaylists(page.pageParam, searchTerm),
+    queryFn: (page) =>
+      rqGetPaginatedPlaylists(page.pageParam, searchTerm, limit),
     getNextPageParam: (lastPage) => {
       if (!lastPage.nextPageAvailable) {
         return;
@@ -72,13 +76,14 @@ export const usePlaylist = (id: number) => {
 export const useCreatePlaylist = () => {
   return useMutation({
     mutationFn: async ({
-      track,
+      trackId,
       openInInspector = false,
     }: {
-      track?: Track;
+      trackId?: number;
       openInInspector?: boolean;
     }) => {
       const addedAt = new Date().toISOString();
+      const track = trackId && (await rqGetTrack(trackId));
       const tracks = track ? [{ track, addedAt }] : [];
       const id = await getIncrementedId();
       const name = `Untitled Playlist ${id}`;
@@ -240,7 +245,8 @@ export const rqGetPlaylistsBySearchTerm = async (
 
 export const rqGetPaginatedPlaylists = async (
   pageParam: number = 0,
-  searchTerm: string
+  searchTerm: string,
+  limit: number
 ): Promise<{
   playlists: Playlist[];
   paginationToken: number;
@@ -255,8 +261,8 @@ export const rqGetPaginatedPlaylists = async (
     playlists.length
   );
 
-  const endIndex = pageParam + DEFAULT_PAGE_LIMIT;
-  const paginationToken = pageParam + DEFAULT_PAGE_LIMIT;
+  const endIndex = pageParam + limit;
+  const paginationToken = pageParam + limit;
 
   return {
     playlists: playlists.slice(pageParam, endIndex),
