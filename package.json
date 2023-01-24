@@ -54,6 +54,7 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^4.22.4",
     "@types/lodash.capitalize": "^4.2.7",
-    "@types/lodash.isequal": "^4.5.6"
+    "@types/lodash.isequal": "^4.5.6",
+    "@types/lodash.partition": "^4.6.7"
   }
 }
