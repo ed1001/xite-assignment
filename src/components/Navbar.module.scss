@@ -8,6 +8,8 @@
   height: variables.$navbar-height;
   width: 100%;
   background-color: variables.$secondary-color;
+  z-index: 1000;
+
   .items-container {
     height: 100%;
     .logo {

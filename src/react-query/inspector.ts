@@ -9,8 +9,6 @@ import { queryClient } from "./client";
 export const rq_inspector_keys = {
   all: ["inspector"] as const,
   inspectedItems: () => [...rq_inspector_keys.all, "inspectedItems"] as const,
-  inspectedEntities: () =>
-    [...rq_inspector_keys.all, "inspectedEntities"] as const,
   currentItemIndex: () =>
     [...rq_inspector_keys.all, "currentInspectorItemIndex"] as const,
   open: () => [...rq_inspector_keys.all, "open"] as const,

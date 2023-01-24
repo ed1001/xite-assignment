@@ -11,9 +11,9 @@ import styles from "./Sidebar.module.scss";
 const sidebarItems = [
   { text: "Dashboard", to: "/", Icon: GoDashboard },
   { text: "Tracks", to: "/tracks", Icon: BsMusicNote },
+  { text: "Playlists", to: "/playlists", Icon: BsMusicNoteList },
   { text: "Artists", to: "/artists", Icon: SlPeople },
   { text: "Genres", to: "/genres", Icon: FaGuitar },
-  { text: "Playlists", to: "/playlists", Icon: BsMusicNoteList },
 ];
 const Sidebar = () => {
   const location = useLocation();
