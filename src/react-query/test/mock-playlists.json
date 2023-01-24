@@ -1,0 +1,126 @@
+[
+  {
+    "id": 2,
+    "name": "Untitled Playlist 2",
+    "tracks": [
+      {
+        "track": {
+          "isrc": "US39N2000303",
+          "xid": 1208187,
+          "title": "Mariachi Flow",
+          "displayArtist": "Ebenezer",
+          "createdAt": "2020-04-04T09:03:30.65371",
+          "updatedAt": "2020-06-09T17:20:15.577822",
+          "releaseYear": 2020,
+          "speed": "Ballad",
+          "energy": "Normal",
+          "languages": [
+            "English"
+          ],
+          "origin": "GB",
+          "parentalWarning": "Explicit",
+          "mood": "Happy",
+          "visions": [
+            "Normal"
+          ],
+          "versions": [
+            "Normal"
+          ],
+          "explicit": [
+            "Language"
+          ],
+          "category": "Music Video",
+          "urgency": "Recognizable",
+          "genres": [
+            "Regional Popular"
+          ],
+          "subGenres": [
+            "French Rap/Hip-Hop"
+          ],
+          "assetType": "Official Music Video",
+          "artists": [
+            {
+              "id": 41773187,
+              "role": "Main",
+              "artistType": "Person",
+              "artist": {
+                "id": 5543922,
+                "name": "Ebenezer"
+              }
+            }
+          ],
+          "musicTags": [],
+          "videoTags": [
+            "master_record"
+          ],
+          "id": 514,
+          "version": 8
+        },
+        "addedAt": "2023-01-24T22:31:30.058Z"
+      }
+    ],
+    "createdAt": "2023-01-24T22:31:30.058Z"
+  },
+  {
+    "id": 1,
+    "name": "Untitled Playlist 1",
+    "tracks": [
+      {
+        "track": {
+          "isrc": "US39N2000303",
+          "xid": 1208187,
+          "title": "Mariachi Flow",
+          "displayArtist": "Ebenezer",
+          "createdAt": "2020-04-04T09:03:30.65371",
+          "updatedAt": "2020-06-09T17:20:15.577822",
+          "releaseYear": 2020,
+          "speed": "Ballad",
+          "energy": "Normal",
+          "languages": [
+            "English"
+          ],
+          "origin": "GB",
+          "parentalWarning": "Explicit",
+          "mood": "Happy",
+          "visions": [
+            "Normal"
+          ],
+          "versions": [
+            "Normal"
+          ],
+          "explicit": [
+            "Language"
+          ],
+          "category": "Music Video",
+          "urgency": "Recognizable",
+          "genres": [
+            "Regional Popular"
+          ],
+          "subGenres": [
+            "French Rap/Hip-Hop"
+          ],
+          "assetType": "Official Music Video",
+          "artists": [
+            {
+              "id": 41773187,
+              "role": "Main",
+              "artistType": "Person",
+              "artist": {
+                "id": 5543922,
+                "name": "Ebenezer"
+              }
+            }
+          ],
+          "musicTags": [],
+          "videoTags": [
+            "master_record"
+          ],
+          "id": 514,
+          "version": 8
+        },
+        "addedAt": "2023-01-24T22:31:30.007Z"
+      }
+    ],
+    "createdAt": "2023-01-24T22:31:30.008Z"
+  }
+]

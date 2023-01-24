@@ -1,27 +1,11 @@
 [
   {
-    "id": 5543922,
-    "name": "Ebenezer"
-  },
-  {
     "id": 5672552,
     "name": "Golden Features"
   },
   {
-    "id": 5497936,
-    "name": "Los De La Noria"
-  },
-  {
     "id": 5447758,
     "name": "Dirty Vegas"
-  },
-  {
-    "id": 5194664,
-    "name": "Calibre 50"
-  },
-  {
-    "id": 5406098,
-    "name": "Alison Krauss & Union Station"
   },
   {
     "id": 5264535,
@@ -32,7 +16,23 @@
     "name": "Nathaniel Rateliff"
   },
   {
+    "id": 5497936,
+    "name": "Los De La Noria"
+  },
+  {
     "id": 5203174,
     "name": "Alison Krauss"
+  },
+  {
+    "id": 5406098,
+    "name": "Alison Krauss & Union Station"
+  },
+  {
+    "id": 5194664,
+    "name": "Calibre 50"
+  },
+  {
+    "id": 5543922,
+    "name": "Ebenezer"
   }
 ]

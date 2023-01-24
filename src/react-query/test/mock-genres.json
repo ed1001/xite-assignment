@@ -1,8 +1,62 @@
 [
-  "Regional Popular",
-  "Rock",
-  "Pop",
-  "Alternative/Indie",
-  "Rap/Hip-Hop",
-  "Latin"
+  {
+    "name": "Rock",
+    "id": 1,
+    "type": "Genre"
+  },
+  {
+    "name": "Alternative/Indie",
+    "id": 2,
+    "type": "Genre"
+  },
+  {
+    "name": "Latin",
+    "id": 3,
+    "type": "Genre"
+  },
+  {
+    "name": "Rap/Hip-Hop",
+    "id": 4,
+    "type": "Genre"
+  },
+  {
+    "name": "Pop",
+    "id": 5,
+    "type": "Genre"
+  },
+  {
+    "name": "Regional Popular",
+    "id": 6,
+    "type": "Genre"
+  },
+  {
+    "name": "Rock",
+    "id": 7,
+    "type": "Sub genre"
+  },
+  {
+    "name": "Alternative/Indie",
+    "id": 8,
+    "type": "Sub genre"
+  },
+  {
+    "name": "Latin",
+    "id": 9,
+    "type": "Sub genre"
+  },
+  {
+    "name": "Rap/Hip-Hop",
+    "id": 10,
+    "type": "Sub genre"
+  },
+  {
+    "name": "Pop",
+    "id": 11,
+    "type": "Sub genre"
+  },
+  {
+    "name": "Regional Popular",
+    "id": 12,
+    "type": "Sub genre"
+  }
 ]
