@@ -8,7 +8,7 @@ export const getTracks = async (): Promise<Track[]> => {
     const res = await fetch(TRACKS_ENDPOINT_URL);
 
     const tracksUnsorted: Track[] = await res.json();
-    const tracks = tracksUnsorted.sort((a, b) => {
+    return tracksUnsorted.sort((a, b) => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
       if (dateA === dateB) {
@@ -17,8 +17,6 @@ export const getTracks = async (): Promise<Track[]> => {
 
       return dateA > dateB ? -1 : 1;
     });
-
-    return tracks;
   } catch (err) {
     return [];
   }

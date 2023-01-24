@@ -1,4 +1,9 @@
-import { EmptyList, ListContent, ListEntry } from "../components";
+import {
+  EmptyList,
+  ErrorBoundaryWrapped,
+  ListContent,
+  ListEntry,
+} from "../components";
 import {
   rq_genres_keys,
   useGenreTotal,
@@ -61,4 +66,4 @@ const Genres = () => {
   );
 };
 
-export default Genres;
+export default ErrorBoundaryWrapped(Genres);

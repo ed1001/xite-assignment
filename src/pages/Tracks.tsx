@@ -1,6 +1,7 @@
 import {
   AddToPlaylist,
   EmptyList,
+  ErrorBoundaryWrapped,
   ListContent,
   ListEntry,
 } from "../components";
@@ -85,4 +86,4 @@ const Tracks = () => {
   );
 };
 
-export default Tracks;
+export default ErrorBoundaryWrapped(Tracks);

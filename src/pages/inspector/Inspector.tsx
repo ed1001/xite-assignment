@@ -19,6 +19,7 @@ import { RenderArtist, RenderGenre, RenderTrack } from "./RenderEntities";
 import React from "react";
 import { RenderPlaylist } from "./RenderPlaylist";
 import { useScrollToAddedElement } from "../../hooks";
+import { ErrorBoundaryWrapped } from "../../components";
 
 const typeIconMap = {
   track: BsMusicNote,
@@ -129,4 +130,4 @@ const renderItem = (item?: InspectableItem) => {
   }
 };
 
-export default Inspector;
+export default ErrorBoundaryWrapped(Inspector);

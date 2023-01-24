@@ -1,4 +1,9 @@
-import { EmptyList, ListContent, ListEntry } from "../components";
+import {
+  EmptyList,
+  ErrorBoundaryWrapped,
+  ListContent,
+  ListEntry,
+} from "../components";
 import {
   rq_playlists_keys,
   useCreatePlaylist,
@@ -81,4 +86,4 @@ const Playlists = () => {
   );
 };
 
-export default Playlists;
+export default ErrorBoundaryWrapped(Playlists);

@@ -1,4 +1,4 @@
-import { EmptyList, ListContent } from "../components";
+import { EmptyList, ErrorBoundaryWrapped, ListContent } from "../components";
 import React, { useState } from "react";
 import {
   rq_artists_keys,
@@ -62,4 +62,4 @@ const Artists = () => {
   );
 };
 
-export default Artists;
+export default ErrorBoundaryWrapped(Artists);

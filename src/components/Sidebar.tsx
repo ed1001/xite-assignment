@@ -1,15 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import classnames from "classnames";
 import { IconType } from "react-icons";
-import { GoDashboard } from "react-icons/go";
-import { BsMusicNoteList, BsMusicNote } from "react-icons/bs";
+import { BsMusicNote, BsMusicNoteList } from "react-icons/bs";
 import { SlPeople } from "react-icons/sl";
 import { FaGuitar } from "react-icons/fa";
 
 import styles from "./Sidebar.module.scss";
 
 const sidebarItems = [
-  { text: "Dashboard", to: "/", Icon: GoDashboard },
   { text: "Tracks", to: "/tracks", Icon: BsMusicNote },
   { text: "Playlists", to: "/playlists", Icon: BsMusicNoteList },
   { text: "Artists", to: "/artists", Icon: SlPeople },

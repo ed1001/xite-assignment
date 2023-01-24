@@ -1,20 +1,11 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { queryClient } from "./react-query/client";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { persistOptions } from "./react-query/persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { ContentContainer, Navbar, Sidebar } from "./components";
 import { prefetchAllTracks } from "./react-query/tracks";
-import {
-  Artists,
-  Dashboard,
-  Genres,
-  Inspector,
-  Playlists,
-  Tracks,
-} from "./pages";
+import { ContentContainer, ErrorBoundary, Navbar, Sidebar } from "./components";
+import { Artists, Genres, Inspector, Playlists, Tracks } from "./pages";
 
 function App() {
   useEffect(() => {
@@ -29,21 +20,21 @@ function App() {
       persistOptions={persistOptions}
     >
       <BrowserRouter>
-        <Navbar />
-        <Sidebar />
-        <ContentContainer>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/tracks" element={<Tracks />} />
-            <Route path="/artists" element={<Artists />} />
-            <Route path="/genres" element={<Genres />} />
-            <Route path="/playlists" element={<Playlists />} />
-            <Route path="*" element={<div>not found</div>} />
-          </Routes>
-          <Inspector />
-        </ContentContainer>
+        <ErrorBoundary>
+          <Navbar />
+          <Sidebar />
+          <ContentContainer>
+            <Routes>
+              <Route path="/tracks" element={<Tracks />} />
+              <Route path="/artists" element={<Artists />} />
+              <Route path="/genres" element={<Genres />} />
+              <Route path="/playlists" element={<Playlists />} />
+              <Route path="*" element={<Navigate to="/tracks" replace />} />
+            </Routes>
+            <Inspector />
+          </ContentContainer>
+        </ErrorBoundary>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
     </PersistQueryClientProvider>
   );
 }
