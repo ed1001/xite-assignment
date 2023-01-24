@@ -24,9 +24,12 @@ const AddToPlaylist = ({
   origin: "inspector" | "list";
   addedAt?: string;
 }) => {
-  const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
+  const [dropdownPosition, setDropdownPosition] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
   const [displayDropdownVertically, setDisplayDropdownVertically] =
-    useState(false);
+    useState<boolean>(false);
 
   const { data: dropdownOpenId } = useDropdownOpenId();
   const { data: playlists } = usePlaylists();
