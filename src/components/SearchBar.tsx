@@ -1,7 +1,7 @@
-import styles from "./SearchBar.module.scss";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
+import styles from "./SearchBar.module.scss";
 
 const SearchBar = ({
   onSearch,

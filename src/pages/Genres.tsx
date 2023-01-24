@@ -1,3 +1,4 @@
+import { useTrimPreviousInfiniteQuery } from "../react-query/util";
 import {
   EmptyList,
   ErrorBoundaryWrapped,
@@ -9,25 +10,26 @@ import {
   useGenreTotal,
   useInfiniteGenres,
 } from "../react-query/genres";
-import { trimPreviousInfiniteQuery } from "../react-query/util";
 import { useState } from "react";
 import { isEven } from "../util";
 
 const Genres = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteGenres(searchTerm);
+  const { data: totalCount } = useGenreTotal(searchTerm);
+  const trimPreviousInfiniteQuery = useTrimPreviousInfiniteQuery().mutate;
+
   const genres = data?.pages.flatMap((page) => page.genres);
+  const shownCount = genres?.length || 0;
+  const type = "genre";
+  const listHeaderAttributes = ["#", "NAME", "TYPE"];
+  const searchPlaceholder = "Search by name";
+
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_genres_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
-  const { data: totalCount } = useGenreTotal(searchTerm);
-  const shownCount = genres?.length || 0;
-
-  const type = "genre";
-  const listHeaderAttributes = ["#", "NAME", "TYPE"];
-  const searchPlaceholder = "Search by name";
 
   return (
     <ListContent

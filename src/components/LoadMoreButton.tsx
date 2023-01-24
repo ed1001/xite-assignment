@@ -1,5 +1,5 @@
-import styles from "./LoadMoreButton.module.scss";
 import { PropsWithChildren } from "react";
+import styles from "./LoadMoreButton.module.scss";
 import { CgSpinner } from "react-icons/cg";
 
 const LoadMoreButton = ({

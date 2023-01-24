@@ -1,14 +1,14 @@
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import Fuse from "fuse.js";
 import { queryClient } from "./client";
 import { GenreType, SubGenre, Track } from "../types";
 import { getTracks } from "../api/xite";
-import Fuse from "fuse.js";
 import {
   DEFAULT_PAGE_LIMIT,
   rqGetEntity,
   rqGetSearchInterface,
   rqSetAndInvalidateQuery,
 } from "./util";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 const searchKeys: Array<string | Fuse.FuseOptionKey<Track>> = [
   "title",

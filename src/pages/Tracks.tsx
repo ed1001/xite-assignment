@@ -1,3 +1,11 @@
+import React, { useState } from "react";
+import { isEven } from "../util";
+import { useTrimPreviousInfiniteQuery } from "../react-query/util";
+import {
+  rq_tracks_keys,
+  useInfiniteTracks,
+  useTrackTotal,
+} from "../react-query/tracks";
 import {
   AddToPlaylist,
   EmptyList,
@@ -5,31 +13,25 @@ import {
   ListContent,
   ListEntry,
 } from "../components";
-import React, { useState } from "react";
-import {
-  rq_tracks_keys,
-  useInfiniteTracks,
-  useTrackTotal,
-} from "../react-query/tracks";
-import { trimPreviousInfiniteQuery } from "../react-query/util";
-import { isEven } from "../util";
 import { Track } from "../types";
 
 const Tracks = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteTracks(searchTerm);
+  const { data: totalCount } = useTrackTotal(searchTerm);
+  const trimPreviousInfiniteQuery = useTrimPreviousInfiniteQuery().mutate;
+
   const tracks = data?.pages.flatMap((page) => page.tracks);
+  const shownCount = tracks?.length || 0;
+  const type = "track";
+  const listHeaderAttributes = ["#", "TITLE", "ARTIST", "GENRE"];
+  const searchPlaceholder = "Search by title or artist";
+
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_tracks_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
-  const { data: totalCount } = useTrackTotal(searchTerm);
-  const shownCount = tracks?.length || 0;
-
-  const type = "track";
-  const listHeaderAttributes = ["#", "TITLE", "ARTIST", "GENRE"];
-  const searchPlaceholder = "Search by title or artist";
 
   const onDragStart = async (event: React.DragEvent, track: Track) => {
     event.dataTransfer.effectAllowed = "copy";

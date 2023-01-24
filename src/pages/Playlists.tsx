@@ -1,33 +1,36 @@
-import {
-  EmptyList,
-  ErrorBoundaryWrapped,
-  ListContent,
-  ListEntry,
-} from "../components";
+import React, { useState } from "react";
+import { GoPlus } from "react-icons/go";
+import { useTrimPreviousInfiniteQuery } from "../react-query/util";
+import { isEven } from "../util";
+import styles from "./Playlists.module.scss";
 import {
   rq_playlists_keys,
   useCreatePlaylist,
   useInfinitePlaylists,
   usePlaylistTotal,
 } from "../react-query/playlists";
-import { trimPreviousInfiniteQuery } from "../react-query/util";
-import React, { useState } from "react";
-import { isEven } from "../util";
-import styles from "./Playlists.module.scss";
-import { GoPlus } from "react-icons/go";
+import {
+  EmptyList,
+  ErrorBoundaryWrapped,
+  ListContent,
+  ListEntry,
+} from "../components";
 
 const Playlists = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfinitePlaylists(searchTerm);
-  const playlists = data?.pages.flatMap((page) => page.playlists);
+  const { data: totalCount } = usePlaylistTotal(searchTerm);
   const createPlaylist = useCreatePlaylist().mutate;
+  const trimPreviousInfiniteQuery = useTrimPreviousInfiniteQuery().mutate;
+
+  const playlists = data?.pages.flatMap((page) => page.playlists);
+  const shownCount = playlists?.length || 0;
+
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_playlists_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
-  const { data: totalCount } = usePlaylistTotal(searchTerm);
-  const shownCount = playlists?.length || 0;
 
   const renderHeaderItems = () => (
     <button

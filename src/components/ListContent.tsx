@@ -1,8 +1,8 @@
 import { PropsWithChildren, ReactElement } from "react";
 import capitalize from "lodash.capitalize";
+import classnames from "classnames";
 import styles from "./ListContent.module.scss";
 import { Loading, LoadMoreButton, SearchBar } from "./index";
-import classnames from "classnames";
 import { EntityType } from "../types";
 
 interface Props {

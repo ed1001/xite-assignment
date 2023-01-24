@@ -1,8 +1,8 @@
+import { ReactElement } from "react";
 import classnames from "classnames";
 import styles from "./ListEntry.module.scss";
-import { InspectableItem, Listable } from "../types";
 import { useAddToInspector } from "../react-query/inspector";
-import { ReactElement } from "react";
+import { InspectableItem, Listable } from "../types";
 
 const ListEntry = ({
   listEntryData,

@@ -1,11 +1,20 @@
-import { queryClient } from "./client";
 import { QueryKey } from "@tanstack/query-core/src/types";
+import { useMutation } from "@tanstack/react-query";
 import Fuse from "fuse.js";
+import { queryClient } from "./client";
 
 export const DEFAULT_PAGE_LIMIT = 50;
 
 // Reset the previously searched query to the first page when a new search is made
-export const trimPreviousInfiniteQuery = (queryKey: QueryKey) => {
+
+export const useTrimPreviousInfiniteQuery = () => {
+  return useMutation({
+    mutationFn: async (queryKey: QueryKey) =>
+      trimPreviousInfiniteQuery(queryKey),
+  });
+};
+
+const trimPreviousInfiniteQuery = (queryKey: QueryKey) => {
   if (!queryClient.getQueryState(queryKey)) {
     return;
   }
@@ -18,25 +27,20 @@ export const trimPreviousInfiniteQuery = (queryKey: QueryKey) => {
   });
 };
 
-export const rqGetEntity = <T extends { id: number }>(
+export const rqGetEntity = async <T extends { id: number }>(
   id: number,
   queryKey: QueryKey,
   getter: () => Promise<T[]>
 ): Promise<T> => {
-  return queryClient.ensureQueryData({
-    queryKey,
-    queryFn: async () => {
-      const items = await getter();
+  const items = await getter();
 
-      const item = items.find((t) => t.id === id);
+  const item = items.find((t) => t.id === id);
 
-      if (!item) {
-        throw new Error("Entity not found");
-      }
+  if (!item) {
+    throw new Error("Entity not found");
+  }
 
-      return item;
-    },
-  });
+  return item;
 };
 
 export const rqGetSearchInterface = <T>(

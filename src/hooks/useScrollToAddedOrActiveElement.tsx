@@ -1,6 +1,11 @@
 import { useCallback } from "react";
 import partition from "lodash.partition";
 
+/*******************************************************
+ *  scrolls to either an added node or if no added nodes
+ *  scroll to element that has had a active class added
+ *******************************************************/
+
 const useScrollToAddedOrActiveElement = () => {
   return useCallback((node: HTMLDivElement) => {
     if (node) {

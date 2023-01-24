@@ -1,3 +1,4 @@
+import React from "react";
 import classnames from "classnames";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
 import { BsMusicNote, BsMusicNoteList } from "react-icons/bs";
@@ -7,32 +8,26 @@ import { TbMoodEmpty } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import styles from "./Inspector.module.scss";
 import {
-  rqSetCurrentInspectorItemIndex,
-  rqToggleInspecterOpen,
   useCurrentInspectorItemIndex,
   useInspectedItems,
   useInspectorOpen,
   useRemoveFromInspector,
+  useSetCurrentInspectorItemIndex,
+  useToggleInspectorOpen,
 } from "../../react-query/inspector";
-import { InspectableItem } from "../../types";
-import { RenderArtist, RenderGenre, RenderTrack } from "./RenderEntities";
-import React from "react";
-import { RenderPlaylist } from "./RenderPlaylist";
 import { useScrollToAddedElement } from "../../hooks";
 import { ErrorBoundaryWrapped } from "../../components";
-
-const typeIconMap = {
-  track: BsMusicNote,
-  artist: SlPeople,
-  playlist: BsMusicNoteList,
-  genre: FaGuitar,
-};
+import { RenderPlaylist } from "./RenderPlaylist";
+import { RenderArtist, RenderGenre, RenderTrack } from "./RenderEntities";
+import { InspectableItem } from "../../types";
 
 const Inspector = () => {
   const { data: open } = useInspectorOpen();
   const { data: inspectedItems } = useInspectedItems();
   const { data: currentInspectorItemIndex = -1 } =
     useCurrentInspectorItemIndex();
+  const toggleInspectorOpen = useToggleInspectorOpen().mutate;
+
   const currentInspectorItem = inspectedItems?.[currentInspectorItemIndex];
 
   return (
@@ -44,7 +39,7 @@ const Inspector = () => {
       <div className={styles.header}>
         {open && <h1>Inspector</h1>}
         <button
-          onClick={() => rqToggleInspecterOpen()}
+          onClick={() => toggleInspectorOpen()}
           className={styles["toggle-open"]}
         >
           {open ? <TfiArrowCircleRight /> : <TfiArrowCircleLeft />}
@@ -72,12 +67,18 @@ const RenderTabs = ({
   activeIndex: number;
 }) => {
   const removeFromInspector = useRemoveFromInspector().mutate;
+  const setCurrentInspectorItemIndex = useSetCurrentInspectorItemIndex().mutate;
   const scrollRef = useScrollToAddedElement();
 
   return (
     <div ref={scrollRef} className={styles.tabs}>
       {items?.map((item, i) => {
-        const Icon = typeIconMap[item.type];
+        const Icon = {
+          track: BsMusicNote,
+          artist: SlPeople,
+          playlist: BsMusicNoteList,
+          genre: FaGuitar,
+        }[item.type];
 
         return (
           <div
@@ -85,7 +86,7 @@ const RenderTabs = ({
             className={classnames(styles.tab, {
               [styles.active]: i === activeIndex,
             })}
-            onClick={() => rqSetCurrentInspectorItemIndex(i)}
+            onClick={() => setCurrentInspectorItemIndex(i)}
           >
             <Icon className={styles.icon} />
             <div className={styles.identifier}>{item.displayName}</div>

@@ -9,6 +9,10 @@
     width: 55px;
     background-color: white;
 
+    &:hover {
+      background-color: variables.$grey !important;
+    }
+
     .plus {
       font-size: 10px;
       position: absolute;

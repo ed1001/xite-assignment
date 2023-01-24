@@ -92,6 +92,7 @@ export const useCreatePlaylist = () => {
     },
     onSuccess: async ({ openInInspector, playlist }) => {
       await queryClient.invalidateQueries(rq_playlists_keys.all);
+
       if (openInInspector) {
         const { id, name } = playlist;
         await rqAddToInspectedItems({
@@ -108,13 +109,14 @@ export const useAddToPlaylist = () => {
   return useMutation({
     mutationFn: async ({
       trackId,
-      playlist,
+      playlistId,
       openInInspector = false,
     }: {
       trackId: number;
-      playlist: Playlist;
+      playlistId: number;
       openInInspector?: boolean;
     }) => {
+      const playlist = await rqGetPlaylist(playlistId);
       const addedAt = new Date().toISOString();
       const track = await rqGetTrack(trackId);
       const updatedPlaylist = {
@@ -139,9 +141,15 @@ export const useAddToPlaylist = () => {
     },
     onSuccess: async ({ openInInspector, playlist }) => {
       await queryClient.invalidateQueries(rq_playlists_keys.all);
+      await queryClient.invalidateQueries(rq_playlists_keys.list());
+      await queryClient.invalidateQueries(rq_playlists_keys.id(playlist.id));
+
+      const playlist2 = await rqGetPlaylist(playlist.id);
+      console.log({ playlist2 });
 
       if (openInInspector) {
         const { id, name } = playlist;
+
         await rqAddToInspectedItems({
           type: "playlist",
           id,

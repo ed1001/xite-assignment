@@ -34,4 +34,4 @@ const dehydrateOptions: DehydrateOptions = {
 export const persistOptions = { persister, dehydrateOptions };
 
 // Uncomment below and refresh to clear persisted cache
-// persister.removeClient();
+persister.removeClient();

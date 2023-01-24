@@ -1,29 +1,31 @@
-import { EmptyList, ErrorBoundaryWrapped, ListContent } from "../components";
 import React, { useState } from "react";
+import { isEven } from "../util";
 import {
   rq_artists_keys,
   useArtistTotal,
   useInfiniteArtists,
 } from "../react-query/artists";
-import { trimPreviousInfiniteQuery } from "../react-query/util";
+import { EmptyList, ErrorBoundaryWrapped, ListContent } from "../components";
 import ListEntry from "../components/ListEntry";
-import { isEven } from "../util";
+import { useTrimPreviousInfiniteQuery } from "../react-query/util";
 
 const Artists = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useInfiniteArtists(searchTerm);
+  const { data: totalCount } = useArtistTotal(searchTerm);
+  const trimPreviousInfiniteQuery = useTrimPreviousInfiniteQuery().mutate;
+
   const artists = data?.pages.flatMap((page) => page.artists) || [];
+  const shownCount = artists?.length || 0;
+  const type = "artist";
+  const listHeaderAttributes = ["#", "NAME"];
+  const searchPlaceholder = "Search by name";
+
   const onSearch = (queryString: string) => {
     trimPreviousInfiniteQuery(rq_artists_keys.infiniteList(searchTerm));
     setSearchTerm(queryString);
   };
-  const { data: totalCount } = useArtistTotal(searchTerm);
-  const shownCount = artists?.length || 0;
-
-  const type = "artist";
-  const listHeaderAttributes = ["#", "NAME"];
-  const searchPlaceholder = "Search by name";
 
   return (
     <ListContent

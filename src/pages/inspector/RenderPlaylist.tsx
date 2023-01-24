@@ -1,22 +1,22 @@
-import { InspectableItem, Playlist } from "../../types";
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
+import classnames from "classnames";
+import { FaEdit } from "react-icons/fa";
+import { TbMoodEmpty } from "react-icons/tb";
+import { isEven } from "../../util";
 import {
   useAddToPlaylist,
   useEditPlaylistName,
   usePlaylist,
 } from "../../react-query/playlists";
 import styles from "./Inspector.module.scss";
-import { AddToPlaylist, ListEntry } from "../../components";
-import { isEven } from "../../util";
-import { TbMoodEmpty } from "react-icons/tb";
-import { EmptyItem } from "./RenderEntities";
-import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
-import classnames from "classnames";
 import { useScrollToAddedElement } from "../../hooks";
-import { FaEdit } from "react-icons/fa";
+import { AddToPlaylist, ListEntry } from "../../components";
+import { EmptyItem } from "./RenderEntities";
+import { InspectableItem, Playlist } from "../../types";
 
 export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
-  const [editingName, setEditingName] = useState(false);
-  const [name, setName] = useState(item.displayName);
+  const [editingName, setEditingName] = useState<boolean>(false);
+  const [name, setName] = useState<string>(item.displayName);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { data: playlist } = usePlaylist(item.id);
   const editName = useEditPlaylistName().mutate;
@@ -43,7 +43,7 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
   return (
     <div className={styles["item-container"]}>
       <div className={styles["item-header-container"]}>
-        <h2 className={styles.description}>Playlist Info </h2>
+        <h2 className={styles.description}>Playlist Info</h2>
         <div className={styles.name}>
           {editingName ? (
             <form onSubmit={handleSubmitEditTitle}>
@@ -135,7 +135,11 @@ const PlaylistDropZone = ({
     setDropZoneEntered(false);
     const json = e.dataTransfer.getData("text/plain");
     const { trackId } = JSON.parse(json);
-    addToPlaylist({ trackId: +trackId, playlist, openInInspector: true });
+    addToPlaylist({
+      trackId: +trackId,
+      playlistId: playlist.id,
+      openInInspector: true,
+    });
   };
 
   return (

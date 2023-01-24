@@ -1,6 +1,7 @@
-import { InspectableItem, Track } from "../../types";
+import capitalize from "lodash.capitalize";
 import styles from "./Inspector.module.scss";
 import { TbMoodSad } from "react-icons/tb";
+import { isEven } from "../../util";
 import {
   useTrack,
   useTracksByArtist,
@@ -9,8 +10,7 @@ import {
 import { useArtist } from "../../react-query/artists";
 import { useGenre } from "../../react-query/genres";
 import { AddToPlaylist, ListEntry } from "../../components";
-import { isEven } from "../../util";
-import capitalize from "lodash.capitalize";
+import { InspectableItem, Track } from "../../types";
 
 interface Props {
   item: InspectableItem;

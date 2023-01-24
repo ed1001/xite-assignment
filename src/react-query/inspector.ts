@@ -77,6 +77,18 @@ export const useCurrentInspectorItemIndex = () => {
   });
 };
 
+export const useToggleInspectorOpen = () => {
+  return useMutation({
+    mutationFn: async () => rqToggleInspecterOpen(),
+  });
+};
+
+export const useSetCurrentInspectorItemIndex = () => {
+  return useMutation({
+    mutationFn: async (index: number) => rqSetCurrentInspectorItemIndex(index),
+  });
+};
+
 /******************
  * HELPER FUNCTIONS
  ******************/
@@ -132,7 +144,7 @@ export const rqUpdateInspectedItem = async (
 };
 
 export const rqToggleInspecterOpen = () =>
-  queryClient.setQueryData(rq_inspector_keys.open(), (prev) => !prev);
+  !!queryClient.setQueryData(rq_inspector_keys.open(), (prev) => !prev);
 
 const getIndexOfInspectedItem = (
   inspected: InspectedItems,
