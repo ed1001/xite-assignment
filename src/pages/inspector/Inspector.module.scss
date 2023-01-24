@@ -20,7 +20,7 @@
         width: $icon-dimension;
 
         &:hover {
-          color: variables.$secondary-color;
+          color: variables.$blue;
         }
       }
     }
@@ -78,7 +78,7 @@
         border-radius: 50%;
 
         &:hover {
-          background-color: lighten(variables.$primary-color, 10%);
+          background-color: variables.$blue;
 
           svg {
             height: 9px;
@@ -133,8 +133,12 @@
       border: 1px dashed variables.$light-grey;
     }
 
+    &.dropzone-open {
+      border: 1px solid variables.$light-grey;
+    }
+
     &.dropzone-active {
-      background-color: lighten(variables.$light-grey, 5%);
+      border: 1px solid variables.$blue;
     }
 
     svg {
@@ -179,24 +183,26 @@
 
     .item-header-container {
       height: variables.$item-header-container-height;
+      display: flex;
+      justify-content: space-between;
 
       .name {
         display: flex;
+      }
 
-        .header-button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          cursor: pointer;
-          color: variables.$grey;
-          box-sizing: border-box;
+      .header-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        color: variables.$grey;
+        box-sizing: border-box;
 
-          &:hover {
-            color: variables.$light-grey;
-          }
+        &:hover {
+          color: variables.$light-grey;
         }
       }
 
@@ -219,9 +225,14 @@
       padding-top: 10px;
       overflow-y: scroll;
       box-sizing: border-box;
+      border: 1px solid transparent;
+
+      &.dropzone-open {
+        border: 1px dashed variables.$light-grey;
+      }
 
       &.dropzone-active {
-        border: 1px dashed variables.$light-grey;
+        border: 1px solid variables.$blue;
       }
     }
   }

@@ -7,7 +7,11 @@ import {
   rqSetAndInvalidateQuery,
 } from "./util";
 import { queryClient } from "./client";
-import { rqAddToInspectedItems, rqUpdateInspectedItem } from "./inspector";
+import {
+  rqAddToInspectedItems,
+  rqRemoveFromInspector,
+  rqUpdateInspectedItem,
+} from "./inspector";
 import { rqGetTrack } from "./tracks";
 
 /************
@@ -141,11 +145,6 @@ export const useAddToPlaylist = () => {
     },
     onSuccess: async ({ openInInspector, playlist }) => {
       await queryClient.invalidateQueries(rq_playlists_keys.all);
-      await queryClient.invalidateQueries(rq_playlists_keys.list());
-      await queryClient.invalidateQueries(rq_playlists_keys.id(playlist.id));
-
-      const playlist2 = await rqGetPlaylist(playlist.id);
-      console.log({ playlist2 });
 
       if (openInInspector) {
         const { id, name } = playlist;
@@ -169,6 +168,11 @@ export const useRemovePlaylist = () => {
           return prev?.filter((p) => p.id !== playlist.id);
         }
       );
+      return playlist.id;
+    },
+    onSuccess: async (id: number) => {
+      await rqRemoveFromInspector(id, "playlist");
+      await queryClient.invalidateQueries(rq_playlists_keys.all);
     },
   });
 };

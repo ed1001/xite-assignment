@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { InspectableItem, InspectedItems } from "../types";
+import { EntityType, InspectableItem, InspectedItems } from "../types";
 import { queryClient } from "./client";
 import { rqSetAndInvalidateQuery } from "./util";
 
@@ -9,6 +9,7 @@ import { rqSetAndInvalidateQuery } from "./util";
 
 export const rq_inspector_keys = {
   all: ["inspector"] as const,
+  id: (id: number) => [...rq_inspector_keys.all, id] as const,
   inspectedItems: () => [...rq_inspector_keys.all, "inspectedItems"] as const,
   currentItemIndex: () =>
     [...rq_inspector_keys.all, "currentInspectorItemIndex"] as const,
@@ -44,29 +45,8 @@ export const useAddToInspector = () => {
 
 export const useRemoveFromInspector = () => {
   return useMutation({
-    mutationFn: async (item: InspectableItem) => {
-      const newInspectedItems =
-        queryClient.setQueryData(
-          rq_inspector_keys.inspectedItems(),
-          (prev: InspectedItems | undefined) => {
-            return prev?.filter(
-              (inspectedItem) =>
-                inspectedItem.type !== item.type || inspectedItem.id !== item.id
-            );
-          }
-        ) || [];
-
-      if (!newInspectedItems.length) {
-        return rqSetCurrentInspectorItemIndex(-1);
-      }
-
-      const currentIndex = await rqGetCurrentInspectorItemIndex();
-      const newIndex = newInspectedItems[currentIndex]
-        ? currentIndex
-        : currentIndex - 1;
-
-      rqSetCurrentInspectorItemIndex(newIndex);
-    },
+    mutationFn: ({ id, type }: { id: number; type: EntityType }) =>
+      rqRemoveFromInspector(id, type),
   });
 };
 
@@ -154,3 +134,27 @@ const getIndexOfInspectedItem = (
     (inspectedItem) =>
       inspectedItem.type === item.type && inspectedItem.id === item.id
   );
+
+export const rqRemoveFromInspector = async (id: number, type: EntityType) => {
+  const newInspectedItems =
+    queryClient.setQueryData(
+      rq_inspector_keys.inspectedItems(),
+      (prev: InspectedItems | undefined) => {
+        return prev?.filter(
+          (inspectedItem) =>
+            inspectedItem.type !== type || inspectedItem.id !== id
+        );
+      }
+    ) || [];
+
+  if (!newInspectedItems.length) {
+    return rqSetCurrentInspectorItemIndex(-1);
+  }
+
+  const currentIndex = await rqGetCurrentInspectorItemIndex();
+  const newIndex = newInspectedItems[currentIndex]
+    ? currentIndex
+    : currentIndex - 1;
+
+  rqSetCurrentInspectorItemIndex(newIndex);
+};

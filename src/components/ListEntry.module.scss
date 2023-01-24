@@ -14,10 +14,6 @@
 
   @include mixins.grid-template-columns-for-entities;
 
-  &.track-abbreviated {
-    grid-template-columns: 1fr 60px;
-  }
-
   div {
     display: flex;
     align-items: center;

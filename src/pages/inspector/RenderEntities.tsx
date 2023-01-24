@@ -22,8 +22,10 @@ const RenderEntity = ({ item, tracks, info }: Props) => {
   return (
     <div className={styles["item-container"]}>
       <div className={styles["item-header-container"]}>
-        <h2 className={styles.description}>{capitalize(item.type)}</h2>
-        <h2>{item.displayName}</h2>
+        <div className={styles["item-description-name"]}>
+          <h2 className={styles.description}>{capitalize(item.type)}</h2>
+          <h2>{item.displayName}</h2>
+        </div>
       </div>
       {info &&
         Object.entries(info).map(([key, value]) => {
@@ -45,7 +47,7 @@ const RenderEntity = ({ item, tracks, info }: Props) => {
               return (
                 <ListEntry
                   key={track.id}
-                  listEntryData={[track.title]}
+                  listEntryData={[i + 1, track.title]}
                   dark={isEven(i)}
                   type={"track-abbreviated"}
                   inspectableItem={{

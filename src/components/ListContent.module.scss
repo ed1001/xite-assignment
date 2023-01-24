@@ -5,7 +5,7 @@
   flex: 1;
   min-width: variables.$content-min-width;
   @include mixins.content-shared;
-  margin-right: variables.$content-padding / 2;
+  margin-right: calc(#{variables.$content-padding} / 2);
 
   .list {
     height: calc(

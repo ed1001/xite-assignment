@@ -10,7 +10,7 @@ import { Artists, Genres, Inspector, Playlists, Tracks } from "./pages";
 function App() {
   useEffect(() => {
     prefetchAllTracks().catch((err) =>
-      console.warn("Could not prefetch track data", err)
+      console.error("Could not prefetch track data", err)
     );
   });
 

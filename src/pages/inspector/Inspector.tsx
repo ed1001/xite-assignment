@@ -94,7 +94,7 @@ const RenderTabs = ({
               <RxCross2
                 onClick={(e) => {
                   e.stopPropagation();
-                  removeFromInspector(item);
+                  removeFromInspector({ id: item.id, type: item.type });
                 }}
               />
             </div>

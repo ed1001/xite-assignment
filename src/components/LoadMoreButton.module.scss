@@ -8,13 +8,6 @@
   .button {
     @include mixins.rounded-button;
 
-    &:not(:disabled) {
-      &:hover {
-        color: white;
-        background-color: variables.$light-grey;
-      }
-    }
-
     .inner {
       display: flex;
       justify-content: center;

@@ -1,12 +1,13 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import classnames from "classnames";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { TbMoodEmpty } from "react-icons/tb";
 import { isEven } from "../../util";
 import {
   useAddToPlaylist,
   useEditPlaylistName,
   usePlaylist,
+  useRemovePlaylist,
 } from "../../react-query/playlists";
 import styles from "./Inspector.module.scss";
 import { useScrollToAddedElement } from "../../hooks";
@@ -19,7 +20,9 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
   const [name, setName] = useState<string>(item.displayName);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const { data: playlist } = usePlaylist(item.id);
+
   const editName = useEditPlaylistName().mutate;
+  const removePlaylist = useRemovePlaylist().mutate;
 
   useEffect(() => {
     if (editingName) {
@@ -43,42 +46,49 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
   return (
     <div className={styles["item-container"]}>
       <div className={styles["item-header-container"]}>
-        <h2 className={styles.description}>Playlist Info</h2>
-        <div className={styles.name}>
-          {editingName ? (
-            <form onSubmit={handleSubmitEditTitle}>
-              <input
-                className={styles["name-input"]}
-                ref={nameInputRef}
-                type="text"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                onBlur={handleSubmitEditTitle}
-              />
-            </form>
-          ) : (
-            <h2>{item.displayName}</h2>
-          )}
+        <div>
+          <h2 className={styles.description}>Playlist Info</h2>
+          <div className={styles.name}>
+            {editingName ? (
+              <form onSubmit={handleSubmitEditTitle}>
+                <input
+                  className={styles["name-input"]}
+                  ref={nameInputRef}
+                  type="text"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  onBlur={handleSubmitEditTitle}
+                />
+              </form>
+            ) : (
+              <h2>{item.displayName}</h2>
+            )}
+            <div
+              className={styles["header-button"]}
+              onClick={() => setEditingName(true)}
+            >
+              <FaEdit />
+            </div>
+          </div>
+        </div>
+        <div>
           <div
             className={styles["header-button"]}
-            onClick={() => setEditingName(true)}
+            onClick={() => removePlaylist(playlist)}
           >
-            <FaEdit />
+            <FaTrash />
           </div>
         </div>
       </div>
       {!!tracks.length ? (
         <>
           <h3>Tracks:</h3>
-          <PlaylistDropZone
-            playlist={playlist}
-            className={styles["tracks-container"]}
-          >
+          <DropZone playlist={playlist} className={styles["tracks-container"]}>
             {tracks.map(({ track, addedAt }, i) => {
               return (
                 <ListEntry
                   key={`${track.id}:${addedAt}`}
-                  listEntryData={[track.title]}
+                  listEntryData={[i + 1, track.title]}
                   dark={isEven(i)}
                   type={"track-abbreviated"}
                   inspectableItem={{
@@ -96,10 +106,10 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
                 />
               );
             })}
-          </PlaylistDropZone>
+          </DropZone>
         </>
       ) : (
-        <PlaylistDropZone playlist={playlist} className={styles.empty}>
+        <DropZone playlist={playlist} className={styles.empty}>
           <TbMoodEmpty />
           <p>
             No tracks in this playlist yet
@@ -108,28 +118,39 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
             inspector (the outlined area here) or by clicking the add to
             playlist button on a track
           </p>
-        </PlaylistDropZone>
+        </DropZone>
       )}
     </div>
   );
 };
 
-const PlaylistDropZone = ({
+const DropZone = ({
   playlist,
   className,
   children,
 }: PropsWithChildren<{ playlist: Playlist; className: string }>) => {
+  const [dropZoneEntered, setDropZoneEntered] = useState<boolean>(false);
+  const [droppableDragged, setDroppableDragged] = useState<boolean>(false);
   const scrollRef = useScrollToAddedElement();
   const addToPlaylist = useAddToPlaylist().mutate;
-  const [dropZoneEntered, setDropZoneEntered] = useState(false);
-  const checkDroppable = (event: React.DragEvent) => {
-    const isDroppable = event.dataTransfer.types.includes("text/plain");
-    if (isDroppable) {
-      event.preventDefault();
-    }
 
-    return isDroppable;
-  };
+  useEffect(() => {
+    const onDocumentDragStart = (event: DragEvent) =>
+      setDroppableDragged(checkDroppable(event));
+
+    const onDocumentDragEnd = () => setDroppableDragged(false);
+
+    document.addEventListener("dragstart", onDocumentDragStart);
+    document.addEventListener("dragend", onDocumentDragEnd);
+
+    return () => {
+      document.removeEventListener("dragstart", onDocumentDragStart);
+      document.removeEventListener("dragend", onDocumentDragEnd);
+    };
+  }, []);
+
+  const checkDroppable = (event: React.DragEvent | DragEvent) =>
+    !!event?.dataTransfer?.types.includes("text/plain");
 
   const onDrop = (e: React.DragEvent) => {
     setDropZoneEntered(false);
@@ -147,16 +168,22 @@ const PlaylistDropZone = ({
       ref={scrollRef}
       onDragOver={(event) => {
         if (checkDroppable(event)) {
+          event.preventDefault();
           setDropZoneEntered(true);
         }
       }}
-      onDragEnter={checkDroppable}
+      onDragEnter={(event) => {
+        if (checkDroppable(event)) {
+          event.preventDefault();
+        }
+      }}
       onDragLeave={() => setDropZoneEntered(false)}
       onDrop={onDrop}
       className={classnames(
         styles.dropzone,
         {
           [styles["dropzone-active"]]: dropZoneEntered,
+          [styles["dropzone-open"]]: droppableDragged,
         },
         className
       )}
