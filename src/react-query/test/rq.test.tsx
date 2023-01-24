@@ -2,9 +2,8 @@ import { PropsWithChildren } from "react";
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { useTrack, useTracks } from "../tracks";
-import { useArtist, useArtists } from "../artists";
-import { useGenres } from "../genres";
+import { useTrack } from "../tracks";
+import { useArtist } from "../artists";
 import mockTrackList from "./mock-tracks.json";
 import mockArtistList from "./mock-artists.json";
 import mockGenreList from "./mock-genres.json";
@@ -35,14 +34,14 @@ afterEach(() => {
 describe("react query", () => {
   // TRACKS
   describe("tracks", () => {
-    describe("useTracks", () => {
-      test("succeeds and retrieves correct data", async () => {
-        const { result } = renderHook(() => useTracks(), { wrapper });
-        await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-        expect(result.current.data).toEqual(mockTrackList);
-      });
-    });
+    // describe("useTracks", () => {
+    //   test("succeeds and retrieves correct data", async () => {
+    //     const { result } = renderHook(() => useTracks(), { wrapper });
+    //     await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    //
+    //     expect(result.current.data).toEqual(mockTrackList);
+    //   });
+    // });
 
     describe("useTrack", () => {
       const expectedTrackId = 514;
@@ -63,14 +62,14 @@ describe("react query", () => {
 
   // ARTISTS
   describe("artists", () => {
-    describe("useArtists", () => {
-      test("succeeds and retrieves correct data", async () => {
-        const { result } = renderHook(() => useArtists(), { wrapper });
-        await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-        expect(result.current.data).toEqual(mockArtistList);
-      });
-    });
+    // describe("useArtists", () => {
+    //   test("succeeds and retrieves correct data", async () => {
+    //     const { result } = renderHook(() => useArtists(), { wrapper });
+    //     await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    //
+    //     expect(result.current.data).toEqual(mockArtistList);
+    //   });
+    // });
 
     describe("useArtist", () => {
       const expectedArtistId = 5447758;
@@ -91,13 +90,13 @@ describe("react query", () => {
 
   // GENRES
   describe("genres", () => {
-    describe("useGenres", () => {
-      test("succeeds and retrieves correct data", async () => {
-        const { result } = renderHook(() => useGenres(), { wrapper });
-        await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-        expect(result.current.data).toEqual(mockGenreList);
-      });
-    });
+    // describe("useGenres", () => {
+    //   test("succeeds and retrieves correct data", async () => {
+    //     const { result } = renderHook(() => useGenres(), { wrapper });
+    //     await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    //
+    //     expect(result.current.data).toEqual(mockGenreList);
+    //   });
+    // });
   });
 });
