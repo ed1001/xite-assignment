@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import classnames from "classnames";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import { TbMoodEmpty } from "react-icons/tb";
 import { isEven } from "../../util";
 import {
@@ -81,7 +82,7 @@ export const RenderPlaylist = ({ item }: { item: InspectableItem }) => {
             className={styles["header-button"]}
             onClick={() => removePlaylist(playlist)}
           >
-            <FaTrash />
+            <FaTrashAlt />
           </div>
         </div>
       </div>
