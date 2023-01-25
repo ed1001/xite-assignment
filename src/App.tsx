@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { queryClient } from "./react-query/client";
-import { persistOptions } from "./react-query/persister";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { prefetchAllTracks } from "./react-query/tracks";
 import { ContentContainer, ErrorBoundary, Navbar, Sidebar } from "./components";
 import { Artists, Genres, Inspector, Playlists, Tracks } from "./pages";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
   useEffect(() => {
@@ -15,10 +14,7 @@ function App() {
   });
 
   return (
-    <PersistQueryClientProvider
-      client={queryClient}
-      persistOptions={persistOptions}
-    >
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ErrorBoundary>
           <Navbar />
@@ -35,7 +31,7 @@ function App() {
           </ContentContainer>
         </ErrorBoundary>
       </BrowserRouter>
-    </PersistQueryClientProvider>
+    </QueryClientProvider>
   );
 }
 
