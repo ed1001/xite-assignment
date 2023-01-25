@@ -28,8 +28,8 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "cold-start": "yarn install && react-scripts start",
+    "start": "yarn install && react-scripts start",
+    "serve-prod": "npx serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
