@@ -108,7 +108,7 @@ const AddToPlaylist = ({
               })}
               onClick={onClickCreatePlaylist}
             >
-              Create playlist &nbsp; <GoPlus />
+              create playlist &nbsp; <GoPlus />
             </div>
             {playlists?.map((playlist) => {
               return (
