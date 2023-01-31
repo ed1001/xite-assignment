@@ -4,7 +4,7 @@ import classnames from "classnames";
 import styles from "./ListContent.module.scss";
 import { Loading, LoadMoreButton, SearchBar } from "./index";
 import { EntityType } from "../types";
-import { useScrollToAddedElement } from "../hooks";
+import { useScrollToAddedOrActiveElement } from "../hooks";
 
 interface Props {
   type: EntityType;
@@ -32,7 +32,7 @@ const ListContent = ({
   shownCount,
   children,
 }: PropsWithChildren<Props>) => {
-  const scrollRef = useScrollToAddedElement();
+  const scrollRef = useScrollToAddedOrActiveElement();
 
   return (
     <section className={styles.content}>

@@ -11,7 +11,7 @@ import {
   useRemovePlaylist,
 } from "../../react-query/playlists";
 import styles from "./Inspector.module.scss";
-import { useScrollToAddedElement } from "../../hooks";
+import { useScrollToAddedOrActiveElement } from "../../hooks";
 import { AddToPlaylist, ListEntry } from "../../components";
 import { EmptyItem } from "./RenderEntities";
 import { InspectableItem, Playlist } from "../../types";
@@ -137,7 +137,7 @@ const DropZone = ({
 }: PropsWithChildren<{ playlist: Playlist; className: string }>) => {
   const [dropZoneEntered, setDropZoneEntered] = useState<boolean>(false);
   const [droppableDragged, setDroppableDragged] = useState<boolean>(false);
-  const scrollRef = useScrollToAddedElement();
+  const scrollRef = useScrollToAddedOrActiveElement();
   const addToPlaylist = useAddToPlaylist().mutate;
 
   useEffect(() => {

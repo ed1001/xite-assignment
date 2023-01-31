@@ -1,1 +1,1 @@
-export { default as useScrollToAddedElement } from "./useScrollToAddedOrActiveElement";
+export { default as useScrollToAddedOrActiveElement } from "./useScrollToAddedOrActiveElement";

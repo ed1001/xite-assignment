@@ -15,7 +15,7 @@ import {
   useSetCurrentInspectorItemIndex,
   useToggleInspectorOpen,
 } from "../../react-query/inspector";
-import { useScrollToAddedElement } from "../../hooks";
+import { useScrollToAddedOrActiveElement } from "../../hooks";
 import { ErrorBoundaryWrapped } from "../../components";
 import { RenderPlaylist } from "./RenderPlaylist";
 import { RenderArtist, RenderGenre, RenderTrack } from "./RenderEntities";
@@ -68,7 +68,7 @@ const RenderTabs = ({
 }) => {
   const removeFromInspector = useRemoveFromInspector().mutate;
   const setCurrentInspectorItemIndex = useSetCurrentInspectorItemIndex().mutate;
-  const scrollRef = useScrollToAddedElement();
+  const scrollRef = useScrollToAddedOrActiveElement();
 
   return (
     <div ref={scrollRef} className={styles.tabs}>
