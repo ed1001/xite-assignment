@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.scss";
 import XiteLogo from "../logo.png";
+import { clearAllData } from "../react-query/persister";
+import { FaTrashAlt } from "react-icons/fa";
+import React from "react";
 
 const Navbar = () => {
   return (
@@ -10,6 +13,7 @@ const Navbar = () => {
           <img src={XiteLogo} alt="logo" />
           <div>cms</div>
         </Link>
+        <FaTrashAlt onClick={clearAllData} title={"clear all data"} />
       </div>
     </nav>
   );

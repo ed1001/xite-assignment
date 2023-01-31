@@ -4,7 +4,9 @@ import { queryClient } from "./react-query/client";
 import { prefetchAllTracks } from "./react-query/tracks";
 import { ContentContainer, ErrorBoundary, Navbar, Sidebar } from "./components";
 import { Artists, Genres, Inspector, Playlists, Tracks } from "./pages";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { persistOptions } from "./react-query/persister";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
   useEffect(() => {
@@ -14,7 +16,10 @@ function App() {
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={persistOptions}
+    >
       <BrowserRouter>
         <ErrorBoundary>
           <Navbar />
@@ -31,7 +36,8 @@ function App() {
           </ContentContainer>
         </ErrorBoundary>
       </BrowserRouter>
-    </QueryClientProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </PersistQueryClientProvider>
   );
 }
 

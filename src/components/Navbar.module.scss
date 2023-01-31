@@ -12,6 +12,21 @@
 
   .items-container {
     height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 30px;
+
+    svg {
+      cursor: pointer;
+      color: white;
+
+      &:hover {
+        color: variables.$light-grey;
+      }
+    }
+
     .logo {
       height: 100%;
       display: flex;

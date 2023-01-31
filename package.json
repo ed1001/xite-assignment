@@ -16,6 +16,7 @@
     "fuse.js": "^6.6.2",
     "idb-keyval": "^6.2.0",
     "lodash.capitalize": "^4.2.1",
+    "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
     "lodash.partition": "^4.6.0",
     "react": "^18.2.0",
@@ -55,6 +56,7 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^4.22.4",
     "@types/lodash.capitalize": "^4.2.7",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.isequal": "^4.5.6",
     "@types/lodash.partition": "^4.6.7"
   }

@@ -68,8 +68,7 @@ export const usePlaylists = () => {
 export const usePlaylist = (id: number) => {
   return useQuery<Playlist>({
     queryKey: rq_playlists_keys.id(id),
-    queryFn: () =>
-      rqGetEntity<Playlist>(id, rq_playlists_keys.id(id), rqGetAllPlaylists),
+    queryFn: () => rqGetPlaylist(id),
   });
 };
 
