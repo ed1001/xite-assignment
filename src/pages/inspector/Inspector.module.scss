@@ -163,7 +163,7 @@
     );
     padding: 30px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: scroll;
 
     .description {
       color: variables.$grey;
