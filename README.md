@@ -1,12 +1,12 @@
 # Getting Started
 
-To start the app in development mode run the following in the project root directory:
+To start the app in prod mode run the following in root directory:
 
 ### `yarn start`
 
-To run an optimised prod version run:
+To start the app in development mode run the following in the root directory:
 
-### `yarn serve-prod`
+### `yarn dev`
 
 The app will be served at: [http://localhost:3000](http://localhost:3000)
 
